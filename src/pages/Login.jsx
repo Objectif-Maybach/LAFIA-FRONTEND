@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserIcon, LockIcon, TruckIcon } from 'lucide-react';
+import axios from 'axios';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const Api_Url = import.meta.env.VITE_API_URL;
+  const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Stocker l'état de connexion
-    localStorage.setItem('isLogged', 'yes');
-    
-    // Rediriger vers la page d'accueil
-    navigate('/accueil');
+    let data = {
+      username: email,
+      password: password
+    }
+    let response ;
+    try {
+       response = axios.post(`${Api_Url}login/`, data
+      );
+      if(response){ 
+        console.log(response);
+        localStorage.setItem('isLogged', response.data);
+        navigate('/accueil');
+      }else {
+        console.log(response);
+      }
+    } catch (error) {
+     console.log(error);
+    }
   };
   return <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden">
@@ -33,13 +46,13 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-medium mb-2">
-                Email
+                Login
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <UserIcon size={16} className="text-gray-400" />
                 </div>
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="votre@email.com" />
+                <input type="text" value={email} onChange={e => setEmail(e.target.value)} className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="votre@email.com" />
               </div>
             </div>
             <div className="mb-6">

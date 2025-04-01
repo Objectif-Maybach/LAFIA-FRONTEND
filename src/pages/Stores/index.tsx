@@ -1,5 +1,5 @@
 import React from 'react';
-import StoreForm from '../components/StoreForm';
+import StoreForm from '../../components/Stores/StoreForm';
 import { PencilIcon, TrashIcon, SearchIcon } from 'lucide-react';
 const Stores = () => {
   // Sample store data

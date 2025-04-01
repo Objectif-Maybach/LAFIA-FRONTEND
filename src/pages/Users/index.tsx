@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import UserForm from "../components/UserForm"
+import UserForm from "../../components/Users/Form"
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
 
 const Users = () => {
