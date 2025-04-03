@@ -1,6 +1,5 @@
-
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { HomeIcon, UsersIcon, ShoppingBagIcon, LogOutIcon } from 'lucide-react';
+import { HomeIcon, UsersIcon, ShoppingBagIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,6 +15,11 @@ const Sidebar = () => {
     path: 'stores',
     icon: <ShoppingBagIcon size={20} />,
     label: 'Boutiques'
+  },
+  {
+    path: 'parametrages',
+    icon: <SettingsIcon size={20} />,
+    label: 'Paramétrages'
   }];
   const Logout = () => {
     localStorage.removeItem('token');

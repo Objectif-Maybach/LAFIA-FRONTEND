@@ -5,6 +5,7 @@ import Users from './pages/Users';
 import Stores from './pages/Stores';
 import Layout from './components/Layout';
 import { ReactNode } from 'react';
+import Parametrages from './pages/Parametrages/index.js';
 
 const RequireAuth = ({ children }: { children: ReactNode }) => {
   const isLogged = localStorage.getItem('isLogged');
@@ -23,6 +24,7 @@ export function App() {
           <Route index element={<Dashboard />} />
           <Route path="users" element={<Users />} />
           <Route path="stores" element={<Stores />} />
+          <Route path="parametrages" element={<Parametrages />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
