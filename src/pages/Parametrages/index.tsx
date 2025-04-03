@@ -5,6 +5,12 @@ import type React from "react"
 import { useState } from "react"
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs"
+import { ToastContainer, toast } from 'react-toastify';
+import CategorieForm from "../../components/parametrages/categoryForm"
+import TypeEtablissementForm from "../../components/parametrages/TypeEtablissementForm"
+import LivraisonForm from "../../components/parametrages/LivraisonForm"
+import { motion } from "framer-motion"
+
 
 // Définition des types
 interface Categorie {
@@ -26,168 +32,17 @@ interface Livraison {
   delai: number
 }
 
-interface FormProps {
-  onClose: () => void
-  onSubmit: () => void
-}
 
-// Composant de formulaire pour les catégories
-const CategorieForm: React.FC<FormProps> = ({ onClose, onSubmit }) => {
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        onSubmit()
-      }}
-    >
-      <div className="space-y-4">
-        <div>
-          <label htmlFor="nom" className="block text-sm font-medium text-gray-700 mb-1">
-            Nom de la catégorie
-          </label>
-          <input
-            type="text"
-            id="nom"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Entrez le nom de la catégorie"
-          />
-        </div>
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-            Description
-          </label>
-          <textarea
-            id="description"
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Entrez une description"
-          />
-        </div>
-        <div className="flex justify-end space-x-3 pt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-          >
-            Annuler
-          </button>
-          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-            Enregistrer
-          </button>
-        </div>
-      </div>
-    </form>
-  )
-}
-
-// Composant de formulaire pour les types d'établissements
-const TypeEtablissementForm: React.FC<FormProps> = ({ onClose, onSubmit }) => {
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        onSubmit()
-      }}
-    >
-      <div className="space-y-4">
-        <div>
-          <label htmlFor="nom" className="block text-sm font-medium text-gray-700 mb-1">
-            Nom du type d'établissement
-          </label>
-          <input
-            type="text"
-            id="nom"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Entrez le nom du type d'établissement"
-          />
-        </div>
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-            Description
-          </label>
-          <textarea
-            id="description"
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Entrez une description"
-          />
-        </div>
-        <div className="flex justify-end space-x-3 pt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-          >
-            Annuler
-          </button>
-          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-            Enregistrer
-          </button>
-        </div>
-      </div>
-    </form>
-  )
-}
-
-// Composant de formulaire pour les livraisons
-const LivraisonForm: React.FC<FormProps> = ({ onClose, onSubmit }) => {
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        onSubmit()
-      }}
-    >
-      <div className="space-y-4">
-        <div>
-          <label htmlFor="nom" className="block text-sm font-medium text-gray-700 mb-1">
-            Nom du type de livraison
-          </label>
-          <input
-            type="text"
-            id="nom"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Entrez le nom du type de livraison"
-          />
-        </div>
-        <div>
-          <label htmlFor="tarif" className="block text-sm font-medium text-gray-700 mb-1">
-            Tarif
-          </label>
-          <input
-            type="number"
-            id="tarif"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Entrez le tarif"
-          />
-        </div>
-        <div>
-          <label htmlFor="delai" className="block text-sm font-medium text-gray-700 mb-1">
-            Délai (en jours)
-          </label>
-          <input
-            type="number"
-            id="delai"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Entrez le délai"
-          />
-        </div>
-        <div className="flex justify-end space-x-3 pt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-          >
-            Annuler
-          </button>
-          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-            Enregistrer
-          </button>
-        </div>
-      </div>
-    </form>
-  )
-}
+const notify = () => toast.success("Connexion réussie !", {
+  position: "top-right",
+  autoClose: 3000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "colored",
+});
 
 const Parametrage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("categories")
@@ -261,22 +116,59 @@ const Parametrage: React.FC = () => {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Paramétrage</h1>
-        <p className="text-gray-600">Gérez les catégories, types d'établissements et options de livraison</p>
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="border-b px-4">
-            <TabsTrigger value="categories" className="py-3 px-4">
+        <div className="relative border-b border-gray-200 mb-6">
+          <TabsList className="relative flex w-full justify-start bg-transparent p-0 h-auto">
+            <TabsTrigger
+              value="categories"
+              className="relative px-6 py-3 text-sm font-medium tracking-wide transition-all data-[state=active]:text-black data-[state=active]:font-semibold data-[state=inactive]:text-gray-500 bg-transparent rounded-none border-0"
+            >
               Catégories
+              {activeTab === "categories" && (
+                <motion.div
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"
+                  layoutId="activeTabIndicator"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
             </TabsTrigger>
-            <TabsTrigger value="typesEtablissements" className="py-3 px-4">
+            <TabsTrigger
+              value="typesEtablissements"
+              className="relative px-6 py-3 text-sm font-medium tracking-wide transition-all data-[state=active]:text-black data-[state=active]:font-semibold data-[state=inactive]:text-gray-500 bg-transparent rounded-none border-0"
+            >
               Types d'établissements
+              {activeTab === "typesEtablissements" && (
+                <motion.div
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"
+                  layoutId="activeTabIndicator"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
             </TabsTrigger>
-            <TabsTrigger value="livraisons" className="py-3 px-4">
+            <TabsTrigger
+              value="livraisons"
+              className="relative px-6 py-3 text-sm font-medium tracking-wide transition-all data-[state=active]:text-black data-[state=active]:font-semibold data-[state=inactive]:text-gray-500 bg-transparent rounded-none border-0"
+            >
               Livraisons
+              {activeTab === "livraisons" && (
+                <motion.div
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"
+                  layoutId="activeTabIndicator"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
             </TabsTrigger>
           </TabsList>
+        </div>
 
           <div className="p-4 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h2 className="text-lg font-medium">
@@ -357,7 +249,8 @@ const Parametrage: React.FC = () => {
                         <div className="text-gray-500">{categorie.description}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 mr-3">
+                        <button onClick={notify} className="text-blue-600 hover:text-blue-900 mr-3">
+                        <ToastContainer />
                           <PencilIcon size={16} />
                         </button>
                         <button className="text-red-600 hover:text-red-900">
