@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import UserForm from "../../components/Users/Form"
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
-
+import { GetAllUsers } from "../../functions/Users"
 const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -46,7 +46,19 @@ const Users = () => {
       role: "Client",
     },
   ]
-
+  const UsersAll = async () => {
+    GetAllUsers().then((users: any) => {
+      console.log(users.data)
+      // setUsers(users.data)
+      // setLoding(false)
+    }).catch((err: any) => {
+      console.error(err);
+    });
+    // setUsers(response.data)
+  }
+  useEffect(() => {
+    UsersAll();
+  },[]);
   const handleFormClose = () => {
     setIsModalOpen(false)
   }
@@ -149,13 +161,12 @@ const Users = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        user.role === "Admin"
+                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.role === "Admin"
                           ? "bg-purple-100 text-purple-800"
                           : user.role === "Livreur"
                             ? "bg-blue-100 text-blue-800"
                             : "bg-green-100 text-green-800"
-                      }`}
+                        }`}
                     >
                       {user.role}
                     </span>
