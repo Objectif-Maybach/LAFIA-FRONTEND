@@ -7,49 +7,49 @@ export const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoding] = useState(false);
-  const { register, handleSubmit, formState: { errors, isValid, isSubmitSuccessful } } = useForm({
+  const { register, handleSubmit,setError, clearErrors, formState: { errors, isValid, isSubmitSuccessful } } = useForm({
     mode: 'onTouched'
   })
   const navigate = useNavigate();
   const Api_Url = import.meta.env.VITE_API_URL;
   const login = async (data) => {
-    // e.preventDefault();
+    clearErrors();
     console.log(data);
-    // setLoding(true);
-    // try {
-    //   const data = {  
-    //     username: email,
-    //     password: password,
-    //   }
-    //   const response = await axios.post(`${Api_Url}login/`, data);
-    //   localStorage.setItem('isLogged', response.data.user.id);
-    //   navigate('/accueil');
-    // } catch (error) {
-    //   console.error('Login error:', error);
-    //   // alert('An error occurred. Please try again.');
-    // } finally {
-    //   setLoding(false);
-    // }
+    setLoding(true);
+    try {
+      const response = await axios.post(`${Api_Url}login/`, data);
+      localStorage.setItem('isLogged', response.data.user.id);
+      navigate('/accueil');
+    } catch (error) {
+      setError('errEmessage', { type: 'manual', message: 'Vos identifiants sont incorrects' });
+      console.error('Login error:', error);
+    } finally {
+      setLoding(false);
+    }
   };
-  console.log(errors)
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="bg-blue-600 py-6 px-8 text-center">
+        <div className="bg-blue-600 py-3 px-5 text-center">
           <div className="flex justify-center mb-2">
             <div className="bg-white p-3 rounded-full">
               <TruckIcon size={32} className="text-blue-600" />
             </div>
           </div>
           <h1 className="text-2xl font-bold text-white">Speeda </h1>
-          <p className="text-blue-100">Système de gestion de livraison</p>
+          {/* <p className="text-blue-100">Système de gestion de livraison</p> */}
         </div>
         <div className="p-8">
           <h2 className="text-xl font-semibold text-gray-700 text-center mb-6">
-            Connexion
+            Connexion  {isSubmitSuccessful ? 'true' : 'false'}
           </h2> 
-          {!isSubmitSuccessful && <div className='alert alert-red-600'>  Vos identifiants sont incorrect </div>}
+          {/* {!isSubmitSuccessful && <div className='alert alert-red-600'>  Vos identifiants sont incorrect </div>} */}
           <form onSubmit={handleSubmit(login)}>
+          {errors?.errEmessage && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+              {errors.errEmessage.message}
+            </div>
+          )}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-medium mb-2">
                 Login
@@ -65,7 +65,7 @@ export const LoginPage = () => {
                   {...register('username',
                     { required: 'Le login est requis' })
                   }
-                  placeholder="Speed250000"
+                  placeholder="Speed mali"
                 />
 
               </div>
@@ -95,7 +95,7 @@ export const LoginPage = () => {
               </div>
               {errors?.password && <span className='text-sm text-red-600'>{errors.password.message}</span>}
             </div>
-            <button type="submit" disabled={!isValid} className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-200">
+            <button type="submit" className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-200">
               {loading ? 'Connexion ... ' : 'Se connecter'}
             </button>
           </form>
