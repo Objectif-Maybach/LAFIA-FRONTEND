@@ -3,77 +3,64 @@
 import { useEffect, useState } from "react"
 import UserForm from "../../components/Users/Form"
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
-import { GetAllUsers } from "../../functions/Users"
+import { AddUser, DeleteUser, GetAllUsers, GetUserById } from "../../functions/Users"
+import { toast } from "react-toastify"
 const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [users, setUsers] = useState([])
+  const [dataEdit, setDataEdit] = useState({})
+  const [error, setError] = useState('')
 
-  // Sample user data
-  const users = [
-    {
-      id: 1,
-      name: "Marie Dubois",
-      email: "marie@example.com",
-      phone: "06 12 34 56 78",
-      role: "Client",
-    },
-    {
-      id: 2,
-      name: "Thomas Martin",
-      email: "thomas@example.com",
-      phone: "07 23 45 67 89",
-      role: "Livreur",
-    },
-    {
-      id: 3,
-      name: "Sophie Bernard",
-      email: "sophie@example.com",
-      phone: "06 34 56 78 90",
-      role: "Client",
-    },
-    {
-      id: 4,
-      name: "Lucas Petit",
-      email: "lucas@example.com",
-      phone: "07 45 67 89 01",
-      role: "Admin",
-    },
-    {
-      id: 5,
-      name: "Emma Leroy",
-      email: "emma@example.com",
-      phone: "06 56 78 90 12",
-      role: "Client",
-    },
-  ]
   const UsersAll = async () => {
-    GetAllUsers().then((users: any) => {
-      console.log(users.data)
-      // setUsers(users.data)
-      // setLoding(false)
-    }).catch((err: any) => {
-      console.error(err);
-    });
-    // setUsers(response.data)
+    try{
+      const response = await GetAllUsers()
+      console.log(response)
+      setUsers(response)
+    }catch(err){
+      console.error(err)
+    }
   }
+  const AddUsers = async (user) => {
+    try {
+      const response = await AddUser(user);
+      toast.success('Ajouter avec succès ')
+      UsersAll()
+      handleFormClose()
+      console.log(response);
+    }catch (error) {
+      toast.error('Erreur lors de l\'ajout avec succès ')
+      // Afficher une notification d'erreur ou gérer l'erreur comme vous le souhaitez
+      console.error(error);
+    }
+  }
+  const handleEdit = async (user) => {
+    setIsModalOpen(true)
+    setDataEdit(user)
+  }
+  const handleDelete = async (userId) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+      try {
+        const response = await DeleteUser(userId);
+        toast.success('Utilisateur supprimé avec succès')
+        UsersAll()
+      } catch (error) {
+        toast.error('Erreur lors de la suppression de l\'utilisateur')
+        console.error(error);
+      }
+    }
+  }   
   useEffect(() => {
     UsersAll();
-  },[]);
+  }, []);
   const handleFormClose = () => {
-    setIsModalOpen(false)
-  }
-
-  const handleFormSubmit = () => {
-    // Handle form submission
     setIsModalOpen(false)
   }
 
   const filteredUsers = users.filter(
     (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.phone.includes(searchQuery) ||
-      user.role.toLowerCase().includes(searchQuery.toLowerCase()),
+      // user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
@@ -88,7 +75,7 @@ const Users = () => {
           <h2 className="text-lg font-medium">Liste des utilisateurs</h2>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-            <div className="relative">
+            {/* <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <SearchIcon size={16} className="text-gray-400" />
               </div>
@@ -99,10 +86,10 @@ const Users = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-            </div>
+            </div> */}
 
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => (setDataEdit([]) , setIsModalOpen(true))}
               className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               <PlusIcon size={16} className="mr-2" />
@@ -119,7 +106,7 @@ const Users = () => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Nom
+                  Nom et Prénom
                 </th>
                 <th
                   scope="col"
@@ -151,31 +138,33 @@ const Users = () => {
               {filteredUsers.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="font-medium text-gray-900">{user.name}</div>
+                    <div className="font-medium text-gray-900">{user.full_name} </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-gray-500">{user.email}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-gray-500">{user.phone}</div>
+                    <div className="text-gray-500"><span className="text-red-700"> {user.contact.telephone}</span> <br />
+                    {user.contact.adresse}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.role === "Admin"
-                          ? "bg-purple-100 text-purple-800"
-                          : user.role === "Livreur"
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-green-100 text-green-800"
+                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.role.nom_role === "admin"
+                        ? "bg-purple-100 text-purple-800"
+                        : user.role.nom_role === "Livreur"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-green-100 text-green-800"
                         }`}
                     >
-                      {user.role}
+                      {user.role.nom_role}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3">
+                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(user)}>
                       <PencilIcon size={16} />
                     </button>
-                    <button className="text-red-600 hover:text-red-900">
+                    <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(user.id)}>
                       <TrashIcon size={16} />
                     </button>
                   </td>
@@ -208,15 +197,20 @@ const Users = () => {
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b">
               <div>
-                <h3 className="text-lg font-medium">Ajouter un utilisateur</h3>
-                <p className="text-sm text-gray-500">Remplissez le formulaire pour ajouter un nouvel utilisateur</p>
+                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un utilisateur': 'Modifier l\'utilisateur'} </h3>
+                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel utilisateur': 'Modifiez les informations pour mettre à jour l\'utilisateur'} </p>
               </div>
               <button onClick={handleFormClose} className="text-gray-500 hover:text-gray-700">
                 <X size={20} />
               </button>
             </div>
+            {error && (
+              <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+                {error}
+              </div>
+            )}
             <div className="p-4">
-              <UserForm onClose={handleFormClose} onSubmit={handleFormSubmit} />
+              <UserForm onClose={handleFormClose} onSubmit={AddUsers} dataEdit={dataEdit} />
             </div>
           </div>
         </div>
