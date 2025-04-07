@@ -9,10 +9,10 @@ import Layout from './components/Layout.jsx';  // Changer l'extension pour .jsx
 import { ToastContainer, toast } from 'react-toastify';
 
 // Fonction RequireAuth pour protéger les routes
-const RequireAuth = ({ children }) => {
-  const isLogged = localStorage.getItem('isLogged');
-  return isLogged ? children : <Navigate to="/" replace />;
-};
+// const RequireAuth = ({ children }) => {
+//   const isLogged = localStorage.getItem('isLogged');
+//   return isLogged ? children : <Navigate to="/" replace />;
+// };
 
 // Composant principal App avec routing
 export function App() {

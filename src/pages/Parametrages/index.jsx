@@ -1,26 +1,12 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs"
-import { toast } from "react-toastify"
-import CategorieForm from "../../components/parametrages/categoryForm"
-import TypeEtablissementForm from "../../components/parametrages/TypeEtablissementForm"
-import { motion } from "framer-motion"
-
-interface Categorie {
-  id: number
-  nom: string
-  description: string
-}
-
-interface TypeEtablissement {
-  id: number
-  nom: string
-  description: string
-}
+import React, { useState } from "react";
+import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
+import { toast } from "react-toastify";
+import CategorieForm from "../../components/parametrages/categoryForm";
+import TypeEtablissementForm from "../../components/parametrages/TypeEtablissementForm";
+import { motion } from "framer-motion";
 
 const notify = () =>
   toast.success("Connexion réussie !", {
@@ -32,91 +18,91 @@ const notify = () =>
     draggable: true,
     progress: undefined,
     theme: "colored",
-  })
+  });
 
-const Parametrage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>("categories")
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [modalType, setModalType] = useState<string>("")
-  const [searchQuery, setSearchQuery] = useState<string>("")
-  const [update, setUpdate] = useState<boolean>(false)
-  const [nomCategorie, setNomCategorie] = useState<string>("")
-  const [nomTypeEtablissement, setNomTypeEtablissement] = useState<string>("")
+const Parametrage = () => {
+  const [activeTab, setActiveTab] = useState("categories");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [update, setUpdate] = useState(false);
+  const [nomCategorie, setNomCategorie] = useState("");
+  const [nomTypeEtablissement, setNomTypeEtablissement] = useState("");
 
-  const clean = () =>{
-    setNomCategorie('');
-    setNomTypeEtablissement('');
+  const clean = () => {
+    setNomCategorie("");
+    setNomTypeEtablissement("");
+  };
 
-  }
-  // Données d'exemple pour les catégories
-  const categories: Categorie[] = [
+  const categories = [
     { id: 1, nom: "Électronique", description: "Produits électroniques et accessoires" },
     { id: 2, nom: "Vêtements", description: "Vêtements et accessoires de mode" },
     { id: 3, nom: "Alimentation", description: "Produits alimentaires et boissons" },
     { id: 4, nom: "Maison", description: "Meubles et décoration d'intérieur" },
     { id: 5, nom: "Beauté", description: "Produits de beauté et soins personnels" },
-  ]
+  ];
 
-  // Données d'exemple pour les types d'établissements
-  const typesEtablissements: TypeEtablissement[] = [
+  const typesEtablissements = [
     { id: 1, nom: "Restaurant", description: "Établissement de restauration" },
     { id: 2, nom: "Boutique", description: "Commerce de détail" },
     { id: 3, nom: "Supermarché", description: "Grande surface alimentaire" },
     { id: 4, nom: "Pharmacie", description: "Établissement pharmaceutique" },
     { id: 5, nom: "Hôtel", description: "Établissement d'hébergement" },
-  ]
+  ];
 
-  const handleFormClose = (): void => {
-    setIsModalOpen(false)
-    setModalType("")
-    clean()
-  }
+  const handleFormClose = () => {
+    setIsModalOpen(false);
+    setModalType("");
+    clean();
+  };
 
-  const handleFormSubmit = (): void => {
-    // Gérer la soumission du formulaire
-    setIsModalOpen(false)
-    setModalType("")
-  }
+  const handleFormSubmit = () => {
+    setIsModalOpen(false);
+    setModalType("");
+  };
 
-  const openModal = (type: string): void => {
-    setModalType(type)
-    setIsModalOpen(true)
-  }
-  const updateState = (type: string, id: number): void => {
-    openModal(type)
-    setUpdate(true)
+  const openModal = (type) => {
+    setModalType(type);
+    setIsModalOpen(true);
+  };
+
+  const updateState = (type, id) => {
+    openModal(type);
+    setUpdate(true);
     if (type === "categories") {
-      dataCategorie(id)
+      dataCategorie(id);
     } else if (type === "typesEtablissements") {
-      dataTypeEtablissement(id)
+      dataTypeEtablissement(id);
     }
-  }
+  };
 
-  const dataCategorie = (id: number): void => {
+  const dataCategorie = (id) => {
     for (const i of categories) {
       if (i.id === id) {
-        setNomCategorie(i.nom)
+        setNomCategorie(i.nom);
       }
     }
-  }
-  const dataTypeEtablissement = (id: number): void => {
+  };
+
+  const dataTypeEtablissement = (id) => {
     for (const i of typesEtablissements) {
       if (i.id === id) {
-        setNomTypeEtablissement(i.nom)
+        setNomTypeEtablissement(i.nom);
       }
     }
-  }
+  };
+
   const filteredCategories = categories.filter(
     (cat) =>
       cat.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cat.description.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+      cat.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const filteredTypesEtablissements = typesEtablissements.filter(
     (type) =>
       type.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      type.description.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+      type.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div>

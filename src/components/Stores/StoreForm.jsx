@@ -1,27 +1,12 @@
-import type React from "react"
+import  React from "react"
 
 import { useState, useEffect } from "react"
-import { Button } from "../../components/ui/button"
-import { Input } from "../../components/ui/input"
-import { Textarea } from "../../components/ui/textarea"
-import { Label } from "../../components/ui/label"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+import { Textarea } from "../ui/textarea"
+import { Label } from "../ui/label"
 
-interface StoreFormProps {
-  onClose: () => void
-  onSubmit: () => void
-  nomEtablissement?: string
-  image?: string
-  cover_image?: string
-  type?: string
-  address?: string
-  phone?: string
-  distance?: string
-  opening_hours?: string
-  description?: string
-  featured?: boolean
-}
-
-const StoreForm: React.FC<StoreFormProps> = ({
+const StoreForm = ({
   onClose,
   onSubmit,
   nomEtablissement = "",
@@ -35,16 +20,16 @@ const StoreForm: React.FC<StoreFormProps> = ({
   featured = false,
   description = "",
 })=> {
-  const [nom, setNom] = useState<string>("")
-  const [descript, setDescript] = useState<string>("")
-  const [img, setImg] = useState<string>("")
-  const [coverImg, setCoverImg] = useState<string>("")
-  const [typ, setTyp] = useState<string>("")
-  const [addres, setAddres] = useState<string>("")
-  const [phone, setPhone] = useState<string>("")
-  const [distances, setDistances] = useState<string>("")
-  const [openingHours, setOpeningHours] = useState<string>("")
-  const [feature, setFeature] = useState<boolean>(false)
+  const [nom, setNom] = useState("")
+  const [descript, setDescript] = useState("")
+  const [img, setImg] = useState("")
+  const [coverImg, setCoverImg] = useState("")
+  const [typ, setTyp] = useState("")
+  const [addres, setAddres] = useState("")
+  const [phone, setPhone] = useState("")
+  const [distances, setDistances] = useState("")
+  const [openingHours, setOpeningHours] = useState("")
+  const [feature, setFeature] = useState(false)
 
   useEffect(() => {
     if (nomEtablissement) {
@@ -61,7 +46,7 @@ const StoreForm: React.FC<StoreFormProps> = ({
     if (featured !== undefined) setFeature(featured)
   }, [nomEtablissement, imageProp, coverImageProp, type, address, phone, distance, opening_hours, featured])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     onSubmit()
   }

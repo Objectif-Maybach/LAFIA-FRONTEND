@@ -1,30 +1,26 @@
-"use client"
-
-import type React from "react"
+import  React from "react"
 
 import { useState, useEffect } from "react"
-import { Button } from "../../components/ui/button"
-import { Input } from "../../components/ui/input"
-import { Textarea } from "../../components/ui/textarea"
-import { Label } from "../../components/ui/label"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+import { Textarea } from "../ui/textarea"
+import { Label } from "../ui/label"
 
-interface CategorieFormProps {
-  onClose: () => void
-  onSubmit: () => void
-  nomCategorie?: string
-}
-
-const CategorieForm: React.FC<CategorieFormProps> = ({ onClose, onSubmit, nomCategorie = "" }) => {
-  const [nom, setNom] = useState<string>("")
-  const [description, setDescription] = useState<string>("")
+const TypeEtablissementForm = ({
+  onClose,
+  onSubmit,
+  nomTypeEtablissement = "",
+}) => {
+  const [nom, setNom] = useState("")
+  const [description, setDescription] = useState("")
 
   useEffect(() => {
-    if (nomCategorie) {
-      setNom(nomCategorie)
+    if (nomTypeEtablissement) {
+      setNom(nomTypeEtablissement)
     }
-  }, [nomCategorie])
+  }, [nomTypeEtablissement])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     // Ici, vous pouvez ajouter la logique pour envoyer les données au serveur
     console.log({ nom, description })
@@ -40,7 +36,7 @@ const CategorieForm: React.FC<CategorieFormProps> = ({ onClose, onSubmit, nomCat
             id="nom"
             value={nom}
             onChange={(e) => setNom(e.target.value)}
-            placeholder="Nom de la catégorie"
+            placeholder="Nom du type d'établissement"
             required
           />
         </div>
@@ -50,7 +46,7 @@ const CategorieForm: React.FC<CategorieFormProps> = ({ onClose, onSubmit, nomCat
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Description de la catégorie"
+            placeholder="Description du type d'établissement"
             rows={3}
           />
         </div>
@@ -65,5 +61,5 @@ const CategorieForm: React.FC<CategorieFormProps> = ({ onClose, onSubmit, nomCat
   )
 }
 
-export default CategorieForm
+export default TypeEtablissementForm
 
