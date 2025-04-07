@@ -4,24 +4,24 @@ import { useForm } from 'react-hook-form';
 import { UserIcon, LockIcon, TruckIcon } from 'lucide-react';
 import axios from 'axios';
 export const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoding] = useState(false);
-  const { register, handleSubmit,setError, clearErrors, formState: { errors, isValid, isSubmitSuccessful } } = useForm({
+  const { register, handleSubmit, formState: { errors} } = useForm({
     mode: 'onTouched'
   })
   const navigate = useNavigate();
   const Api_Url = import.meta.env.VITE_API_URL;
   const login = async (data) => {
-    clearErrors();
-    console.log(data);
+    // localStorage.setItem('isLogged', '145455656');
+    // navigate('/accueil');*
+    console.log(errors);
     setLoding(true);
     try {
       const response = await axios.post(`${Api_Url}login/`, data);
       localStorage.setItem('isLogged', response.data.user.id);
       navigate('/accueil');
     } catch (error) {
-      setError('errEmessage', { type: 'manual', message: 'Vos identifiants sont incorrects' });
+      setError(error);
       console.error('Login error:', error);
     } finally {
       setLoding(false);
@@ -37,17 +37,15 @@ export const LoginPage = () => {
             </div>
           </div>
           <h1 className="text-2xl font-bold text-white">Speeda </h1>
-          {/* <p className="text-blue-100">Système de gestion de livraison</p> */}
         </div>
         <div className="p-8">
           <h2 className="text-xl font-semibold text-gray-700 text-center mb-6">
-            Connexion  {isSubmitSuccessful ? 'true' : 'false'}
+            Connexion  
           </h2> 
-          {/* {!isSubmitSuccessful && <div className='alert alert-red-600'>  Vos identifiants sont incorrect </div>} */}
           <form onSubmit={handleSubmit(login)}>
-          {errors?.errEmessage && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
-              {errors.errEmessage.message}
+          {error && (
+            <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+             Vos identifiants sont incorrects
             </div>
           )}
             <div className="mb-4">
