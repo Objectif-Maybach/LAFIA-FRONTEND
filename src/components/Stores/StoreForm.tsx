@@ -1,115 +1,175 @@
-import React, { useState } from 'react';
-import { ShoppingBagIcon, MapPinIcon, PhoneIcon, ClockIcon } from 'lucide-react';
-const StoreForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    type: 'restaurant',
-    address: '',
-    phone: '',
-    openingTime: '',
-    closingTime: ''
-  });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const {
-      name,
-      value
-    } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+import type React from "react"
+
+import { useState, useEffect } from "react"
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
+import { Textarea } from "../../components/ui/textarea"
+import { Label } from "../../components/ui/label"
+
+interface StoreFormProps {
+  onClose: () => void
+  onSubmit: () => void
+  nomEtablissement?: string
+  image?: string
+  cover_image?: string
+  type?: string
+  address?: string
+  phone?: string
+  distance?: string
+  opening_hours?: string
+  description?: string
+  featured?: boolean
+}
+
+const StoreForm: React.FC<StoreFormProps> = ({
+  onClose,
+  onSubmit,
+  nomEtablissement = "",
+  image: imageProp = "",
+  cover_image: coverImageProp = "",
+  type = "",
+  address = "",
+  // contact = "",
+  distance = "",
+  opening_hours = "",
+  featured = false,
+  description = "",
+})=> {
+  const [nom, setNom] = useState<string>("")
+  const [descript, setDescript] = useState<string>("")
+  const [img, setImg] = useState<string>("")
+  const [coverImg, setCoverImg] = useState<string>("")
+  const [typ, setTyp] = useState<string>("")
+  const [addres, setAddres] = useState<string>("")
+  const [phone, setPhone] = useState<string>("")
+  const [distances, setDistances] = useState<string>("")
+  const [openingHours, setOpeningHours] = useState<string>("")
+  const [feature, setFeature] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (nomEtablissement) {
+      setNom(nomEtablissement)
+    }
+    if (imageProp) setImg(imageProp)
+    if (coverImageProp) setCoverImg(coverImageProp)
+    if (type) setTyp(type)
+    if (address) setAddres(address)
+      if (description) setDescript(description)
+    if (phone) setPhone(phone)
+    if (distance) setDistances(distance)
+    if (opening_hours) setOpeningHours(opening_hours)
+    if (featured !== undefined) setFeature(featured)
+  }, [nomEtablissement, imageProp, coverImageProp, type, address, phone, distance, opening_hours, featured])
+
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Just for demonstration, no actual backend
-    alert('Boutique ajoutée avec succès!');
-    setFormData({
-      name: '',
-      type: 'restaurant',
-      address: '',
-      phone: '',
-      openingTime: '',
-      closingTime: ''
-    });
-  };
-  return <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-lg font-medium mb-6">Ajouter une boutique</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nom de la boutique
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <ShoppingBagIcon size={16} className="text-gray-400" />
-              </div>
-              <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Le Petit Café" required />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Type de boutique
-            </label>
-            <select name="type" value={formData.type} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="restaurant">Restaurant</option>
-              <option value="epicerie">Épicerie</option>
-              <option value="boulangerie">Boulangerie</option>
-              <option value="pharmacie">Pharmacie</option>
-              <option value="autre">Autre</option>
-            </select>
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Adresse
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MapPinIcon size={16} className="text-gray-400" />
-              </div>
-              <input type="text" name="address" value={formData.address} onChange={handleChange} className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="45 Rue du Commerce, Paris" required />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Téléphone
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <PhoneIcon size={16} className="text-gray-400" />
-              </div>
-              <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="01 23 45 67 89" required />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Heure d'ouverture
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <ClockIcon size={16} className="text-gray-400" />
-                </div>
-                <input type="time" name="openingTime" value={formData.openingTime} onChange={handleChange} className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Heure de fermeture
-              </label>
-              <input type="time" name="closingTime" value={formData.closingTime} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-          </div>
+    e.preventDefault()
+    onSubmit()
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="nom">Nom</Label>
+          <Input
+            id="nom"
+            value={nom}
+            onChange={(e) => setNom(e.target.value)}
+            placeholder="Nom de la catégorie"
+            required
+          />
         </div>
-        <div className="flex justify-end">
-          <button type="button" className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 mr-2 hover:bg-gray-50">
-            Annuler
-          </button>
-          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            Ajouter la boutique
-          </button>
+        <div>
+          <Label htmlFor="description">Description</Label>
+          <Textarea
+            id="description"
+            value={descript}
+            onChange={(e) => setDescript(e.target.value)}
+            placeholder="Description de la catégorie"
+            rows={3}
+          />
         </div>
-      </form>
-    </div>;
-};
-export default StoreForm;
+        <div>
+          <Label htmlFor="image">Image</Label>
+          <Input
+            id="image"
+            value={img}
+            onChange={(e) => setImg(e.target.value)}
+            placeholder="URL de l'image"
+          />
+        </div>
+        <div>
+          <Label htmlFor="coverImage">Image de couverture</Label>
+          <Input
+            id="coverImage"
+            value={coverImg}
+            onChange={(e) => setCoverImg(e.target.value)}
+            placeholder="URL de l'image de couverture"
+          />
+        </div>
+        <div>
+          <Label htmlFor="type">Type</Label>
+          <Input
+            id="type"
+            value={typ}
+            onChange={(e) => setTyp(e.target.value)}
+            placeholder="Type d'établissement"
+          />
+        </div>
+        <div>
+          <Label htmlFor="address">Adresse</Label>
+          <Input
+            id="address"
+            value={addres}
+            onChange={(e) => setAddres(e.target.value)}
+            placeholder="Adresse"
+          />
+        </div>
+        <div>
+          <Label htmlFor="phone">Téléphone</Label>
+          <Input
+            id="phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="Numéro de téléphone"
+          />
+        </div>
+        <div>
+          <Label htmlFor="distance">Distance</Label>
+          <Input
+            id="distance"
+            value={distances}
+            onChange={(e) => setDistances(e.target.value)}
+            placeholder="Distance"
+          />
+        </div>
+        <div>
+          <Label htmlFor="openingHours">Horaires d'ouverture</Label>
+          <Input
+            id="openingHours"
+            value={openingHours}
+            onChange={(e) => setOpeningHours(e.target.value)}
+            placeholder="Ex : 08h - 20h"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <input
+            id="featured"
+            type="checkbox"
+            checked={feature}
+            onChange={(e) => setFeature(e.target.checked)}
+          />
+          <Label htmlFor="featured">Mis en avant</Label>
+        </div>
+      </div>
+      <div className="flex justify-end gap-2 mt-6">
+        <Button type="button" variant="outline" onClick={onClose}>
+          Annuler
+        </Button>
+        <Button type="submit">Enregistrer</Button>
+      </div>
+    </form>
+  )
+}
+
+export default StoreForm
