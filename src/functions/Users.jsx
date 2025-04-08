@@ -34,7 +34,7 @@ export const GetRoles = async () => {
 // Ajout d'un utilisateur
 export const AddUser = async (userData) => {
   try {
-    const response = await axios.post(`${Api_Url}register/`, userData);
+    const response = await axios.post(`${Api_Url}user/`, userData);
     return response.data;
   } catch (error) {
     console.error('Error adding user:', error);
