@@ -1,160 +1,175 @@
-import  React from "react"
+import { useEffect, useState } from "react";
+import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { GetRoles } from "../../functions/Users";
 
-import { useState, useEffect } from "react"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Textarea } from "../ui/textarea"
-import { Label } from "../ui/label"
+const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm(
+    {mode: "onTouched"}
+  );
 
-const StoreForm = ({
-  onClose,
-  onSubmit,
-  nomEtablissement = "",
-  image: imageProp = "",
-  cover_image: coverImageProp = "",
-  type = "",
-  address = "",
-  // contact = "",
-  distance = "",
-  opening_hours = "",
-  featured = false,
-  description = "",
-})=> {
-  const [nom, setNom] = useState("")
-  const [descript, setDescript] = useState("")
-  const [img, setImg] = useState("")
-  const [coverImg, setCoverImg] = useState("")
-  const [typ, setTyp] = useState("")
-  const [addres, setAddres] = useState("")
-  const [phone, setPhone] = useState("")
-  const [distances, setDistances] = useState("")
-  const [openingHours, setOpeningHours] = useState("")
-  const [feature, setFeature] = useState(false)
-
-  useEffect(() => {
-    if (nomEtablissement) {
-      setNom(nomEtablissement)
-    }
-    if (imageProp) setImg(imageProp)
-    if (coverImageProp) setCoverImg(coverImageProp)
-    if (type) setTyp(type)
-    if (address) setAddres(address)
-      if (description) setDescript(description)
-    if (phone) setPhone(phone)
-    if (distance) setDistances(distance)
-    if (opening_hours) setOpeningHours(opening_hours)
-    if (featured !== undefined) setFeature(featured)
-  }, [nomEtablissement, imageProp, coverImageProp, type, address, phone, distance, opening_hours, featured])
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    onSubmit()
+  const AddStore = data => {
+    onSubmit(data);
+  };
+  if (dataEdit.length != 0) {
+  setValue('nomEtablissement', dataEdit?.nom);
+  setValue('image', dataEdit?.image);
+  setValue('id', dataEdit?.id);
+  setValue('cover_image', dataEdit?.cover_image);
+  setValue('address', dataEdit?.address);
+  setValue('distance', dataEdit?.distance);
+  setValue('opening_hours', dataEdit?.opening_hours);
+  setValue('description', dataEdit?.description);
+  setValue('featured', dataEdit?.featured);
+  setValue('contact', dataEdit?.id_contact);
+  setValue('type', dataEdit?.id_type_etablissements);
   }
-
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="nom">Nom</Label>
-          <Input
-            id="nom"
-            value={nom}
-            onChange={(e) => setNom(e.target.value)}
-            placeholder="Nom de la catégorie"
-            required
-          />
+    <div className="p-1">
+      <form onSubmit={handleSubmit(AddStore)}>
+        <div className="gap-6">
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nom </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <UserIcon size={16} className="text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  name="nom"
+                  {...register('nom',
+                    { required: 'Le nom est obligatoire' })
+                  }
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Nom de la catégorie"
+                />
+              </div>
+              {errors?.nom && <span className='text-sm text-red-600'>{errors.nom.message}</span>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+              <input
+                type="text"
+                name="address"
+                {...register('address', { required: "L'adresse est obligatoire" })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Adresse de l'établissement"
+              />
+              {errors?.address && <span className='text-sm text-red-600'>{errors.address.message}</span>}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Heures d'ouverture</label>
+              <input
+                type="text"
+                name="opening_hours"
+                {...register('opening_hours')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Ex: 8h00 - 18h00"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea
+                name="description"
+                {...register('description')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Décrivez l'établissement..."
+                rows={2}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
+              <input
+                type="file"
+                name="image"
+                {...register('image')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="URL de l'image"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Image de couverture</label>
+              <input
+                type="file"
+                name="cover_image"
+                {...register('cover_image')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="URL de l'image de couverture"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Distance</label>
+              <input
+                type="text"
+                name="distance"
+                {...register('distance')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Distance de l'établissement"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Contact</label>
+              <input
+                type="text"
+                name="contact"
+                {...register('contact')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Contact de l'établissement"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Type d'établissement</label>
+              <input
+                type="text"
+                name="type"
+                {...register('type')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Type d'établissement"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">En vedette ?</label>
+              <select
+                name="featured"
+                {...register('featured')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Sélectionnez</option>
+                <option value="true">Oui</option>
+                <option value="false">Non</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div>
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            value={descript}
-            onChange={(e) => setDescript(e.target.value)}
-            placeholder="Description de la catégorie"
-            rows={3}
-          />
+        <div className="flex justify-end gap-3 mt-6">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+          >
+            <X size={18} className="mr-2" />
+            Annuler
+          </button>
+          <button
+            type="submit"
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+          >
+            <CheckCircle size={18} className="mr-2" />
+            Valider
+          </button>
         </div>
-        <div>
-          <Label htmlFor="image">Image</Label>
-          <Input
-            id="image"
-            value={img}
-            onChange={(e) => setImg(e.target.value)}
-            placeholder="URL de l'image"
-          />
-        </div>
-        <div>
-          <Label htmlFor="coverImage">Image de couverture</Label>
-          <Input
-            id="coverImage"
-            value={coverImg}
-            onChange={(e) => setCoverImg(e.target.value)}
-            placeholder="URL de l'image de couverture"
-          />
-        </div>
-        <div>
-          <Label htmlFor="type">Type</Label>
-          <Input
-            id="type"
-            value={typ}
-            onChange={(e) => setTyp(e.target.value)}
-            placeholder="Type d'établissement"
-          />
-        </div>
-        <div>
-          <Label htmlFor="address">Adresse</Label>
-          <Input
-            id="address"
-            value={addres}
-            onChange={(e) => setAddres(e.target.value)}
-            placeholder="Adresse"
-          />
-        </div>
-        <div>
-          <Label htmlFor="phone">Téléphone</Label>
-          <Input
-            id="phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="Numéro de téléphone"
-          />
-        </div>
-        <div>
-          <Label htmlFor="distance">Distance</Label>
-          <Input
-            id="distance"
-            value={distances}
-            onChange={(e) => setDistances(e.target.value)}
-            placeholder="Distance"
-          />
-        </div>
-        <div>
-          <Label htmlFor="openingHours">Horaires d'ouverture</Label>
-          <Input
-            id="openingHours"
-            value={openingHours}
-            onChange={(e) => setOpeningHours(e.target.value)}
-            placeholder="Ex : 08h - 20h"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <input
-            id="featured"
-            type="checkbox"
-            checked={feature}
-            onChange={(e) => setFeature(e.target.checked)}
-          />
-          <Label htmlFor="featured">Mis en avant</Label>
-        </div>
-      </div>
-      <div className="flex justify-end gap-2 mt-6">
-        <Button type="button" variant="outline" onClick={onClose}>
-          Annuler
-        </Button>
-        <Button type="submit">Enregistrer</Button>
-      </div>
-    </form>
-  )
-}
+      </form>
+    </div>
+  );
+};
 
-export default StoreForm
+export default CategoryForm;

@@ -25,13 +25,12 @@ const Parametrage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [update, setUpdate] = useState(false);
-  const [nomCategorie, setNomCategorie] = useState("");
-  const [nomTypeEtablissement, setNomTypeEtablissement] = useState("");
+  const [dataEdit, setDataEdit] = useState([]);
+  const [update, setUpdate] = useState(false)
 
   const clean = () => {
-    setNomCategorie("");
-    setNomTypeEtablissement("");
+    setDataEdit([]);
+    setUpdate(false)
   };
 
   const categories = [
@@ -64,33 +63,16 @@ const Parametrage = () => {
   const openModal = (type) => {
     setModalType(type);
     setIsModalOpen(true);
+    
   };
 
-  const updateState = (type, id) => {
+  const updateState = (type, prop) => {
     openModal(type);
+    setDataEdit(prop);
     setUpdate(true);
-    if (type === "categories") {
-      dataCategorie(id);
-    } else if (type === "typesEtablissements") {
-      dataTypeEtablissement(id);
-    }
   };
-
-  const dataCategorie = (id) => {
-    for (const i of categories) {
-      if (i.id === id) {
-        setNomCategorie(i.nom);
-      }
-    }
-  };
-
-  const dataTypeEtablissement = (id) => {
-    for (const i of typesEtablissements) {
-      if (i.id === id) {
-        setNomTypeEtablissement(i.nom);
-      }
-    }
-  };
+ 
+  
 
   const filteredCategories = categories.filter(
     (cat) =>
@@ -231,7 +213,7 @@ const Parametrage = () => {
                           <PencilIcon size={16} />
                         </button> */}
                         <button
-                          onClick={() => updateState(activeTab, categorie.id)}
+                          onClick={() => updateState(activeTab, categorie)}
                           className="text-blue-600 hover:text-blue-900 mr-3"
                         >
                           <PencilIcon size={16} />
@@ -308,7 +290,7 @@ const Parametrage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
-                          onClick={() => updateState(activeTab, type.id)}
+                          onClick={() => updateState(activeTab, type)}
                           className="text-blue-600 hover:text-blue-900 mr-3"
                         >
                           <PencilIcon size={16} />
@@ -367,13 +349,13 @@ const Parametrage = () => {
             </div>
             <div className="p-4">
               {modalType === "categories" && (
-                <CategorieForm onClose={handleFormClose} onSubmit={handleFormSubmit} nomCategorie={nomCategorie} />
+                <CategorieForm onClose={handleFormClose} onSubmit={handleFormSubmit} dataEdit={dataEdit} />
               )}
               {modalType === "typesEtablissements" && (
                 <TypeEtablissementForm
                   onClose={handleFormClose}
                   onSubmit={handleFormSubmit}
-                  nomTypeEtablissement={nomTypeEtablissement}
+                  dataEdit={dataEdit}
                 />
               )}
             </div>
