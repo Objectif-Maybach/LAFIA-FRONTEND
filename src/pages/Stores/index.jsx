@@ -1,11 +1,36 @@
 import React, { useState } from 'react';
 import StoreForm from '../../components/Stores/StoreForm';
-import { PencilIcon, TrashIcon, SearchIcon, PlusIcon } from 'lucide-react';
+import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from 'lucide-react';
 import restauImg from '../../assets/images/restau.jpg';
+
 const Stores = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
-  // Sample store data
+    const [dataEdit, setDataEdit] = useState([])
+    const [update, setUpdate] = useState(false)
+
+
+    const clean = () => {
+      setDataEdit([]);
+      setUpdate(false)
+    };
+    const handleFormClose = () => {
+      setIsModalOpen(false);
+      clean();
+    };
+    const openModal = () => {
+      setIsModalOpen(true);
+      
+    };
+const AddUsers = async () =>{
+  console.log("hello");
+ 
+}
+const updateState = (prop) => {
+  openModal();
+  setDataEdit(prop);
+  setUpdate(true);
+};
   const allStores = [{
     id: 1,
     name: 'Le Petit Café',
@@ -79,6 +104,7 @@ const Stores = () => {
             <button
            
               className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              onClick={openModal}
             >
               <PlusIcon size={16} className="mr-2" />
               Ajouter un établissement
@@ -117,7 +143,7 @@ const Stores = () => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredStores.map(store => <tr key={store.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <img src={store.photo} alt={store.name} className="w-16 h-16 object-cover" />
+                        <img src={store.photo} alt={store.name} className="w-16 h-16 object-cover rounded-md"  />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="font-medium text-gray-900">
@@ -139,7 +165,7 @@ const Stores = () => {
                         <div className="text-gray-500">{store.distance}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 mr-3">
+                        <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => updateState(store)}>
                           <PencilIcon size={16} />
                         </button>
                         <button className="text-red-600 hover:text-red-900">
@@ -167,7 +193,25 @@ const Stores = () => {
         </div>
           </div>
         </div>
-       
+        {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b">
+              <div>
+                <h3 className="text-lg font-medium">{update ? 'Ajouter un établissement': 'Modifier l\'établissement'} </h3>
+    
+              </div>
+              <button onClick={handleFormClose} className="text-gray-500 hover:text-gray-700">
+                <X size={20} />
+              </button>
+            </div>
+           
+            <div className="p-4">
+              <StoreForm onClose={handleFormClose} onSubmit={AddUsers} dataEdit={dataEdit} />
+            </div>
+          </div>
+        </div>
+      )}
       </div>
 
 };

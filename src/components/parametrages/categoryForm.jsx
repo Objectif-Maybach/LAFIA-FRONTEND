@@ -1,61 +1,81 @@
-import  React from "react"
+import { useEffect, useState } from "react";
+import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { GetRoles } from "../../functions/Users";
 
-import { useState, useEffect } from "react"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Textarea } from "../ui/textarea"
-import { Label } from "../ui/label"
+const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm(
+    {mode: "onTouched"}
+  );
 
-const CategorieForm = ({ onClose, onSubmit, nomCategorie }) => {
-  const [nom, setNom] = useState("")
-  const [description, setDescription] = useState("")
-
-  useEffect(() => {
-    if (nomCategorie) {
-      setNom(nomCategorie)
-    }
-  }, [nomCategorie])
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Ici, vous pouvez ajouter la logique pour envoyer les données au serveur
-    console.log({ nom, description })
-    onSubmit()
+  const AddCategory = data => {
+    onSubmit(data);
+  };
+  if (dataEdit.length != 0) {
+  setValue('nom', dataEdit?.nom);
+  setValue('description', dataEdit?.description);
+  setValue('id', dataEdit?.id);
   }
-
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="nom">Nom</Label>
-          <Input
-            id="nom"
-            value={nom}
-            onChange={(e) => setNom(e.target.value)}
-            placeholder="Nom de la catégorie"
-            required
-          />
+    <div className="p-1">
+      <form onSubmit={handleSubmit(AddCategory)}>
+        <div className="gap-6 mb-6">
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nom </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <UserIcon size={16} className="text-gray-400" />
+              </div>
+              <input
+                type="text"
+                name="nom"
+                {...register('nom',
+                  { required: 'Le nom est obligatoire' })
+                }
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Nom de la catégorie"
+              />
+            </div>
+            {errors?.nom && <span className='text-sm text-red-600'>{errors.nom.message}</span>}
+          </div>
+         
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <div className="relative w-full">
+              <textarea
+             
+                name="description"
+                {...register('description',
+                  { required: 'La description est obligatoire' })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Décrivez la catégorie..."
+                rows={4}
+              />
+            </div>
+            {errors?.description && <span className='text-sm text-red-600'>{errors.description.message}</span>}
+          </div>
         </div>
-        <div>
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Description de la catégorie"
-            rows={3}
-          />
+        <div className="flex justify-end gap-3 mt-6">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+          >
+            <X size={18} className="mr-2" />
+            Annuler
+          </button>
+          <button
+            type="submit"
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+          >
+            <CheckCircle size={18} className="mr-2" />
+            Valider
+          </button>
         </div>
-      </div>
-      <div className="flex justify-end gap-2 mt-6">
-        <Button type="button" variant="outline" onClick={onClose}>
-          Annuler
-        </Button>
-        <Button type="submit">Enregistrer</Button>
-      </div>
-    </form>
-  )
-}
+      </form>
+    </div>
+  );
+};
 
-export default CategorieForm
-
+export default CategoryForm;
