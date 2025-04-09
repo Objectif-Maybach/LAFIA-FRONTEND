@@ -8,7 +8,7 @@ import CategorieForm from "../../components/parametrages/categoryForm";
 import TypeEtablissementForm from "../../components/parametrages/TypeEtablissementForm";
 import { motion } from "framer-motion";
 import { GetAllTypeEtablissements, updateTypeEtablissement, AddTypeEtablissement, DeleteTypeEtablissement } from "../../functions/TypeEtablissements";
-import {GetAllCategories} from "../../functions/Categories";
+import {GetAllCategories, AddCategorie} from "../../functions/Categories";
 
 
 
@@ -119,6 +119,19 @@ const Parametrage = () => {
   } catch (error) {
     console.error("Error fetching data:", error);
   }
+ }
+ const addCategorie = async (data) => {
+  try{
+    await AddCategorie(data);
+    toast.success('Ajout effectué avec succès')
+    dataCategorie();
+    setIsModalOpen(false);
+    setModalType("");
+  } catch (error) {
+    toast.error('Erreur lors de l\'ajout')
+    console.error("Error sending data:", error);
+  }
+  
  }
   useEffect(() => {
     dataCategorie();
@@ -401,7 +414,7 @@ const Parametrage = () => {
             </div>
             <div className="p-4">
               {modalType === "categories" && (
-                <CategorieForm onClose={handleFormClose} onSubmit={handleFormSubmit} dataEdit={dataEdit} />
+                <CategorieForm onClose={handleFormClose} onSubmit={addCategorie} dataEdit={dataEdit} />
               )}
               {modalType === "typesEtablissements" && (
                 <TypeEtablissementForm
