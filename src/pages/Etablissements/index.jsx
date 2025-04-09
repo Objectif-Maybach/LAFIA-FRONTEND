@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react"
 import EtablissementForm from "../../components/Etablissements/Form"
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
-import { AddEtablissement, DeleteEtablissement, GetAllEtablissements,  UpdateEtablissement } from "../../functions/Etablissements"
+import { AddEtablissement, DeleteEtablissement, GetAllEtablissements, UpdateEtablissement } from "../../functions/Etablissements"
+import restauImg from '../../assets/images/restau.jpg';
 import { toast } from "react-toastify"
 const Etablissements = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -13,11 +14,11 @@ const Etablissements = () => {
   const [error, setError] = useState('')
 
   const EtablissementsAll = async () => {
-    try{
+    try {
       const response = await GetAllEtablissements()
       console.log(response)
       setEtablissements(response)
-    }catch(err){
+    } catch (err) {
       console.error(err)
     }
   }
@@ -28,7 +29,7 @@ const Etablissements = () => {
       EtablissementsAll()
       handleFormClose()
       console.log(response);
-    }catch (error) {
+    } catch (error) {
       toast.error('Erreur lors de l\'ajout avec succès ')
       // Afficher une notification d'erreur ou gérer l'erreur comme vous le souhaitez
       console.error(error);
@@ -62,7 +63,7 @@ const Etablissements = () => {
         console.error(error);
       }
     }
-  }   
+  }
   useEffect(() => {
     EtablissementsAll();
   }, []);
@@ -88,7 +89,7 @@ const Etablissements = () => {
           <h2 className="text-lg font-medium">Liste des etablissements</h2>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-            <div className="relative">
+            {/* <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <SearchIcon size={16} className="text-gray-400" />
               </div>
@@ -99,10 +100,10 @@ const Etablissements = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-            </div>
+            </div> */}
 
             <button
-              onClick={() => (setDataEdit([]) , setIsModalOpen(true))}
+              onClick={() => (setDataEdit([]), setIsModalOpen(true))}
               className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               <PlusIcon size={16} className="mr-2" />
@@ -119,7 +120,13 @@ const Etablissements = () => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Nom 
+                  Image
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Nom
                 </th>
                 <th
                   scope="col"
@@ -139,7 +146,7 @@ const Etablissements = () => {
                 >
                   Contact
                 </th>
-                
+
                 <th
                   scope="col"
                   className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -152,20 +159,29 @@ const Etablissements = () => {
               {filteredEtablissements.map((etab) => (
                 <tr key={etab.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
+                    {etab.image ? (
+                      <img src={etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
+                    ) : (
+                      <img src={restauImg} alt="placeholder" className="w-12 h-12 rounded-full" />
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">{etab.establishment_name} </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-gray-500">{etab.description}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {etab.establishment_type?.establishment_type_name}
-                    </td>
+                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${etab.establishment_type?.establishment_type_name === 'restaurant' ? 'bg-orange-100 text-orange-800' : etab.establishment_type?.establishment_type_name === 'boulangerie' ? 'bg-yellow-100 text-yellow-800' : etab.establishment_type?.establishment_type_name === 'boutique' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
+                      {etab.establishment_type?.establishment_type_name}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-gray-500"><span className="text-red-700"> {etab.contact.telephone}</span> <br />
-                    {etab.contact.adresse}
+                      {etab.contact.adresse}
                     </div>
                   </td>
-                 
+
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(etab)}>
                       <PencilIcon size={16} />
@@ -203,8 +219,8 @@ const Etablissements = () => {
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b">
               <div>
-                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un utilisateur': 'Modifier l\'etablissement'} {dataEdit.length} </h3>
-                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel utilisateur': 'Modifiez les informations pour mettre à jour l\'etablissement'} </p>
+                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un utilisateur' : 'Modifier l\'etablissement'} </h3>
+                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel utilisateur' : 'Modifiez les informations pour mettre à jour l\'etablissement'} </p>
               </div>
               <button onClick={handleFormClose} className="text-gray-500 hover:text-gray-700">
                 <X size={20} />
@@ -216,7 +232,7 @@ const Etablissements = () => {
               </div>
             )}
             <div className="p-4">
-              <EtablissementForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddEtablissements: UpdateEtablissements} dataEdit={dataEdit} />
+              <EtablissementForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddEtablissements : UpdateEtablissements} dataEdit={dataEdit} />
             </div>
           </div>
         </div>

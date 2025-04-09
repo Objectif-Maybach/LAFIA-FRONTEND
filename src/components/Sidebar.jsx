@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { HomeIcon, UsersIcon, ShoppingBagIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
+import { HomeIcon, UsersIcon, ShoppingBagIcon, LogOutIcon, SettingsIcon, Building } from 'lucide-react';
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,12 +14,12 @@ const Sidebar = () => {
   }
   , {
     path: 'etablissements',
-    icon: <UsersIcon size={20} />,
+    icon: <Building size={20} />,
     label: 'Etablissements'
   }, {
-    path: 'stores',
+    path: 'produits',
     icon: <ShoppingBagIcon size={20} />,
-    label: 'Boutiques'
+    label: 'Produits'
   },
   {
     path: 'parametrages',
