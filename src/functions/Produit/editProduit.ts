@@ -13,7 +13,7 @@ export const editProduit = async (
     category: string,
 ) => {
     try {
-        const { data }: { data: PRODUIT_T } = await axios.post(
+        const { data }: { data: PRODUIT_T } = await axios.put(
             `${Api_Url}products/${id}/`,
             {
                 product_name,
@@ -25,7 +25,7 @@ export const editProduit = async (
         );
         return data;
     } catch (error) {
-        console.error("Erreur Lors de la modification de la boutique:", error);
+        console.error("Erreur Lors de la modification du produit:", error);
         return false;
     }
 }
