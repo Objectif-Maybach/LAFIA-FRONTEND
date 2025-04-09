@@ -24,7 +24,7 @@ export const addProduit = async (
         );
         return data;
     } catch (error) {
-        console.error("Erreur Lors de l'ajout de la boutique:", error);
+        console.error("Erreur Lors de l'ajout du produit:", error);
         return false;
     }
 }

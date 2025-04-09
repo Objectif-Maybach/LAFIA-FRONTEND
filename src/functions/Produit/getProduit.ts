@@ -9,7 +9,7 @@ export const getProduit = async (id: string) => {
         const { data }: { data: PRODUIT_T} = await axios.get(`${Api_Url}products/${id}/`);
         return data;
     } catch (error) {
-        console.error("Error Lors de la recuperation:", error);
+        console.error("Error Lors de la recuperation du produit:", error);
         return false;
     }
 }
