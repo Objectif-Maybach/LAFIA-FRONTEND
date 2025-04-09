@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import StoreForm from '../../components/Stores/StoreForm';
+import StoreForm from '../../components/Produits/StoreForm';
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from 'lucide-react';
 import restauImg from '../../assets/images/restau.jpg';
 
-const Stores = () => {
+const Produits = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
     const [dataEdit, setDataEdit] = useState([])
@@ -31,7 +31,7 @@ const updateState = (prop) => {
   setDataEdit(prop);
   setUpdate(true);
 };
-  const allStores = [{
+  const allProduits = [{
     id: 1,
     name: 'Le Petit Café',
     type: 'Restaurant',
@@ -66,7 +66,7 @@ const updateState = (prop) => {
     photo: restauImg,
   }];
   
-  const filteredStores = allStores.filter(store =>
+  const filteredProduits = allProduits.filter(store =>
     store.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     store.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
     store.address.toLowerCase().includes(searchQuery.toLowerCase())
@@ -141,7 +141,7 @@ const updateState = (prop) => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredStores.map(store => <tr key={store.id} className="hover:bg-gray-50">
+                  {filteredProduits.map(store => <tr key={store.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <img src={store.photo} alt={store.name} className="w-16 h-16 object-cover rounded-md"  />
                       </td>
@@ -179,8 +179,8 @@ const updateState = (prop) => {
             <div className="px-4 py-3 border-t flex items-center justify-between">
           <div className="text-sm text-gray-700">
             Affichage de <span className="font-medium">1</span> à{" "}
-            <span className="font-medium">{filteredStores.length}</span> sur{" "}
-            <span className="font-medium">{filteredStores.length}</span> résultats
+            <span className="font-medium">{filteredProduits.length}</span> sur{" "}
+            <span className="font-medium">{filteredProduits.length}</span> résultats
           </div>
           <div className="flex space-x-2">
             <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
@@ -215,4 +215,4 @@ const updateState = (prop) => {
       </div>
 
 };
-export default Stores;
+export default Produits;
