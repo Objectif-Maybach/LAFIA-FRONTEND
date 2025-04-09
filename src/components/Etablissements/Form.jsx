@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2 } from "lucide-react";
+import { UserIcon, PhoneIcon, MapPinIcon, CheckCircle, X, FileText } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { GetAllTypeEtablissements } from "../../functions/TypeEtablissements";
 
@@ -38,14 +38,14 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
     console.log('object', formData.get('contact'));
     onSubmit(formData);
   };
-  console.log(dataEdit);
-  if (dataEdit.length != 0) {
-    setValue('establishment_name', dataEdit?.establishment_name);
-    setValue('description', dataEdit?.description);
-    setValue('establishment_type', dataEdit?.establishment_type.id);
-    setValue('telephone', dataEdit?.contact.telephone);
-    setValue('adresse', dataEdit?.contact.adresse);
-  }
+  console.log(dataEdit?.establishment_type?.id);
+  // if (dataEdit?.length != 0) {
+  //   setValue('establishment_name', dataEdit?.establishment_name);
+  //   setValue('description', dataEdit?.description);
+  //   setValue('establishment_type', dataEdit?.establishment_type.id);
+  //   setValue('telephone', dataEdit?.contact.telephone);
+  //   setValue('adresse', dataEdit?.contact.adresse);
+  // }
   return (
     <div className="p-1">
       <form onSubmit={handleSubmit(AddUser)}>
@@ -59,6 +59,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
               <input
                 type="text"
                 name="establishment_name"
+                defaultValue={dataEdit?.establishment_name}
                 {...register('establishment_name',
                   { required: 'Le nom est obligatoire' })
                 }
@@ -74,12 +75,12 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Telephone</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MapPinIcon size={16} className="text-gray-400" />
+                <PhoneIcon size={16} className="text-gray-400" />
               </div>
               <input
                 type="text"
                 name="telephone"
-
+                defaultValue={dataEdit?.contact?.telephone}
                 {...register('telephone',
                   { required: 'Le telephone est obligatoire' })
                 }
@@ -98,7 +99,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
               <input
                 type="text"
                 name="adresse"
-
+                defaultValue={dataEdit?.contact?.adresse}
                 {...register('adresse',
                   { required: 'L\'adresse est obligatoire' })
                 }
@@ -109,10 +110,10 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
             {errors?.adresse && <span className='text-sm text-red-600'>{errors.adresse.message}</span>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Type </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Type  </label>
             <select
               name="establishment_type"
-
+              defaultValue={dataEdit?.establishment_type?.id}
               {...register('establishment_type',
                 { required: 'Le type est obligatoire' })
               }
@@ -120,7 +121,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
             >
               {types.map(type => (
                 <option key={type.id} value={type.id}>
-                  {type.establishment_type_name}
+                  {type.id}
                 </option>
               ))}
             </select>
@@ -130,11 +131,14 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
             <div className="relative" >
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <User2 size={16} className="text-gray-400" />
+                <FileText size={16} className="text-gray-400" />
               </div>
               <textarea
                 type="text"
                 name="description"
+                id="description"
+                defaultValue={dataEdit?.description}
+                rows={1}
                 {...register('description',
                   { required: 'La description est obligatoire' })
                 }
@@ -161,7 +165,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Image de l'arriere plan</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Image de couverture</label>
             <div className="relative">
 
               <input
