@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { UserIcon, LockIcon, TruckIcon } from 'lucide-react';
 import axios from 'axios';
+import {getAllProduit} from "../functions/Produit/getAllProduit"
+
 export const LoginPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoding] = useState(false);
-  const { register, handleSubmit, formState: { errors} } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     mode: 'onTouched'
   })
+  getAllProduit()
   const navigate = useNavigate();
   const Api_Url = import.meta.env.VITE_API_URL;
   const login = async (data) => {
@@ -16,6 +19,7 @@ export const LoginPage = () => {
     // navigate('/accueil');*
     console.log(errors);
     setLoding(true);
+    
     try {
       const response = await axios.post(`${Api_Url}login/`, data);
       localStorage.setItem('isLogged', response.data.user.id);
@@ -40,14 +44,14 @@ export const LoginPage = () => {
         </div>
         <div className="p-8">
           <h2 className="text-xl font-semibold text-gray-700 text-center mb-6">
-            Connexion  
-          </h2> 
+            Connexion
+          </h2>
           <form onSubmit={handleSubmit(login)}>
-          {error && (
-            <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
-             Vos identifiants sont incorrects
-            </div>
-          )}
+            {error && (
+              <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+                Vos identifiants sont incorrects
+              </div>
+            )}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-medium mb-2">
                 Login
