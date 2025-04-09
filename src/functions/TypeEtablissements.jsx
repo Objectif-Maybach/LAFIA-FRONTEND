@@ -21,10 +21,12 @@ export const GetEtablissementById = async (typesEtablissementId) => {
     throw error;
   }
 };
-// Ajout d'un types etablissement
-export const AddEtablissement = async (typesEtablissementData) => {
+// Ajout d'un type etablissement
+export const AddTypeEtablissement = async (typesEtablissementData) => {
   try {
-    const response = await axios.post(`${Api_Url}establishments-types/`, typesEtablissementData);
+    const response = await axios.post(`${Api_Url}establishment-types/`, typesEtablissementData, {
+     
+});
     return response.data;
   } catch (error) {
     console.error('Error adding types etablissement:', error);
@@ -33,9 +35,9 @@ export const AddEtablissement = async (typesEtablissementData) => {
 };
 
 // Modification d'un types etablissement
-export const UpdateEtablissement = async (typesEtablissementId, typesEtablissementData) => {
+export const updateTypeEtablissement = async (typesEtablissementId, typesEtablissementData) => {
   try {
-    const response = await axios.put(`${Api_Url}establishments-types/${typesEtablissementId}/`, typesEtablissementData);
+    const response = await axios.put(`${Api_Url}establishment-types/${typesEtablissementId}/`, typesEtablissementData);
     return response.data;
   } catch (error) {
     console.error('Error updating types etablissement:', error);
@@ -43,9 +45,9 @@ export const UpdateEtablissement = async (typesEtablissementId, typesEtablisseme
   }
 };
 // Suppression d'un types etablissement 
-export const DeleteEtablissement = async (typesEtablissementId) => {
+export const DeleteTypeEtablissement = async (typesEtablissementId) => {
   try {
-    const response = await axios.delete(`${Api_Url}establishments-types/${typesEtablissementId}/`);
+    const response = await axios.delete(`${Api_Url}establishment-types/${typesEtablissementId}/`);
     return response.data;
   } catch (error) {
     console.error('Error deleting types etablissement:', error);

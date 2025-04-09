@@ -1,14 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
 import { toast } from "react-toastify";
 import CategorieForm from "../../components/parametrages/categoryForm";
 import TypeEtablissementForm from "../../components/parametrages/TypeEtablissementForm";
 import { motion } from "framer-motion";
+import { GetAllTypeEtablissements, updateTypeEtablissement, AddTypeEtablissement, DeleteTypeEtablissement } from "../../functions/TypeEtablissements";
+import {GetAllCategories, AddCategorie} from "../../functions/Categories";
 
-const notify = () =>
+
+
+const notify = (message) =>
   toast.success("Connexion réussie !", {
     position: "top-right",
     autoClose: 3000,
@@ -27,27 +31,16 @@ const Parametrage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [dataEdit, setDataEdit] = useState([]);
   const [update, setUpdate] = useState(false)
+  const [isDelete, setIsDelete] = useState(false)
+  const [id, setId] = useState('');
 
   const clean = () => {
     setDataEdit([]);
     setUpdate(false)
   };
 
-  const categories = [
-    { id: 1, nom: "Électronique", description: "Produits électroniques et accessoires" },
-    { id: 2, nom: "Vêtements", description: "Vêtements et accessoires de mode" },
-    { id: 3, nom: "Alimentation", description: "Produits alimentaires et boissons" },
-    { id: 4, nom: "Maison", description: "Meubles et décoration d'intérieur" },
-    { id: 5, nom: "Beauté", description: "Produits de beauté et soins personnels" },
-  ];
-
-  const typesEtablissements = [
-    { id: 1, nom: "Restaurant", description: "Établissement de restauration" },
-    { id: 2, nom: "Boutique", description: "Commerce de détail" },
-    { id: 3, nom: "Supermarché", description: "Grande surface alimentaire" },
-    { id: 4, nom: "Pharmacie", description: "Établissement pharmaceutique" },
-    { id: 5, nom: "Hôtel", description: "Établissement d'hébergement" },
-  ];
+  const [typesEtablissements, setTypesEtablissements] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const handleFormClose = () => {
     setIsModalOpen(false);
@@ -71,18 +64,90 @@ const Parametrage = () => {
     setDataEdit(prop);
     setUpdate(true);
   };
- 
+  const dataTypeEtablissement = async () => {
+    try {
+      const response = await GetAllTypeEtablissements();
+      setTypesEtablissements(response);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+  const addDataTypeEtablissement = async (data) => {
+    try{
+      await AddTypeEtablissement(data);
+      toast.success('Ajout effectué avec succès')
+      dataTypeEtablissement();
+      setIsModalOpen(false);
+      setModalType("");
+    }catch (error) {
+      toast.error('Erreur lors de l\'ajout')
+      console.error("Error sending data:", error);
+     
+    }
+  }
+  const updateDataTypeEtablissement = async (data) => {
+    try{
+      await updateTypeEtablissement(dataEdit.id, data);
+      toast.success('Modification effectuée avec succès')
+      dataTypeEtablissement();
+      setIsModalOpen(false);
+      setModalType("");
+    }catch (error) {
+      toast.error('Erreur lors de la modification')
+      console.error("Error sending data:", error);
+     
+    }
+  }
+  const deleteDataTypeEtablissement = async (id) => {
+    try{
+      await DeleteTypeEtablissement(id);
+      toast.success('Suppression effectuée avec succès')
+      dataTypeEtablissement();
+      setIsDelete(false);
+      setModalType("");
+    }
+    catch (error) {
+      toast.error('Erreur lors de la suppression')
+      console.error("Error sending data:", error);
+  }
+}
+ const dataCategorie= async ()=> {
+  try{
+    const response = await GetAllCategories();
+    setCategories(response);
+    console.log(response)
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+ }
+ const addCategorie = async (data) => {
+  try{
+    await AddCategorie(data);
+    toast.success('Ajout effectué avec succès')
+    dataCategorie();
+    setIsModalOpen(false);
+    setModalType("");
+  } catch (error) {
+    toast.error('Erreur lors de l\'ajout')
+    console.error("Error sending data:", error);
+  }
   
+ }
+  useEffect(() => {
+    dataCategorie();
+    dataTypeEtablissement();
+    
+  }, []);
 
   const filteredCategories = categories.filter(
     (cat) =>
-      cat.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cat.category_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       cat.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const filteredTypesEtablissements = typesEtablissements.filter(
     (type) =>
-      type.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      type.establishment_type_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       type.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -202,7 +267,7 @@ const Parametrage = () => {
                   {filteredCategories.map((categorie) => (
                     <tr key={categorie.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="font-medium text-gray-900">{categorie.nom}</div>
+                        <div className="font-medium text-gray-900">{categorie.category_name}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-gray-500">{categorie.description}</div>
@@ -282,7 +347,7 @@ const Parametrage = () => {
                         <div className="font-medium text-gray-900">{type.id}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="font-medium text-gray-900">{type.nom}</div>
+                        <div className="font-medium text-gray-900">{type.establishment_type_name}</div>
                       </td>
 
                       <td className="px-6 py-4">
@@ -295,7 +360,7 @@ const Parametrage = () => {
                         >
                           <PencilIcon size={16} />
                         </button>
-                        <button className="text-red-600 hover:text-red-900">
+                        <button className="text-red-600 hover:text-red-900" onClick={() => {setIsDelete(true); setId(type.id)}}>
                           <TrashIcon size={16} />
                         </button>
                       </td>
@@ -349,15 +414,59 @@ const Parametrage = () => {
             </div>
             <div className="p-4">
               {modalType === "categories" && (
-                <CategorieForm onClose={handleFormClose} onSubmit={handleFormSubmit} dataEdit={dataEdit} />
+                <CategorieForm onClose={handleFormClose} onSubmit={addCategorie} dataEdit={dataEdit} />
               )}
               {modalType === "typesEtablissements" && (
                 <TypeEtablissementForm
                   onClose={handleFormClose}
-                  onSubmit={handleFormSubmit}
+                  onSubmit={update ? updateDataTypeEtablissement :
+                    addDataTypeEtablissement}
                   dataEdit={dataEdit}
                 />
               )}
+            </div>
+          </div>
+        </div>
+      )}
+      {isDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b">
+              <div>
+                <h3 className="text-lg font-medium">
+                  {modalType === "categories"
+                    ? "Supprimer une catégorie"
+                       :"Supprimer un type d'établissement"
+                     }
+                </h3>
+              </div>
+              <button onClick={()=> {setIsDelete(false); setId('')}} className="text-gray-500 hover:text-gray-700">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-4">
+              <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={()=> {setIsDelete(false); setId('')}}
+                  className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+                >
+                  <X size={18} className="mr-2" />
+                  Annuler
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    deleteDataTypeEtablissement(id);
+                    setIsDelete(false);
+                    setId('');
+                  }}
+                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                >
+                  Confirmer
+                </button>
+              </div>
             </div>
           </div>
         </div>
