@@ -12,7 +12,7 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
     onSubmit(data);
   };
   if (dataEdit.length != 0) {
-  setValue('nom', dataEdit?.nom);
+  setValue('category_name', dataEdit?.category_name);
   setValue('description', dataEdit?.description);
   setValue('id', dataEdit?.id);
   }
@@ -28,15 +28,15 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
               </div>
               <input
                 type="text"
-                name="nom"
-                {...register('nom',
+                name="category_name"
+                {...register('category_name',
                   { required: 'Le nom est obligatoire' })
                 }
                 className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nom de la catégorie"
               />
             </div>
-            {errors?.nom && <span className='text-sm text-red-600'>{errors.nom.message}</span>}
+            {errors?.category_name && <span className='text-sm text-red-600'>{errors.category_name.message}</span>}
           </div>
          
           <div className="mt-4">
