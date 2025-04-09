@@ -3,9 +3,9 @@ import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2 
 import { useForm } from "react-hook-form";
 import { GetRoles } from "../../functions/Users";
 
-const UserForm = ({ onClose, onSubmit, dataEdit}) => {
+const UserForm = ({ onClose, onSubmit, dataEdit }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm(
-    {mode: "onTouched"}
+    { mode: "onTouched" }
   );
   const [roles, setRoles] = useState([]);
   const AllRoles = async () => {
@@ -19,19 +19,31 @@ const UserForm = ({ onClose, onSubmit, dataEdit}) => {
   useEffect(() => {
     AllRoles();
   }, []);
-  const AddUser = data => {
+  const AddUser = user => {
+    let data =
+    {
+      username: user.username,
+      full_name: user.full_name,
+      email: user.email,
+      password: user.password,
+      role: user.role,
+      contact: {
+        is_active: true,
+        telephone: user.telephone,
+        adresse: user.adresse
+      }
+    }
     onSubmit(data);
   };
   console.log(dataEdit);
   if (dataEdit.length != 0) {
-  setValue('full_name', dataEdit?.full_name);
-  setValue('username', dataEdit?.username);
-  setValue('email', dataEdit?.email);
-  setValue('telephone', dataEdit?.contact.telephone);
-  setValue('adresse', dataEdit?.contact.adresse);
-  setValue('role', dataEdit?.role.id);
-  setValue('password', dataEdit?.password);
-  setValue('id', dataEdit?.id);
+    setValue('full_name', dataEdit?.full_name);
+    setValue('username', dataEdit?.username);
+    setValue('email', dataEdit?.email);
+    setValue('telephone', dataEdit?.contact.telephone);
+    setValue('adresse', dataEdit?.contact.adresse);
+    setValue('role', dataEdit?.role);
+    setValue('password', dataEdit?.password);
   }
   return (
     <div className="p-1">
@@ -55,7 +67,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit}) => {
             </div>
             {errors?.full_name && <span className='text-sm text-red-600'>{errors.full_name.message}</span>}
           </div>
-         
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nom d'utilisateur</label>
             <div className="relative" >
@@ -83,12 +95,13 @@ const UserForm = ({ onClose, onSubmit, dataEdit}) => {
               <input
                 type="text"
                 name="password"
-                {...register('password',
-                  { required: 'Le mot de passe est obligatoire' })
-                }
+                {...register("password", {
+                  required: "Le mot de passe est obligatoire"
+                })}
                 className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="JeanD123"
               />
+
             </div>
             {errors?.password && <span className='text-sm text-red-600'>{errors.password.message}</span>}
           </div>
@@ -126,7 +139,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit}) => {
                 placeholder="06 12 34 56 78"
               />
             </div>
-            {errors?.email && <span className='text-sm text-red-600'>{errors.email.message}</span>}
+            {errors?.telephone && <span className='text-sm text-red-600'>{errors.telephone.message}</span>}
 
           </div>
           <div>
@@ -146,6 +159,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit}) => {
                 placeholder="123 Rue de la Paix, BKO"
               />
             </div>
+            {errors?.adresse && <span className='text-sm text-red-600'>{errors.adresse.message}</span>}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
@@ -176,7 +190,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit}) => {
           </button>
           <button
             type="submit"
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
           >
             <CheckCircle size={18} className="mr-2" />
             Valider

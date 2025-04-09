@@ -4,7 +4,7 @@ import { render } from "react-dom";
 import { App } from "./App";
 render(<App />, document.getElementById("root"));
 // setLoding(true);
-    // try { 
+    // try {
     //   const data = {  
     //     username: email,
     //     password: password,

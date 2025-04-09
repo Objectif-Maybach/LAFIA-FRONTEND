@@ -11,6 +11,11 @@ const Sidebar = () => {
     path: 'users',
     icon: <UsersIcon size={20} />,
     label: 'Utilisateurs'
+  }
+  , {
+    path: 'etablissements',
+    icon: <UsersIcon size={20} />,
+    label: 'Etablissements'
   }, {
     path: 'stores',
     icon: <ShoppingBagIcon size={20} />,
