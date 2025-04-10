@@ -6,22 +6,18 @@ const Api_Url = import.meta.env.VITE_API_URL;
 
 export const editProduit = async (
     id: string,
-    product_name: string,
-    description: string,
-    price: number,
-    establishment: string,
-    category: string,
+    params: {
+        product_name?: string,
+        description?: string,
+        price?: number,
+        establishment?: string,
+        category?: string,
+    } | any
 ) => {
     try {
         const { data }: { data: PRODUIT_T } = await axios.put(
             `${Api_Url}products/${id}/`,
-            {
-                product_name,
-                description,
-                price,
-                establishment,
-                category,
-            }
+            params
         );
         return data;
     } catch (error) {
