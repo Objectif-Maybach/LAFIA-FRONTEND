@@ -5,22 +5,18 @@ import { PRODUIT_T } from "../../types";
 const Api_Url = import.meta.env.VITE_API_URL;
 
 export const addProduit = async (
-    product_name: string,
-    description: string,
-    price: number,
-    establishment: string,
-    category: string,
+    params: {
+        product_name: string,
+        description: string,
+        price: number,
+        establishment: string,
+        category: string,
+    } | any
 ) => {
     try {
         const { data }: { data: PRODUIT_T } = await axios.post(
             `${Api_Url}products/`,
-            {
-                product_name,
-                description,
-                price,
-                establishment,
-                category,
-            }
+            params
         );
         return data;
     } catch (error) {
