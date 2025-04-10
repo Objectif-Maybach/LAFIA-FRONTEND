@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StoreForm from '../../components/Produits/Form';
+import {getAllProduit} from '../../functions/Produit/getAllProduit';
+import {addProduit} from '../../functions/Produit/addProduit';
+import {editProduit} from '../../functions/Produit/editProduit';
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from 'lucide-react';
 import restauImg from '../../assets/images/restau.jpg';
 
@@ -12,7 +15,7 @@ const Produits = () => {
 
   const ProduitsAll = async () => {
     try {
-      const response = await GetAllProduits()
+      const response = await getAllProduit()
       console.log(response)
       setProduits(response)
     } catch (err) {
@@ -21,7 +24,7 @@ const Produits = () => {
   }
   const AddProduits = async (produit) => {
     try {
-      const response = await AddProduit(produit);
+      const response = await addProduit(produit);
       toast.success('Ajouter avec succès ')
       ProduitsAll()
       handleFormClose()
@@ -34,7 +37,7 @@ const Produits = () => {
   }
   const UpdateProduits = async (produit) => {
     try {
-      const response = await UpdateProduit(dataEdit.id, produit)
+      const response = await editProduit(dataEdit.id, produit)
       toast.success('Mise à jour effectuée avec succès')
       ProduitsAll()
       handleFormClose()
@@ -68,45 +71,10 @@ const Produits = () => {
     setIsModalOpen(false)
   }
 
-  const allProduits = [{
-    id: 1,
-    name: 'Le Petit Café',
-    type: 'Restaurant',
-    address: '12 Rue de la Paix, Paris',
-    phone: '01 23 45 67 89',
-    distance: '1.2 km',
-    photo: restauImg,
-  }, {
-    id: 2,
-    name: 'Boulangerie Tartine',
-    type: 'Boulangerie',
-    address: '45 Avenue Victor Hugo, Lyon',
-    phone: '04 56 78 90 12',
-    distance: '3.5 km',
-    photo: restauImg,
-
-  }, {
-    id: 3,
-    name: 'Épicerie Bio',
-    type: 'Épicerie',
-    address: '8 Rue des Fleurs, Marseille',
-    phone: '04 91 23 45 67',
-    distance: '2.0 km',
-    photo: restauImg,
-  }, {
-    id: 4,
-    name: 'Pharmacie Centrale',
-    type: 'Pharmacie',
-    address: '23 Boulevard Saint-Michel, Paris',
-    phone: '01 45 67 89 01',
-    distance: '4.1 km',
-    photo: restauImg,
-  }];
-
-  const filteredProduits = allProduits.filter(store =>
-    store.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    store.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    store.address.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredProduits = produits.filter(store =>
+    store.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    store.price.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    store.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return <div>
@@ -141,7 +109,7 @@ const Produits = () => {
               <button
 
                 className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                onClick={openModal}
+                onClick={() => (setDataEdit([]) , setIsModalOpen(true))}
               >
                 <PlusIcon size={16} className="mr-2" />
                 Ajouter un produit
@@ -234,7 +202,7 @@ const Produits = () => {
         <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
           <div className="flex items-center justify-between p-4 border-b">
             <div>
-              <h3 className="text-lg font-medium">{update ? 'Ajouter un produit' : 'Modifier un produit'} </h3>
+              <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un produit' : 'Modifier un produit'} </h3>
 
             </div>
             <button onClick={handleFormClose} className="text-gray-500 hover:text-gray-700">
@@ -243,7 +211,7 @@ const Produits = () => {
           </div>
 
           <div className="p-4">
-            <StoreForm onClose={handleFormClose} onSubmit={AddProduits} dataEdit={dataEdit} />
+            <StoreForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ?AddProduits : UpdateProduits} dataEdit={dataEdit} />
           </div>
         </div>
       </div>

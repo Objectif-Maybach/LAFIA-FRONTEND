@@ -1,29 +1,42 @@
 import { useEffect, useState } from "react";
-import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2 } from "lucide-react";
+import { UserIcon, FileText, CheckCircle, X } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { GetRoles } from "../../functions/Users";
+import { GetAllEtablissements } from "../../functions/Etablissements";
+import { GetAllCategories } from "../../functions/Categories";
 
-const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
+const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm(
-    {mode: "onTouched"}
+    { mode: "onTouched" }
   );
+  const [etablissements, setEtablissements] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const AllCategories = async () => {
+    try {
+      const response = await GetAllCategories();
+      setCategories(response);
+    } catch (error) {
+      console.error(error);
+      
+    }
+  };
 
+  const AllEtablissements = async () => {
+    try {
+      const response = await GetAllEtablissements();
+      setEtablissements(response);
+    } catch (error) {
+      console.error(error);
+
+    }
+  };
+  useEffect(() => {
+    AllCategories();
+    AllEtablissements();
+  }, []);
   const AddStore = data => {
+    console.log(data);
     onSubmit(data);
   };
-  if (dataEdit.length != 0) {
-  setValue('nomEtablissement', dataEdit?.nom);
-  setValue('image', dataEdit?.image);
-  setValue('id', dataEdit?.id);
-  setValue('cover_image', dataEdit?.cover_image);
-  setValue('address', dataEdit?.address);
-  setValue('distance', dataEdit?.distance);
-  setValue('opening_hours', dataEdit?.opening_hours);
-  setValue('description', dataEdit?.description);
-  setValue('featured', dataEdit?.featured);
-  setValue('contact', dataEdit?.id_contact);
-  setValue('type', dataEdit?.id_type_etablissements);
-  }
   return (
     <div className="p-1">
       <form onSubmit={handleSubmit(AddStore)}>
@@ -37,51 +50,54 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
                 </div>
                 <input
                   type="text"
-                  name="nom"
-                  {...register('nom',
-                    { required: 'Le nom est obligatoire' })
+                  defaultValue={dataEdit?.product_name}
+                  name="product_name"
+                  {...register('product_name',
+                    { required: 'Le nom du produit est obligatoire' })
                   }
                   className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Nom de la catégorie"
+                  placeholder="Nom du produit"
                 />
               </div>
-              {errors?.nom && <span className='text-sm text-red-600'>{errors.nom.message}</span>}
+              {errors?.product_name && <span className='text-sm text-red-600'>{errors.product_name.message}</span>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Prix</label>
               <input
-                type="text"
-                name="address"
-                {...register('address', { required: "L'adresse est obligatoire" })}
+                type="number"
+                defaultValue={dataEdit?.price}
+                name="price"
+                {...register('price', { required: "Le prix est obligatoire" })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Adresse de l'établissement"
+                placeholder="Prix du produit"
               />
-              {errors?.address && <span className='text-sm text-red-600'>{errors.address.message}</span>}
+              {errors?.price && <span className='text-sm text-red-600'>{errors.price.message}</span>}
             </div>
           </div>
+          
           <div className="grid grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Heures d'ouverture</label>
-              <input
-                type="text"
-                name="opening_hours"
-                {...register('opening_hours')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Ex: 8h00 - 18h00"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <div className="relative" >
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FileText size={16} className="text-gray-400" />
+              </div>
               <textarea
+                type="text"
                 name="description"
-                {...register('description')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Décrivez l'établissement..."
-                rows={2}
-              />
+                id="description"
+                defaultValue={dataEdit?.description}
+                rows={1}
+                {...register('description',
+                  { required: 'La description est obligatoire' })
+                }
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder=" Description"
+              >
+              </textarea>
             </div>
+            {errors?.description && <span className='text-sm text-red-600'>{errors.description.message}</span>}
           </div>
-          <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
               <input
@@ -92,61 +108,46 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
                 placeholder="URL de l'image"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Image de couverture</label>
-              <input
-                type="file"
-                name="cover_image"
-                {...register('cover_image')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="URL de l'image de couverture"
-              />
-            </div>
+            {errors?.image && <span className='text-sm text-red-600'>{errors.image.message}</span>}
           </div>
           <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Distance</label>
-              <input
-                type="text"
-                name="distance"
-                {...register('distance')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Distance de l'établissement"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Contact</label>
-              <input
-                type="text"
-                name="contact"
-                {...register('contact')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Contact de l'établissement"
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Type d'établissement</label>
-              <input
-                type="text"
-                name="type"
-                {...register('type')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Type d'établissement"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">En vedette ?</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Etablissement</label>
               <select
-                name="featured"
-                {...register('featured')}
+                name="establishment"
+                defaultValue={dataEdit?.establishment?.id}
+                {...register('establishment',
+                  { required: 'L\' etablissement est obligatoire' })
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Sélectionnez</option>
-                <option value="true">Oui</option>
-                <option value="false">Non</option>
+                <option value="">-- Choisir --</option>
+                {etablissements.map(etab => (
+                  <option key={etab.id} value={etab.id}>
+                    {etab.establishment_name}
+                  </option>
+                ))}
               </select>
+              {errors?.establishment && <span className='text-sm text-red-600'>{errors.establishment.message}</span>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Categorie</label>
+              <select
+                name="category"
+                defaultValue={dataEdit?.category?.id}
+                {...register('category',
+                  { required: 'La categorie est obligatoire' })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              > 
+                <option value="">-- Choisir --</option>
+                {categories.map(cat => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.category_name}
+                  </option>
+                ))}
+              </select>
+              {errors?.category && <span className='text-sm text-red-600'>{errors.category.message}</span>}
             </div>
           </div>
         </div>

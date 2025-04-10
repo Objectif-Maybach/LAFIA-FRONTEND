@@ -170,7 +170,9 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
                 { required: 'Le rôle est obligatoire' })
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+            > 
+              
+              <option value="">-- Choisir --</option>
               {roles.map(role => (
                 <option key={role.id} value={role.id}>
                   {role.nom_role}
