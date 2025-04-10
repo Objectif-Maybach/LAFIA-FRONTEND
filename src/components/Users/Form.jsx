@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { GetRoles } from "../../functions/Users";
+import { GetRoles } from "../../functions/User/Users";
 
 const UserForm = ({ onClose, onSubmit, dataEdit }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm(
@@ -37,13 +37,22 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
   };
   console.log(dataEdit);
   if (dataEdit.length != 0) {
-    setValue('full_name', dataEdit?.full_name);
-    setValue('username', dataEdit?.username);
-    setValue('email', dataEdit?.email);
-    setValue('telephone', dataEdit?.contact.telephone);
-    setValue('adresse', dataEdit?.contact.adresse);
-    setValue('role', dataEdit?.role);
-    setValue('password', dataEdit?.password);
+    useEffect(() =>{
+      setValue('full_name', dataEdit?.full_name);
+      setValue('username', dataEdit?.username);
+      setValue('email', dataEdit?.email);
+      setValue('telephone', dataEdit?.contact.telephone);
+      setValue('adresse', dataEdit?.contact.adresse);
+      setValue('role', dataEdit?.role.id);
+      setValue('password', dataEdit?.password);
+    }, [dataEdit, setValue]);
+    // setValue('full_name', dataEdit?.full_name);
+    // setValue('username', dataEdit?.username);
+    // setValue('email', dataEdit?.email);
+    // setValue('telephone', dataEdit?.contact.telephone);
+    // setValue('adresse', dataEdit?.contact.adresse);
+    // setValue('role', dataEdit?.role);
+    // setValue('password', dataEdit?.password);
   }
   return (
     <div className="p-1">

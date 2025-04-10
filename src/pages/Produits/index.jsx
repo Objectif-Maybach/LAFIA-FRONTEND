@@ -3,8 +3,10 @@ import StoreForm from '../../components/Produits/Form';
 import {getAllProduit} from '../../functions/Produit/getAllProduit';
 import {addProduit} from '../../functions/Produit/addProduit';
 import {editProduit} from '../../functions/Produit/editProduit';
+import {deleteProduit} from '../../functions/Produit/deleteProduit';
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from 'lucide-react';
 import restauImg from '../../assets/images/restau.jpg';
+import { toast } from 'react-toastify';
 
 const Produits = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -55,7 +57,7 @@ const Produits = () => {
   const handleDelete = async (produitId) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
       try {
-        const response = await DeleteProduit(produitId);
+        const response = await deleteProduit(produitId);
         toast.success('Utilisateur supprimé avec succès')
         ProduitsAll()
       } catch (error) {
@@ -73,7 +75,6 @@ const Produits = () => {
 
   const filteredProduits = produits.filter(store =>
     store.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    store.price.toLowerCase().includes(searchQuery.toLowerCase()) ||
     store.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 

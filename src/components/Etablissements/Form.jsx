@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { UserIcon, PhoneIcon, MapPinIcon, CheckCircle, X, FileText } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { GetAllTypeEtablissements } from "../../functions/TypeEtablissements";
+import { GetAllTypeEtablissements } from "../../functions/TypeEtablissement/TypeEtablissements";
 
 const UserForm = ({ onClose, onSubmit, dataEdit }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm(
@@ -38,14 +38,16 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
     console.log('object', formData.get('contact'));
     onSubmit(formData);
   };
-  console.log(dataEdit?.establishment_type?.id);
-  // if (dataEdit?.length != 0) {
-  //   setValue('establishment_name', dataEdit?.establishment_name);
-  //   setValue('description', dataEdit?.description);
-  //   setValue('establishment_type', dataEdit?.establishment_type.id);
-  //   setValue('telephone', dataEdit?.contact.telephone);
-  //   setValue('adresse', dataEdit?.contact.adresse);
-  // }
+  useEffect(() => {
+    if (dataEdit.length !== 0) {
+      setValue('establishment_name', dataEdit?.establishment_name);
+      setValue('description', dataEdit?.description);
+      setValue('establishment_type', dataEdit?.establishment_type.id);
+      setValue('telephone', dataEdit?.contact.telephone);
+      setValue('adresse', dataEdit?.contact.adresse);
+    }
+  }, [dataEdit, setValue]);
+  console.log(dataEdit);
   return (
     <div className="p-1">
       <form onSubmit={handleSubmit(AddUser)}>
@@ -122,8 +124,8 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
               
               <option value="">-- Choisir --</option>
               {types.map(type => (
-                <option key={type.id} value={type.id}>
-                  {type.id}
+                <option selected={dataEdit?.establishment_type.id === type.id} key={type.id} value={type.id}>
+                  {type.establishment_type_name}
                 </option>
               ))}
             </select>

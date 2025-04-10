@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import UserForm from "../../components/Users/Form"
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
-import { AddUser, DeleteUser, GetAllUsers, GetUserById, UpdateUser } from "../../functions/Users"
+import { AddUser, DeleteUser, GetAllUsers, GetUserById, UpdateUser } from "../../functions/User/Users"
 import { toast } from "react-toastify"
 const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)

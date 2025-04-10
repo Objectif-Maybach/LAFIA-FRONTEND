@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import EtablissementForm from "../../components/Etablissements/Form"
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
-import { AddEtablissement, DeleteEtablissement, GetAllEtablissements, UpdateEtablissement } from "../../functions/Etablissements"
+import { AddEtablissement, DeleteEtablissement, GetAllEtablissements, UpdateEtablissement } from "../../functions/Etablissement/Etablissements"
 import restauImg from '../../assets/images/restau.jpg';
 import { toast } from "react-toastify"
 const Etablissements = () => {
