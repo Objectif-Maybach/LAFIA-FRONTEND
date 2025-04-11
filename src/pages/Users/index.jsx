@@ -12,7 +12,7 @@ const Users = () => {
   const [users, setUsers] = useState([])
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const UsersAll = async () => {
     setIsLoading(true)
