@@ -124,7 +124,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
               
               <option value="">-- Choisir --</option>
               {types.map(type => (
-                <option selected={dataEdit?.establishment_type.id === type.id} key={type.id} value={type.id}>
+                <option selected={dataEdit?.establishment_type?.id === type.id} key={type.id} value={type.id}>
                   {type.establishment_type_name}
                 </option>
               ))}

@@ -43,7 +43,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
       setValue('email', dataEdit?.email);
       setValue('telephone', dataEdit?.contact.telephone);
       setValue('adresse', dataEdit?.contact.adresse);
-      setValue('role', dataEdit?.role.id);
+      setValue('role', dataEdit?.role);
       setValue('password', dataEdit?.password);
     }, [dataEdit, setValue]);
     // setValue('full_name', dataEdit?.full_name);
@@ -95,7 +95,8 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
             </div>
             {errors?.username && <span className='text-sm text-red-600'>{errors.username.message}</span>}
           </div>
-          <div>
+          { dataEdit.length === 0 &&  (
+            <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -114,6 +115,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
             </div>
             {errors?.password && <span className='text-sm text-red-600'>{errors.password.message}</span>}
           </div>
+          )}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <div className="relative">
@@ -183,7 +185,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
               
               <option value="">-- Choisir --</option>
               {roles.map(role => (
-                <option key={role.id} value={role.id}>
+                <option key={role.id} selected={dataEdit?.role === role.id} value={role.id}>
                   {role.nom_role}
                 </option>
               ))}

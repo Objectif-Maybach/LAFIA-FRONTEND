@@ -30,7 +30,7 @@ const Etablissements = () => {
       handleFormClose()
       console.log(response);
     } catch (error) {
-      toast.error('Erreur lors de l\'ajout avec succès ')
+      toast.error('Erreur lors de l\'ajout de l\'etablissement ')
       // Afficher une notification d'erreur ou gérer l'erreur comme vous le souhaitez
       console.error(error);
     }
@@ -53,7 +53,7 @@ const Etablissements = () => {
     setDataEdit(user)
   }
   const handleDelete = async (userId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet etablissement ?')) {
       try {
         const response = await DeleteEtablissement(userId);
         toast.success('Utilisateur supprimé avec succès')
