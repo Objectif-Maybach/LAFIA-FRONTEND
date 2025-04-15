@@ -43,7 +43,7 @@ export const AddUser = async (userData) => {
 // Modification d'un utilisateur
 export const UpdateUser = async (userId, userData) => {
   try {
-    const response = await axiosClient.put(`user/${userId}/`, userData);
+    const response = await axiosClient.patch(`user/${userId}/`, userData);
     return response.data;
   } catch (error) {
     console.error('Error updating user:', error);
