@@ -22,6 +22,11 @@ const Sidebar = () => {
     label: 'Produits'
   },
   {
+    path: 'drivers',
+    icon: <UsersIcon size={20} />,
+    label: 'Livreurs'
+  },
+  {
     path: 'parametrages',
     icon: <SettingsIcon size={20} />,
     label: 'Paramétrages'
