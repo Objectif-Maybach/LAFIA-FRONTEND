@@ -56,7 +56,7 @@ const Drivers = () => {
       console.log(response)
     }
     catch (error) {
-      toast.error('Erreur lors de la modification de l\'livreur')
+      toast.error('Erreur lors de la modification d\'un livreur')
       console.error(error);
     } finally {
       setIsLoading(false)
@@ -72,10 +72,10 @@ const Drivers = () => {
       setIsLoading(true)
       try {
         const response = await deleteDriver(userId);
-        toast.success('Utilisateur supprimé avec succès')
+        toast.success('Produit supprimé avec succès')
         DriversAll()
       } catch (error) {
-        toast.error('Erreur lors de la suppression de l\'livreur')
+        toast.error('Erreur lors de la suppression du livreur')
         console.error(error);
       } finally {
         setIsLoading(false)
@@ -213,8 +213,8 @@ const Drivers = () => {
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b">
               <div>
-                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un livreur' : 'Modifier l\'livreur'}  </h3>
-                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel livreur' : 'Modifiez les informations pour mettre à jour l\'livreur'} </p>
+                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un livreur' : 'Modifier le livreur'}  </h3>
+                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel livreur' : 'Modifiez les informations pour mettre à jour le livreur'} </p>
               </div>
               <button onClick={handleFormClose} className="text-gray-500 hover:text-gray-700">
                 <X size={20} />

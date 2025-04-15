@@ -177,7 +177,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
               
               <option value="">-- Choisir --</option>
               {roles.map(role => (
-                <option key={role.id} selected={dataEdit?.role.id === role.id} value={role.id}>
+                <option key={role.id} selected={dataEdit?.role?.id === role.id} value={role.id}>
                   {role.nom_role}
                 </option>
               ))}

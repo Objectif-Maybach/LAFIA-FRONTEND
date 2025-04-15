@@ -71,7 +71,7 @@ const Etablissements = () => {
       setIsLoading(true)
       try {
         const response = await DeleteEtablissement(userId);
-        toast.success('Utilisateur supprimé avec succès')
+        toast.success('etablissement supprimé avec succès')
         EtablissementsAll()
       } catch (error) {
         toast.error('Erreur lors de la suppression de l\'etablissement')
@@ -115,7 +115,7 @@ const Etablissements = () => {
               <input
                 type="text"
                 className="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Rechercher un utilisateur..."
+                placeholder="Rechercher un etablissement..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -238,8 +238,8 @@ const Etablissements = () => {
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b">
               <div>
-                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un utilisateur' : 'Modifier l\'etablissement'} </h3>
-                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel utilisateur' : 'Modifiez les informations pour mettre à jour l\'etablissement'} </p>
+                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un etablissement' : 'Modifier l\'etablissement'} </h3>
+                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel etablissement' : 'Modifiez les informations pour mettre à jour l\'etablissement'} </p>
               </div>
               <button onClick={handleFormClose} className="text-gray-500 hover:text-gray-700">
                 <X size={20} />

@@ -57,7 +57,7 @@ const Produits = () => {
       console.log(response)
     }
     catch (error) {
-      toast.error('Erreur lors de la modification de l\'utilisateur')
+      toast.error('Erreur lors de la modification du produit')
       console.error(error);
     }
     finally {
@@ -69,14 +69,14 @@ const Produits = () => {
     setDataEdit(produit)
   }
   const handleDelete = async (produitId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet produit ?')) {
       setIsLoading(true)
       try {
         const response = await deleteProduit(produitId);
-        toast.success('Utilisateur supprimé avec succès')
+        toast.success('produit supprimé avec succès')
         ProduitsAll()
       } catch (error) {
-        toast.error('Erreur lors de la suppression de l\'utilisateur')
+        toast.error('Erreur lors de la suppression du produit')
         console.error(error);
       }
       finally {
@@ -121,7 +121,7 @@ const Produits = () => {
                   <input
                     type="text"
                     className="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Rechercher un utilisateur..."
+                    placeholder="Rechercher un produit..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
