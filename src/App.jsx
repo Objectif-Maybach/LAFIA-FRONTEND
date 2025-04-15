@@ -14,7 +14,7 @@ import Etablissements from './pages/Etablissements/index.jsx';
 // const RequireAuth = ({ children }) => {
 //   const isLogged = localStorage.getItem('isLogged');
 //   return isLogged ? children : <Navigate to="/" replace />;
-// };
+// }; 
 
 // Composant principal App avec routing
 export function App() {

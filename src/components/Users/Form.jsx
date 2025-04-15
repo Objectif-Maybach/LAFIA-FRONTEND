@@ -35,7 +35,6 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
     }
     onSubmit(data);
   };
-  console.log(dataEdit);
   if (dataEdit.length != 0) {
     useEffect(() =>{
       setValue('full_name', dataEdit?.full_name);
@@ -178,7 +177,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
               
               <option value="">-- Choisir --</option>
               {roles.map(role => (
-                <option key={role.id} selected={dataEdit?.role === role.id} value={role.id}>
+                <option key={role.id} selected={dataEdit?.role.id === role.id} value={role.id}>
                   {role.nom_role}
                 </option>
               ))}

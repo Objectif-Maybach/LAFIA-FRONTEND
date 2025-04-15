@@ -35,7 +35,6 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
     // Ajouter les champs imbriqués manuellement avec le bon préfixe
     formData.append("contact.telephone", etab.telephone);
     formData.append("contact.adresse", etab.adresse);
-    console.log('object', formData.get('contact'));
     onSubmit(formData);
   };
   useEffect(() => {
@@ -47,7 +46,6 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
       setValue('adresse', dataEdit?.contact.adresse);
     }
   }, [dataEdit, setValue]);
-  console.log(dataEdit);
   return (
     <div className="p-1">
       <form onSubmit={handleSubmit(AddUser)}>

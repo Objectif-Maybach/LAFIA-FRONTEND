@@ -37,7 +37,7 @@ const Users = () => {
       handleFormClose()
       console.log(response);
     } catch (error) {
-      toast.error('Erreur lors de l\'ajout avec succès ')
+      toast.error('Une erreur est survenue lors de l\'ajout de l\'utilisateur')
       // Afficher une notification d'erreur ou gérer l'erreur comme vous le souhaitez
       console.error(error);
     } finally {
