@@ -12,13 +12,12 @@ export const LoginPage = () => {
   const navigate = useNavigate();
   const Api_Url = import.meta.env.VITE_API_URL;
   const login = async (data) => {
-    // localStorage.setItem('isLogged', '145455656');
-    // navigate('/accueil');*
-    console.log(errors);
     setLoding(true);
     try {
       const response = await axios.post(`${Api_Url}login/`, data);
       localStorage.setItem('isLogged', response.data.user.id);
+      localStorage.setItem('username', response.data.user.username);
+      localStorage.setItem('full_name', response.data.user.full_name);
       navigate('/accueil');
     } catch (error) {
       setError(error);
