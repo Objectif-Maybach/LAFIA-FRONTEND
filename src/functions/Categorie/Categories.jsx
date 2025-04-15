@@ -10,9 +10,9 @@ export const GetAllCategories = async () => {
   }
 };
 // Recuperation d'un types categorie par son id
-export const GetCategorieById = async (typesCategorieId) => {
+export const GetCategorieById = async (categorieId) => {
   try {
-    const response = await axiosClient.get(`${Api_Url}establishments-types/${typesCategorieId}/`);
+    const response = await axios.get(`${Api_Url}establishments-types/${categorieId}/`);
     return response.data;
   } catch (error) {
     console.error('Error fetching types categorie:', error);
@@ -20,9 +20,9 @@ export const GetCategorieById = async (typesCategorieId) => {
   }
 };
 // Ajout d'un type categorie
-export const AddCategorie = async (typesCategorieData) => {
+export const AddCategorie = async (CategorieData) => {
   try {
-    const response = await axiosClient.post(`${Api_Url}categories/`, typesCategorieData, {
+    const response = await axios.post(`${Api_Url}categories/`, CategorieData, {
      
 });
     return response.data;
@@ -33,9 +33,9 @@ export const AddCategorie = async (typesCategorieData) => {
 };
 
 // Modification d'un types categorie
-export const updateCategorie = async (typesCategorieId, typesCategorieData) => {
+export const updateCategorie = async (categorieId, CategorieData) => {
   try {
-    const response = await axiosClient.put(`${Api_Url}categories/${typesCategorieId}/`, typesCategorieData);
+    const response = await axios.put(`${Api_Url}categories/${categorieId}/`, CategorieData);
     return response.data;
   } catch (error) {
     console.error('Error updating types categorie:', error);
@@ -43,9 +43,9 @@ export const updateCategorie = async (typesCategorieId, typesCategorieData) => {
   }
 };
 // Suppression d'un types categorie 
-export const DeleteCategorie = async (typesCategorieId) => {
+export const DeleteCategorie = async (categorieId) => {
   try {
-    const response = await axiosClient.delete(`${Api_Url}categories/${typesCategorieId}/`);
+    const response = await axios.delete(`${Api_Url}categories/${categorieId}/`);
     return response.data;
   } catch (error) {
     console.error('Error deleting types categorie:', error);
