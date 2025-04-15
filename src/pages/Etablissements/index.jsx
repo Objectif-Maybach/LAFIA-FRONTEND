@@ -3,17 +3,20 @@
 import { useEffect, useState } from "react"
 import EtablissementForm from "../../components/Etablissements/Form"
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
-import { AddEtablissement, DeleteEtablissement, GetAllEtablissements, UpdateEtablissement } from "../../functions/Etablissements"
+import { AddEtablissement, DeleteEtablissement, GetAllEtablissements, UpdateEtablissement } from "../../functions/Etablissement/Etablissements"
 import restauImg from '../../assets/images/restau.jpg';
 import { toast } from "react-toastify"
+import Loader from "../../components/loading/loader"
 const Etablissements = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [etablissements, setEtablissements] = useState([])
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const EtablissementsAll = async () => {
+    setIsLoading(true)
     try {
       const response = await GetAllEtablissements()
       console.log(response)
@@ -21,8 +24,12 @@ const Etablissements = () => {
     } catch (err) {
       console.error(err)
     }
+    finally {
+      setIsLoading(false)
+    }
   }
   const AddEtablissements = async (user) => {
+    setIsLoading(true)
     try {
       const response = await AddEtablissement(user);
       toast.success('Ajouter avec succès ')
@@ -30,12 +37,16 @@ const Etablissements = () => {
       handleFormClose()
       console.log(response);
     } catch (error) {
-      toast.error('Erreur lors de l\'ajout avec succès ')
+      toast.error('Erreur lors de l\'ajout de l\'etablissement ')
       // Afficher une notification d'erreur ou gérer l'erreur comme vous le souhaitez
       console.error(error);
     }
+    finally {
+      setIsLoading(false)
+    }
   }
   const UpdateEtablissements = async (user) => {
+    setIsLoading(true)
     try {
       const response = await UpdateEtablissement(dataEdit.id, user)
       toast.success('Mise à jour effectuée avec succès')
@@ -47,13 +58,17 @@ const Etablissements = () => {
       toast.error('Erreur lors de la modification de l\'etablissement')
       console.error(error);
     }
+    finally {
+      setIsLoading(false)
+    }
   }
   const handleEdit = async (user) => {
     setIsModalOpen(true)
     setDataEdit(user)
   }
   const handleDelete = async (userId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet etablissement ?')) {
+      setIsLoading(true)
       try {
         const response = await DeleteEtablissement(userId);
         toast.success('Utilisateur supprimé avec succès')
@@ -61,6 +76,9 @@ const Etablissements = () => {
       } catch (error) {
         toast.error('Erreur lors de la suppression de l\'etablissement')
         console.error(error);
+      }
+      finally {
+        setIsLoading(false)
       }
     }
   }
@@ -79,6 +97,7 @@ const Etablissements = () => {
 
   return (
     <div>
+      {isLoading && (<Loader />)}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Gestion des etablissements</h1>
         <p className="text-gray-600">Ajouter, modifier ou supprimer des etablissements</p>

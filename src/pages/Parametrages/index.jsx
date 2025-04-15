@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 import CategorieForm from "../../components/parametrages/categoryForm";
 import TypeEtablissementForm from "../../components/parametrages/TypeEtablissementForm";
 import { motion } from "framer-motion";
-import { GetAllTypeEtablissements, updateTypeEtablissement, AddTypeEtablissement, DeleteTypeEtablissement } from "../../functions/TypeEtablissements";
-import {GetAllCategories, AddCategorie, updateCategorie, DeleteCategorie} from "../../functions/Categories";
+import { GetAllTypeEtablissements, updateTypeEtablissement, AddTypeEtablissement, DeleteTypeEtablissement } from "../../functions/TypeEtablissement/TypeEtablissements";
+import {GetAllCategories, AddCategorie, updateCategorie, DeleteCategorie} from "../../functions/Categorie/Categories";
 
 
 const notify = (message) =>

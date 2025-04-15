@@ -1,10 +1,8 @@
-import axios from "axios";
-
-const Api_Url = import.meta.env.VITE_API_URL;
+import axiosClient from "../../axiosClient";
 // Recuperation de la liste des types types categories
 export const GetAllCategories = async () => {
   try {
-    const response = await axios.get(`${Api_Url}categories/`);
+    const response = await axiosClient.get(`${Api_Url}categories/`);
     return response.data;
   } catch (error) {
     console.error('Error fetching types types categories:', error);
