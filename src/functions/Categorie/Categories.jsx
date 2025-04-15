@@ -10,7 +10,7 @@ export const GetAllCategories = async () => {
   }
 };
 // Recuperation d'un types categorie par son id
-export const GetCategorieById = async (categorieId) => {
+export const GetCategorieById = async (typesCategorieId) => {
   try {
     const response = await axiosClient.get(`${Api_Url}establishments-types/${typesCategorieId}/`);
     return response.data;
@@ -20,7 +20,7 @@ export const GetCategorieById = async (categorieId) => {
   }
 };
 // Ajout d'un type categorie
-export const AddCategorie = async (CategorieData) => {
+export const AddCategorie = async (typesCategorieData) => {
   try {
     const response = await axiosClient.post(`${Api_Url}categories/`, typesCategorieData, {
      
@@ -33,7 +33,7 @@ export const AddCategorie = async (CategorieData) => {
 };
 
 // Modification d'un types categorie
-export const updateCategorie = async (categorieId, CategorieData) => {
+export const updateCategorie = async (typesCategorieId, typesCategorieData) => {
   try {
     const response = await axiosClient.put(`${Api_Url}categories/${typesCategorieId}/`, typesCategorieData);
     return response.data;
@@ -43,7 +43,7 @@ export const updateCategorie = async (categorieId, CategorieData) => {
   }
 };
 // Suppression d'un types categorie 
-export const DeleteCategorie = async (categorieId) => {
+export const DeleteCategorie = async (typesCategorieId) => {
   try {
     const response = await axiosClient.delete(`${Api_Url}categories/${typesCategorieId}/`);
     return response.data;
