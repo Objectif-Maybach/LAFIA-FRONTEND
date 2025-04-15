@@ -43,16 +43,9 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
       setValue('email', dataEdit?.email);
       setValue('telephone', dataEdit?.contact.telephone);
       setValue('adresse', dataEdit?.contact.adresse);
-      setValue('role', dataEdit?.role);
+      setValue('role', dataEdit?.role?.id);
       setValue('password', dataEdit?.password);
-    }, [dataEdit, setValue]);
-    // setValue('full_name', dataEdit?.full_name);
-    // setValue('username', dataEdit?.username);
-    // setValue('email', dataEdit?.email);
-    // setValue('telephone', dataEdit?.contact.telephone);
-    // setValue('adresse', dataEdit?.contact.adresse);
-    // setValue('role', dataEdit?.role);
-    // setValue('password', dataEdit?.password);
+    }, [dataEdit, setValue])
   }
   return (
     <div className="p-1">
