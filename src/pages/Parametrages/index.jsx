@@ -8,8 +8,7 @@ import CategorieForm from "../../components/parametrages/categoryForm";
 import TypeEtablissementForm from "../../components/parametrages/TypeEtablissementForm";
 import { motion } from "framer-motion";
 import { GetAllTypeEtablissements, updateTypeEtablissement, AddTypeEtablissement, DeleteTypeEtablissement } from "../../functions/TypeEtablissements";
-import {GetAllCategories, AddCategorie} from "../../functions/Categories";
-
+import {GetAllCategories, AddCategorie, updateCategorie, DeleteCategorie} from "../../functions/Categories";
 
 
 const notify = (message) =>
@@ -120,7 +119,7 @@ const Parametrage = () => {
     console.error("Error fetching data:", error);
   }
  }
- const addCategorie = async (data) => {
+ const addDataCategorie = async (data) => {
   try{
     await AddCategorie(data);
     toast.success('Ajout effectué avec succès')
@@ -133,6 +132,31 @@ const Parametrage = () => {
   }
   
  }
+ const updateDataCategorie = async (data) => {
+  try{
+    await updateCategorie(dataEdit.id, data);
+    toast.success('Modification effectuée avec succès')
+    dataCategorie();
+    setIsModalOpen(false);
+    setModalType("");
+  }catch (error){
+    toast.error('Erreur lors de la modification')
+    console.error("Error sending data:", error);
+  }
+ }
+ const deleteDataCategorie = async (id) => {
+  try{
+    await DeleteCategorie(id);
+    toast.success('Suppression effectuée avec succès')
+    dataCategorie();
+    setIsDelete(false);
+    setModalType("");
+  }
+  catch (error) {
+    toast.error('Erreur lors de la suppression')
+    console.error("Error sending data:", error);
+}
+}
   useEffect(() => {
     dataCategorie();
     dataTypeEtablissement();
@@ -283,7 +307,7 @@ const Parametrage = () => {
                         >
                           <PencilIcon size={16} />
                         </button>
-                        <button className="text-red-600 hover:text-red-900">
+                        <button className="text-red-600 hover:text-red-900" onClick={() => {setIsDelete(true); setId(categorie.id)}}>
                           <TrashIcon size={16} />
                         </button>
                       </td>
@@ -414,7 +438,7 @@ const Parametrage = () => {
             </div>
             <div className="p-4">
               {modalType === "categories" && (
-                <CategorieForm onClose={handleFormClose} onSubmit={addCategorie} dataEdit={dataEdit} />
+                <CategorieForm onClose={handleFormClose} onSubmit={ update? updateDataCategorie: addDataCategorie} dataEdit={dataEdit} />
               )}
               {modalType === "typesEtablissements" && (
                 <TypeEtablissementForm
@@ -457,7 +481,7 @@ const Parametrage = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={() => {activeTab==='categories' ? deleteDataCategorie(id) :
                     deleteDataTypeEtablissement(id);
                     setIsDelete(false);
                     setId('');
@@ -474,6 +498,7 @@ const Parametrage = () => {
     </div>
   )
 }
+
 
 export default Parametrage
 
