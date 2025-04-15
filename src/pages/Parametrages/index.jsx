@@ -8,7 +8,10 @@ import CategorieForm from "../../components/parametrages/categoryForm";
 import TypeEtablissementForm from "../../components/parametrages/TypeEtablissementForm";
 import { motion } from "framer-motion";
 import { GetAllTypeEtablissements, updateTypeEtablissement, AddTypeEtablissement, DeleteTypeEtablissement } from "../../functions/TypeEtablissement/TypeEtablissements";
-import {GetAllCategories, AddCategorie, updateCategorie, DeleteCategorie} from "../../functions/Categorie/Categories";
+import { GetAllCategories, AddCategorie, updateCategorie, DeleteCategorie } from "../../functions/Categorie/Categories";
+import Loader from "../../components/loading/loader";
+import TypeEtablissement from "./TypeEtablissement";
+import Categorie from "./Categorie";
 
 
 const notify = (message) =>
@@ -32,6 +35,7 @@ const Parametrage = () => {
   const [update, setUpdate] = useState(false)
   const [isDelete, setIsDelete] = useState(false)
   const [id, setId] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
 
   const clean = () => {
     setDataEdit([]);
@@ -55,7 +59,7 @@ const Parametrage = () => {
   const openModal = (type) => {
     setModalType(type);
     setIsModalOpen(true);
-    
+
   };
 
   const updateState = (type, prop) => {
@@ -64,41 +68,53 @@ const Parametrage = () => {
     setUpdate(true);
   };
   const dataTypeEtablissement = async () => {
+    setIsLoading(true)
     try {
       const response = await GetAllTypeEtablissements();
       setTypesEtablissements(response);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+    finally {
+      setIsLoading(false)
+    }
   }
   const addDataTypeEtablissement = async (data) => {
-    try{
+    setIsLoading(true)
+    try {
       await AddTypeEtablissement(data);
       toast.success('Ajout effectué avec succès')
       dataTypeEtablissement();
       setIsModalOpen(false);
       setModalType("");
-    }catch (error) {
+    } catch (error) {
       toast.error('Erreur lors de l\'ajout')
       console.error("Error sending data:", error);
-     
+    }
+    finally {
+      setIsLoading(false)
     }
   }
   const updateDataTypeEtablissement = async (data) => {
-    try{
+    setIsLoading(true)
+    try {
       await updateTypeEtablissement(dataEdit.id, data);
       toast.success('Modification effectuée avec succès')
       dataTypeEtablissement();
       setIsModalOpen(false);
       setModalType("");
-    }catch (error) {
+    } catch (error) {
       toast.error('Erreur lors de la modification')
       console.error("Error sending data:", error);
-     
+
+    }
+    finally {
+      setIsLoading(false)
     }
   }
   const deleteDataTypeEtablissement = async (id) => {
-    try{
+    setIsLoading(true)
+    try {
       await DeleteTypeEtablissement(id);
       toast.success('Suppression effectuée avec succès')
       dataTypeEtablissement();
@@ -108,59 +124,78 @@ const Parametrage = () => {
     catch (error) {
       toast.error('Erreur lors de la suppression')
       console.error("Error sending data:", error);
+    }
+    finally {
+      setIsLoading(false)
+    }
   }
-}
- const dataCategorie= async ()=> {
-  try{
-    const response = await GetAllCategories();
-    setCategories(response);
-    console.log(response)
-  } catch (error) {
-    console.error("Error fetching data:", error);
+  const dataCategorie = async () => {
+    setIsLoading(true)
+    try {
+      const response = await GetAllCategories();
+      setCategories(response);
+      console.log(response)
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+    finally {
+      setIsLoading(false)
+    }
   }
- }
- const addDataCategorie = async (data) => {
-  try{
-    await AddCategorie(data);
-    toast.success('Ajout effectué avec succès')
-    dataCategorie();
-    setIsModalOpen(false);
-    setModalType("");
-  } catch (error) {
-    toast.error('Erreur lors de l\'ajout')
-    console.error("Error sending data:", error);
+  const addDataCategorie = async (data) => {
+    setIsLoading(true)
+    try {
+      await AddCategorie(data);
+      toast.success('Ajout effectué avec succès')
+      dataCategorie();
+      setIsModalOpen(false);
+      setModalType("");
+    } catch (error) {
+      toast.error('Erreur lors de l\'ajout')
+      console.error("Error sending data:", error);
+    }
+    finally {
+      setIsLoading(false)
+    }
+
   }
-  
- }
- const updateDataCategorie = async (data) => {
-  try{
-    await updateCategorie(dataEdit.id, data);
-    toast.success('Modification effectuée avec succès')
-    dataCategorie();
-    setIsModalOpen(false);
-    setModalType("");
-  }catch (error){
-    toast.error('Erreur lors de la modification')
-    console.error("Error sending data:", error);
+  const updateDataCategorie = async (data) => {
+    setIsLoading(true)
+    try {
+      await updateCategorie(dataEdit.id, data);
+      toast.success('Modification effectuée avec succès')
+      dataCategorie();
+      setIsModalOpen(false);
+      setModalType("");
+    } catch (error) {
+      toast.error('Erreur lors de la modification')
+      console.error("Error sending data:", error);
+    }
+    finally {
+      setIsLoading(false)
+    }
   }
- }
- const deleteDataCategorie = async (id) => {
-  try{
-    await DeleteCategorie(id);
-    toast.success('Suppression effectuée avec succès')
-    dataCategorie();
-    setIsDelete(false);
-    setModalType("");
+  const deleteDataCategorie = async (id) => {
+    setIsLoading(true)
+    try {
+      await DeleteCategorie(id);
+      toast.success('Suppression effectuée avec succès')
+      dataCategorie();
+      setIsDelete(false);
+      setModalType("");
+    }
+    catch (error) {
+      toast.error('Erreur lors de la suppression')
+      console.error("Error sending data:", error);
+    }
+    finally {
+      setIsLoading(false)
+    }
   }
-  catch (error) {
-    toast.error('Erreur lors de la suppression')
-    console.error("Error sending data:", error);
-}
-}
   useEffect(() => {
     dataCategorie();
     dataTypeEtablissement();
-    
+
   }, []);
 
   const filteredCategories = categories.filter(
@@ -177,6 +212,7 @@ const Parametrage = () => {
 
   return (
     <div>
+      {isLoading && (<Loader />)}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Paramétrage</h1>
       </div>
@@ -235,20 +271,19 @@ const Parametrage = () => {
                 <input
                   type="text"
                   className="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder={`Rechercher ${
-                    activeTab === "categories"
-                      ? "une catégorie"
-                      : activeTab === "typesEtablissements"
-                        ? "un type d'établissement"
-                        : "une option de livraison"
-                  }...`}
+                  placeholder={`Rechercher ${activeTab === "categories"
+                    ? "une catégorie"
+                    : activeTab === "typesEtablissements"
+                      ? "un type d'établissement"
+                      : "une option de livraison"
+                    }...`}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
 
               <button
-                onClick={() => openModal(activeTab)}
+                onClick={() => (openModal(activeTab), clean())}
                 className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 <PlusIcon size={16} className="mr-2" />
@@ -263,151 +298,10 @@ const Parametrage = () => {
           </div>
 
           <TabsContent value="categories" className="p-0">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Nom
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Description
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredCategories.map((categorie) => (
-                    <tr key={categorie.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="font-medium text-gray-900">{categorie.category_name}</div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-gray-500">{categorie.description}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        {/* <button onClick={notify} className="text-blue-600 hover:text-blue-900 mr-3">
-                        <ToastContainer />
-                          <PencilIcon size={16} />
-                        </button> */}
-                        <button
-                          onClick={() => updateState(activeTab, categorie)}
-                          className="text-blue-600 hover:text-blue-900 mr-3"
-                        >
-                          <PencilIcon size={16} />
-                        </button>
-                        <button className="text-red-600 hover:text-red-900" onClick={() => {setIsDelete(true); setId(categorie.id)}}>
-                          <TrashIcon size={16} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="px-4 py-3 border-t flex items-center justify-between">
-              <div className="text-sm text-gray-700">
-                Affichage de <span className="font-medium">1</span> à{" "}
-                <span className="font-medium">{filteredCategories.length}</span> sur{" "}
-                <span className="font-medium">{filteredCategories.length}</span> résultats
-              </div>
-              <div className="flex space-x-2">
-                <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-                  Précédent
-                </button>
-                <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-                  Suivant
-                </button>
-              </div>
-            </div>
+            <Categorie filteredCategories={filteredCategories} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab}/>
           </TabsContent>
-
           <TabsContent value="typesEtablissements" className="p-0">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      ID
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Nom
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Description
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredTypesEtablissements.map((type) => (
-                    <tr key={type.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="font-medium text-gray-900">{type.id}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="font-medium text-gray-900">{type.establishment_type_name}</div>
-                      </td>
-
-                      <td className="px-6 py-4">
-                        <div className="text-gray-500">{type.description}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          onClick={() => updateState(activeTab, type)}
-                          className="text-blue-600 hover:text-blue-900 mr-3"
-                        >
-                          <PencilIcon size={16} />
-                        </button>
-                        <button className="text-red-600 hover:text-red-900" onClick={() => {setIsDelete(true); setId(type.id)}}>
-                          <TrashIcon size={16} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="px-4 py-3 border-t flex items-center justify-between">
-              <div className="text-sm text-gray-700">
-                Affichage de <span className="font-medium">1</span> à{" "}
-                <span className="font-medium">{filteredTypesEtablissements.length}</span> sur{" "}
-                <span className="font-medium">{filteredTypesEtablissements.length}</span> résultats
-              </div>
-              <div className="flex space-x-2">
-                <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-                  Précédent
-                </button>
-                <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-                  Suivant
-                </button>
-              </div>
-            </div>
+            <TypeEtablissement filteredTypesEtablissements={filteredTypesEtablissements} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab}/>
           </TabsContent>
         </Tabs>
       </div>
@@ -438,7 +332,7 @@ const Parametrage = () => {
             </div>
             <div className="p-4">
               {modalType === "categories" && (
-                <CategorieForm onClose={handleFormClose} onSubmit={ update? updateDataCategorie: addDataCategorie} dataEdit={dataEdit} />
+                <CategorieForm onClose={handleFormClose} onSubmit={update ? updateDataCategorie : addDataCategorie} dataEdit={dataEdit} />
               )}
               {modalType === "typesEtablissements" && (
                 <TypeEtablissementForm
@@ -460,11 +354,11 @@ const Parametrage = () => {
                 <h3 className="text-lg font-medium">
                   {modalType === "categories"
                     ? "Supprimer une catégorie"
-                       :"Supprimer un type d'établissement"
-                     }
+                    : "Supprimer un type d'établissement"
+                  }
                 </h3>
               </div>
-              <button onClick={()=> {setIsDelete(false); setId('')}} className="text-gray-500 hover:text-gray-700">
+              <button onClick={() => { setIsDelete(false); setId('') }} className="text-gray-500 hover:text-gray-700">
                 <X size={20} />
               </button>
             </div>
@@ -473,7 +367,7 @@ const Parametrage = () => {
               <div className="flex justify-end gap-3 mt-6">
                 <button
                   type="button"
-                  onClick={()=> {setIsDelete(false); setId('')}}
+                  onClick={() => { setIsDelete(false); setId('') }}
                   className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
                 >
                   <X size={18} className="mr-2" />
@@ -481,8 +375,9 @@ const Parametrage = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => {activeTab==='categories' ? deleteDataCategorie(id) :
-                    deleteDataTypeEtablissement(id);
+                  onClick={() => {
+                    activeTab === 'categories' ? deleteDataCategorie(id) :
+                      deleteDataTypeEtablissement(id);
                     setIsDelete(false);
                     setId('');
                   }}
@@ -498,7 +393,5 @@ const Parametrage = () => {
     </div>
   )
 }
-
-
 export default Parametrage
 
