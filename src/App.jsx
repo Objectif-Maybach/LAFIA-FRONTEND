@@ -9,6 +9,7 @@ import Driver from './pages/Drivers/index.jsx';  // Changer l'extension pour .js
 import Layout from './components/Layout.jsx';  // Changer l'extension pour .jsx
 import { ToastContainer, toast } from 'react-toastify';
 import Etablissements from './pages/Etablissements/index.jsx';
+import Commandes from './pages/Commandes/index.jsx'
 
 // Fonction RequireAuth pour protéger les routes
 // const RequireAuth = ({ children }) => {
@@ -34,6 +35,8 @@ export function App() {
           <Route path="produits" element={<Produits />} />
           <Route path="parametrages" element={<Parametrages />} />
           <Route path="drivers" element={<Driver />} />
+          <Route path="commandes" element={<Commandes />} />
+
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -30,7 +30,13 @@ const Sidebar = () => {
     path: '/accueil/parametrages',
     icon: <SettingsIcon size={20} />,
     label: 'Paramétrages'
-  }];
+  },
+  {
+    path: '/accueil/commandes',
+    icon: <ShoppingBagIcon size={20} />,
+    label: 'Commandes'
+  }
+];
   const Logout = () => {
     localStorage.removeItem('token');
     navigate('/');
