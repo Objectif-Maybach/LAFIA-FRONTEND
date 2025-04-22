@@ -33,7 +33,6 @@ export function App() {
           <Route path="etablissements" element={<Etablissements />} />
           <Route path="produits" element={<Produits />} />
           <Route path="parametrages" element={<Parametrages />} />
-          <Route path="drivers" element={<Driver />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
