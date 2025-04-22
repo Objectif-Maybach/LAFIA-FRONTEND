@@ -104,6 +104,7 @@ const Parametrage = () => {
       dataTypeEtablissement();
       setIsDelete(false);
       setModalType("");
+      clean();
     }
     catch (error) {
       toast.error('Erreur lors de la suppression')
@@ -135,10 +136,13 @@ const Parametrage = () => {
  const updateDataCategorie = async (data) => {
   try{
     await updateCategorie(dataEdit.id, data);
-    toast.success('Modification effectuée avec succès')
+    setUpdate(false)
+    clean();
     dataCategorie();
     setIsModalOpen(false);
     setModalType("");
+    toast.success('Modification effectuée avec succès')
+   
   }catch (error){
     toast.error('Erreur lors de la modification')
     console.error("Error sending data:", error);

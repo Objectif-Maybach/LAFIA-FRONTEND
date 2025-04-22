@@ -8,6 +8,7 @@ import Parametrages from './pages/Parametrages';  // Changer l'extension pour .j
 import Layout from './components/Layout.jsx';  // Changer l'extension pour .jsx
 import { ToastContainer, toast } from 'react-toastify';
 import Etablissements from './pages/Etablissements/index.jsx';
+import Commandes from './pages/Commandes/index';
 
 // Fonction RequireAuth pour protéger les routes
 // const RequireAuth = ({ children }) => {
@@ -32,6 +33,8 @@ export function App() {
           <Route path="etablissements" element={<Etablissements />} />
           <Route path="produits" element={<Produits />} />
           <Route path="parametrages" element={<Parametrages />} />
+          <Route path="commandes" element={<Commandes />} />
+
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
