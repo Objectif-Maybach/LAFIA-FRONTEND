@@ -305,7 +305,6 @@ const Parametrage = () => {
           </TabsContent>
         </Tabs>
       </div>
-
       {/* Modal personnalisé */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

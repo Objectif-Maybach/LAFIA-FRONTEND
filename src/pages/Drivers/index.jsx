@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react"
 import DriversForm from "../../components/Drivers/Form"
-import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X, LockIcon } from "lucide-react"
+import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X, LockIcon, File } from "lucide-react"
 import { getAllDriver } from '../../functions/driver/getAllDriver';
 import { addDriver } from '../../functions/driver/addDriver';
 import { editDriver } from '../../functions/driver/editDriver';
 import { deleteDriver } from '../../functions/driver/deleteDriver';
 import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
+import ReadFile from "../../components/ReadFile";
 const Drivers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -16,6 +17,8 @@ const Drivers = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isReadFile, setIsReadFile] = useState(false)
+  const [fileUrl, setFileUrl] = useState('')
 
   const DriversAll = async () => {
     setIsLoading(true)
@@ -82,6 +85,11 @@ const Drivers = () => {
       }
     }
   }
+  const readingFileUrl = (file) => {
+    setFileUrl(file)
+    setIsReadFile(true)
+  }
+
   useEffect(() => {
     DriversAll();
   }, []);
@@ -168,7 +176,10 @@ const Drivers = () => {
                     <div className="font-medium text-gray-900">{driver.driver_name} </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-gray-500">{driver.piece}</div>
+                  <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(driver.piece)}>
+                      <File size={16} /> {driver.piece}
+                    </button>
+                   
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-gray-500"><span className="text-red-700"> {driver.contact.telephone}</span> <br />
@@ -206,7 +217,7 @@ const Drivers = () => {
           </div>
         </div>
       </div>
-
+      {isReadFile && (<ReadFile fileUrl={fileUrl} onClose={setIsReadFile} />)}
       {/* Modal personnalisé */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
