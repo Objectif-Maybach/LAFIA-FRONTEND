@@ -6,22 +6,26 @@ import axios from 'axios';
 export const LoginPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoding] = useState(false);
-  const { register, handleSubmit, formState: { errors} } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     mode: 'onTouched'
   })
   const navigate = useNavigate();
   const Api_Url = import.meta.env.VITE_API_URL;
   const login = async (data) => {
-    // localStorage.setItem('isLogged', '145455656');
-    // navigate('/accueil');*
-    console.log(errors);
     setLoding(true);
     try {
       const response = await axios.post(`${Api_Url}login/`, data);
-      localStorage.setItem('isLogged', response.data.user.id);
-      navigate('/accueil');
+      const role = response.data.user.role?.nom_role;
+      if (role === 'admin') {
+        localStorage.setItem('isLogged', response.data.user.id);
+        localStorage.setItem('username', response.data.user.username);
+        localStorage.setItem('full_name', response.data.user.full_name);
+        navigate('/accueil');
+      } else {
+        setError('Vous n\'avez pas les droits d\'accès');
+      }
     } catch (error) {
-      setError(error);
+      setError('Vos identifiants sont incorrects');
       console.error('Login error:', error);
     } finally {
       setLoding(false);
@@ -40,14 +44,14 @@ export const LoginPage = () => {
         </div>
         <div className="p-8">
           <h2 className="text-xl font-semibold text-gray-700 text-center mb-6">
-            Connexion  
-          </h2> 
+            Connexion
+          </h2>
           <form onSubmit={handleSubmit(login)}>
-          {error && (
-            <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
-             Vos identifiants sont incorrects
-            </div>
-          )}
+            {error && (
+              <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+                {error}
+              </div>
+            )}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-medium mb-2">
                 Login

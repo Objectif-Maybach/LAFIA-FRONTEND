@@ -1,30 +1,28 @@
-import axios from "axios";
-
-const Api_Url = import.meta.env.VITE_API_URL;
+import axiosClient from "../../axiosClient";
 // Recuperation de la liste des Utilisateurs
 export const GetAllUsers = async () => {
   try {
-    const response = await axios.get(`${Api_Url}user/`);
+    const response = await axiosClient.get(`user/`);
     return response.data;
   } catch (error) {
     console.error('Error fetching users:', error);
     throw error;
   }
 };
-// Recuperation d'un utilisateur par son id
-export const GetUserById = async (userId) => {
+// Reinitialser le mot de passe d'un utilisateur
+export const ResetPassword = async (userId, password) => {
   try {
-    const response = await axios.get(`${Api_Url}user/${userId}/`);
+    const response = await axiosClient.patch(`user/${userId}/`,  password);
     return response.data;
   } catch (error) {
-    console.error('Error fetching user:', error);
+    console.error('Error resetting password:', error);
     throw error;
   }
 };
 // Recuperation de la liste des rôles
 export const GetRoles = async () => {
   try {
-    const response = await axios.get(`${Api_Url}role/`);
+    const response = await axiosClient.get(`role/`);
     return response.data;
   } catch (error) {
     console.error('Error fetching roles:', error);
@@ -34,7 +32,7 @@ export const GetRoles = async () => {
 // Ajout d'un utilisateur
 export const AddUser = async (userData) => {
   try {
-    const response = await axios.post(`${Api_Url}user/`, userData);
+    const response = await axiosClient.post(`user/`, userData);
     return response.data;
   } catch (error) {
     console.error('Error adding user:', error);
@@ -45,7 +43,7 @@ export const AddUser = async (userData) => {
 // Modification d'un utilisateur
 export const UpdateUser = async (userId, userData) => {
   try {
-    const response = await axios.put(`${Api_Url}user/${userId}/`, userData);
+    const response = await axiosClient.patch(`user/${userId}/`, userData);
     return response.data;
   } catch (error) {
     console.error('Error updating user:', error);
@@ -55,7 +53,7 @@ export const UpdateUser = async (userId, userData) => {
 // Suppression d'un utilisateur 
 export const DeleteUser = async (userId) => {
   try {
-    const response = await axios.delete(`${Api_Url}user/${userId}/`);
+    const response = await axiosClient.delete(`user/${userId}/`);
     return response.data;
   } catch (error) {
     console.error('Error deleting user:', error);

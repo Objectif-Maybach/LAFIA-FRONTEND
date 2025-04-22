@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2 } from "lucide-react";
+import { UserIcon, CheckCircle, X } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { GetRoles } from "../../functions/Users";
 
 const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm(

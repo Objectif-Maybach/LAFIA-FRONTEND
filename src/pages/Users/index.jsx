@@ -2,39 +2,65 @@
 
 import { useEffect, useState } from "react"
 import UserForm from "../../components/Users/Form"
-import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
-import { AddUser, DeleteUser, GetAllUsers, GetUserById, UpdateUser } from "../../functions/Users"
+import ResetForm from "../../components/Reset/Form"
+import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X, LockIcon } from "lucide-react"
+import { AddUser, DeleteUser, GetAllUsers, ResetPassword, UpdateUser } from "../../functions/User/Users"
 import { toast } from "react-toastify"
+import Loader from "../../components/loading/loader"
 const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalResetOpen, setIsModalResetOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [users, setUsers] = useState([])
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const UsersAll = async () => {
-    try{
+    setIsLoading(true)
+    try {
       const response = await GetAllUsers()
       console.log(response)
       setUsers(response)
-    }catch(err){
+    } catch (err) {
       console.error(err)
+    } finally {
+      setIsLoading(false)
     }
   }
   const AddUsers = async (user) => {
+    setIsLoading(true)
     try {
       const response = await AddUser(user);
       toast.success('Ajouter avec succès ')
       UsersAll()
       handleFormClose()
       console.log(response);
-    }catch (error) {
-      toast.error('Erreur lors de l\'ajout avec succès ')
+    } catch (error) {
+      toast.error('Une erreur est survenue lors de l\'ajout de l\'utilisateur')
       // Afficher une notification d'erreur ou gérer l'erreur comme vous le souhaitez
       console.error(error);
+    } finally {
+      setIsLoading(false)
+    }
+  }
+  const ResetUsers = async (user) => {
+    setIsLoading(true)
+    try {
+      const response = await ResetPassword(dataEdit.id, user)
+      toast.success('Réinitialisation effectuée avec succès')
+      UsersAll()
+      handleFormCloseReset()
+      console.log(response)
+    } catch (error) {
+      toast.error('Erreur lors de la réinitialisation de l\'utilisateur')
+      console.error(error);
+    } finally {
+      setIsLoading(false)
     }
   }
   const UpdateUsers = async (user) => {
+    setIsLoading(true)
     try {
       const response = await UpdateUser(dataEdit.id, user)
       toast.success('Mise à jour effectuée avec succès')
@@ -45,14 +71,21 @@ const Users = () => {
     catch (error) {
       toast.error('Erreur lors de la modification de l\'utilisateur')
       console.error(error);
+    } finally {
+      setIsLoading(false)
     }
   }
   const handleEdit = async (user) => {
     setIsModalOpen(true)
     setDataEdit(user)
   }
+  const handleReset = async (user) => {
+    setIsModalResetOpen(true)
+    setDataEdit(user)
+  }
   const handleDelete = async (userId) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+      setIsLoading(true)
       try {
         const response = await DeleteUser(userId);
         toast.success('Utilisateur supprimé avec succès')
@@ -60,14 +93,19 @@ const Users = () => {
       } catch (error) {
         toast.error('Erreur lors de la suppression de l\'utilisateur')
         console.error(error);
+      } finally {
+        setIsLoading(false)
       }
     }
-  }   
+  }
   useEffect(() => {
     UsersAll();
   }, []);
   const handleFormClose = () => {
     setIsModalOpen(false)
+  }
+  const handleFormCloseReset = () => {
+    setIsModalResetOpen(false)
   }
 
   const filteredUsers = users.filter(
@@ -78,6 +116,7 @@ const Users = () => {
 
   return (
     <div>
+      {isLoading && (<Loader />)}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Gestion des utilisateurs</h1>
         <p className="text-gray-600">Ajouter, modifier ou supprimer des utilisateurs</p>
@@ -88,7 +127,7 @@ const Users = () => {
           <h2 className="text-lg font-medium">Liste des utilisateurs</h2>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-            {/* <div className="relative">
+            <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <SearchIcon size={16} className="text-gray-400" />
               </div>
@@ -99,10 +138,10 @@ const Users = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-            </div> */}
+            </div>
 
             <button
-              onClick={() => (setDataEdit([]) , setIsModalOpen(true))}
+              onClick={() => (setDataEdit([]), setIsModalOpen(true))}
               className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               <PlusIcon size={16} className="mr-2" />
@@ -158,7 +197,7 @@ const Users = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-gray-500"><span className="text-red-700"> {user.contact.telephone}</span> <br />
-                    {user.contact.adresse}
+                      {user.contact.adresse}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -174,6 +213,9 @@ const Users = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button className="text-yellow-600 hover:text-yellow-900 mr-3" onClick={() => handleReset(user)}>
+                      <LockIcon size={16} />
+                    </button>
                     <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(user)}>
                       <PencilIcon size={16} />
                     </button>
@@ -210,8 +252,8 @@ const Users = () => {
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b">
               <div>
-                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un utilisateur': 'Modifier l\'utilisateur'} {dataEdit.length} </h3>
-                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel utilisateur': 'Modifiez les informations pour mettre à jour l\'utilisateur'} </p>
+                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un utilisateur' : 'Modifier l\'utilisateur'}  </h3>
+                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel utilisateur' : 'Modifiez les informations pour mettre à jour l\'utilisateur'} </p>
               </div>
               <button onClick={handleFormClose} className="text-gray-500 hover:text-gray-700">
                 <X size={20} />
@@ -223,14 +265,36 @@ const Users = () => {
               </div>
             )}
             <div className="p-4">
-              <UserForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddUsers: UpdateUsers} dataEdit={dataEdit} />
+              <UserForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddUsers : UpdateUsers} dataEdit={dataEdit} />
+            </div>
+          </div>
+        </div>
+      )}
+      {isModalResetOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b">
+              <div>
+                <h3 className="text-lg font-medium">Reinitialisation  </h3>
+                <p className="text-sm text-gray-500">Reinitialiser le mot de passe de {dataEdit.full_name } </p>
+              </div>
+              <button onClick={handleFormCloseReset} className="text-gray-500 hover:text-gray-700">
+                <X size={20} />
+              </button>
+            </div>
+            {error && (
+              <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+                {error}
+              </div>
+            )}
+            <div className="p-4">
+              <ResetForm onClose={handleFormCloseReset} onSubmit={ResetUsers } dataEdit={dataEdit} />
             </div>
           </div>
         </div>
       )}
     </div>
-  )
-}
-
+  );
+};
 export default Users
 
