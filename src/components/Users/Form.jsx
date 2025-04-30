@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { GetRoles } from "../../functions/Users";
+import { GetRoles } from "../../functions/User/Users";
 
 const UserForm = ({ onClose, onSubmit, dataEdit }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm(
@@ -35,15 +35,16 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
     }
     onSubmit(data);
   };
-  console.log(dataEdit);
   if (dataEdit.length != 0) {
-    setValue('full_name', dataEdit?.full_name);
-    setValue('username', dataEdit?.username);
-    setValue('email', dataEdit?.email);
-    setValue('telephone', dataEdit?.contact.telephone);
-    setValue('adresse', dataEdit?.contact.adresse);
-    setValue('role', dataEdit?.role);
-    setValue('password', dataEdit?.password);
+    useEffect(() =>{
+      setValue('full_name', dataEdit?.full_name);
+      setValue('username', dataEdit?.username);
+      setValue('email', dataEdit?.email);
+      setValue('telephone', dataEdit?.contact.telephone);
+      setValue('adresse', dataEdit?.contact.adresse);
+      setValue('role', dataEdit?.role?.id);
+      setValue('password', dataEdit?.password);
+    }, [dataEdit, setValue])
   }
   return (
     <div className="p-1">
@@ -86,7 +87,8 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
             </div>
             {errors?.username && <span className='text-sm text-red-600'>{errors.username.message}</span>}
           </div>
-          <div>
+          { dataEdit.length === 0 &&  (
+            <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -105,6 +107,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
             </div>
             {errors?.password && <span className='text-sm text-red-600'>{errors.password.message}</span>}
           </div>
+          )}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <div className="relative">
@@ -170,9 +173,11 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
                 { required: 'Le rôle est obligatoire' })
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+            > 
+              
+              <option value="">-- Choisir --</option>
               {roles.map(role => (
-                <option key={role.id} value={role.id}>
+                <option key={role.id} selected={dataEdit?.role?.id === role.id} value={role.id}>
                   {role.nom_role}
                 </option>
               ))}

@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { HomeIcon, UsersIcon, ShoppingBagIcon, LogOutIcon, SettingsIcon, Building } from 'lucide-react';
+import { HomeIcon, UsersIcon, ShoppingBagIcon, LogOutIcon, SettingsIcon, Building, PackageIcon } from 'lucide-react';
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -8,24 +8,35 @@ const Sidebar = () => {
     icon: <HomeIcon size={20} />,
     label: 'Dashboard'
   }, {
-    path: 'users',
+    path: '/accueil/users',
     icon: <UsersIcon size={20} />,
     label: 'Utilisateurs'
   }
   , {
-    path: 'etablissements',
+    path: '/accueil/etablissements',
     icon: <Building size={20} />,
     label: 'Etablissements'
   }, {
-    path: 'produits',
+    path: '/accueil/produits',
     icon: <ShoppingBagIcon size={20} />,
     label: 'Produits'
   },
   {
-    path: 'parametrages',
+    path: '/accueil/drivers',
+    icon: <UsersIcon size={20} />,
+    label: 'Livreurs'
+  },
+  {
+    path: '/accueil/parametrages',
     icon: <SettingsIcon size={20} />,
     label: 'Paramétrages'
-  }];
+  },
+  {
+    path: 'commandes',
+    icon: <PackageIcon size={20} />,
+    label: 'Commandes'
+  }
+];
   const Logout = () => {
     localStorage.removeItem('token');
     navigate('/');
@@ -40,7 +51,7 @@ const Sidebar = () => {
         {navItems.map(item => <li key={item.path}>
           <Link to={item.path} className={`flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 ${location.pathname === item.path ? 'bg-blue-50 text-blue-600 border-r-4 border-blue-600' : ''}`}>
             <span className="mr-3">{item.icon}</span>
-            {item.label}
+            {item.label} 
           </Link>
         </li>)}
       </ul>
