@@ -5,7 +5,7 @@ import { addProduit } from '../../functions/Produit/addProduit';
 import { editProduit } from '../../functions/Produit/editProduit';
 import { deleteProduit } from '../../functions/Produit/deleteProduit';
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from 'lucide-react';
-import restauImg from '../../assets/images/restau.jpg';
+import no_image from '../../assets/images/no_image.png';
 import { toast } from 'react-toastify';
 import Loader from '../../components/loading/loader';
 
@@ -169,7 +169,11 @@ const Produits = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredProduits.map(produit => <tr key={produit.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <img src={restauImg} alt={produit.product_name} className="w-16 h-16 object-cover rounded-md" />
+                    <img
+                      src={produit.images.length ? produit.images[0].file_name : no_image}
+                      alt={produit.product_name}
+                      className="w-16 h-16 object-cover rounded-md"
+                    />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">
