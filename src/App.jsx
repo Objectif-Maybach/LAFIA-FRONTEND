@@ -35,6 +35,7 @@ export function App() {
           <Route path="produits" element={<Produits />} />
           <Route path="parametrages" element={<Parametrages />} />
           <Route path="Commandes" element={<Commandes />} />
+          <Route path="drivers" element={<Driver />} />
 
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

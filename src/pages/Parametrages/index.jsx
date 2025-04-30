@@ -24,7 +24,7 @@ const notify = (message) =>
     draggable: true,
     progress: undefined,
     theme: "colored",
-  });
+  }); 
 
 const Parametrage = () => {
   const [activeTab, setActiveTab] = useState("categories");

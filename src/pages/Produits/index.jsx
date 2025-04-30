@@ -184,10 +184,10 @@ const Produits = () => {
                     <div className="text-gray-500">{produit.price}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="text-gray-500">{produit.establishment}</div>
+                    <div className="text-gray-500">{produit.establishment?.establishment_name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="text-gray-500">{produit.category}</div>
+                    <div className="text-gray-500">{produit.category?.category_name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(produit)}>
