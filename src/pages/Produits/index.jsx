@@ -5,7 +5,7 @@ import { addProduit } from '../../functions/Produit/addProduit';
 import { editProduit } from '../../functions/Produit/editProduit';
 import { deleteProduit } from '../../functions/Produit/deleteProduit';
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from 'lucide-react';
-import restauImg from '../../assets/images/restau.jpg';
+import no_image from '../../assets/images/no_image.png';
 import { toast } from 'react-toastify';
 import Loader from '../../components/loading/loader';
 
@@ -57,7 +57,7 @@ const Produits = () => {
       console.log(response)
     }
     catch (error) {
-      toast.error('Erreur lors de la modification de l\'utilisateur')
+      toast.error('Erreur lors de la modification du produit')
       console.error(error);
     }
     finally {
@@ -69,14 +69,14 @@ const Produits = () => {
     setDataEdit(produit)
   }
   const handleDelete = async (produitId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet produit ?')) {
       setIsLoading(true)
       try {
         const response = await deleteProduit(produitId);
-        toast.success('Utilisateur supprimé avec succès')
+        toast.success('produit supprimé avec succès')
         ProduitsAll()
       } catch (error) {
-        toast.error('Erreur lors de la suppression de l\'utilisateur')
+        toast.error('Erreur lors de la suppression du produit')
         console.error(error);
       }
       finally {
@@ -121,7 +121,7 @@ const Produits = () => {
                   <input
                     type="text"
                     className="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Rechercher un utilisateur..."
+                    placeholder="Rechercher un produit..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -169,7 +169,11 @@ const Produits = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredProduits.map(produit => <tr key={produit.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <img src={restauImg} alt={produit.product_name} className="w-16 h-16 object-cover rounded-md" />
+                    <img
+                      src={produit.images.length ? produit.images[0].file_name : no_image}
+                      alt={produit.product_name}
+                      className="w-16 h-16 object-cover rounded-md"
+                    />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">
@@ -184,10 +188,10 @@ const Produits = () => {
                     <div className="text-gray-500">{produit.price}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="text-gray-500">{produit.establishment}</div>
+                    <div className="text-gray-500">{produit.establishment?.establishment_name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="text-gray-500">{produit.category}</div>
+                    <div className="text-gray-500">{produit.category?.category_name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(produit)}>

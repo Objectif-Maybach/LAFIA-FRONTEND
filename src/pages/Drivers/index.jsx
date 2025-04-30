@@ -1,64 +1,67 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import EtablissementForm from "../../components/Etablissements/Form"
-import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react"
-import { AddEtablissement, DeleteEtablissement, GetAllEtablissements, UpdateEtablissement } from "../../functions/Etablissement/Etablissements"
-import restauImg from '../../assets/images/restau.jpg';
+import DriversForm from "../../components/Drivers/Form"
+import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X, LockIcon, File } from "lucide-react"
+import { getAllDriver } from '../../functions/driver/getAllDriver';
+import { addDriver } from '../../functions/driver/addDriver';
+import { editDriver } from '../../functions/driver/editDriver';
+import { deleteDriver } from '../../functions/driver/deleteDriver';
 import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
-const Etablissements = () => {
+import ReadFile from "../../components/ReadFile";
+const Drivers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const [etablissements, setEtablissements] = useState([])
+  const [drivers, setDrivers] = useState([])
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isReadFile, setIsReadFile] = useState(false)
+  const [fileUrl, setFileUrl] = useState('')
 
-  const EtablissementsAll = async () => {
+  const DriversAll = async () => {
     setIsLoading(true)
     try {
-      const response = await GetAllEtablissements()
+      const response = await getAllDriver()
       console.log(response)
-      setEtablissements(response)
+      setDrivers(response)
     } catch (err) {
       console.error(err)
-    }
-    finally {
+    } finally {
       setIsLoading(false)
     }
   }
-  const AddEtablissements = async (user) => {
+  const AddDrivers = async (user) => {
     setIsLoading(true)
     try {
-      const response = await AddEtablissement(user);
+      const response = await addDriver(user);
       toast.success('Ajouter avec succès ')
-      EtablissementsAll()
+      DriversAll()
       handleFormClose()
       console.log(response);
     } catch (error) {
-      toast.error('Erreur lors de l\'ajout de l\'etablissement ')
+      toast.error('Erreur lors de l\'ajout avec succès ')
       // Afficher une notification d'erreur ou gérer l'erreur comme vous le souhaitez
       console.error(error);
-    }
-    finally {
+    } finally {
       setIsLoading(false)
     }
   }
-  const UpdateEtablissements = async (user) => {
+  
+  const UpdateDrivers = async (user) => {
     setIsLoading(true)
     try {
-      const response = await UpdateEtablissement(dataEdit.id, user)
+      const response = await editDriver(dataEdit.id, user)
       toast.success('Mise à jour effectuée avec succès')
-      EtablissementsAll()
+      DriversAll()
       handleFormClose()
       console.log(response)
     }
     catch (error) {
-      toast.error('Erreur lors de la modification de l\'etablissement')
+      toast.error('Erreur lors de la modification d\'un livreur')
       console.error(error);
-    }
-    finally {
+    } finally {
       setIsLoading(false)
     }
   }
@@ -66,67 +69,71 @@ const Etablissements = () => {
     setIsModalOpen(true)
     setDataEdit(user)
   }
+ 
   const handleDelete = async (userId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet etablissement ?')) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce livreur ?')) {
       setIsLoading(true)
       try {
-        const response = await DeleteEtablissement(userId);
-        toast.success('etablissement supprimé avec succès')
-        EtablissementsAll()
+        const response = await deleteDriver(userId);
+        toast.success('Produit supprimé avec succès')
+        DriversAll()
       } catch (error) {
-        toast.error('Erreur lors de la suppression de l\'etablissement')
+        toast.error('Erreur lors de la suppression du livreur')
         console.error(error);
-      }
-      finally {
+      } finally {
         setIsLoading(false)
       }
     }
   }
+  const readingFileUrl = (file) => {
+    setFileUrl(file)
+    setIsReadFile(true)
+  }
+
   useEffect(() => {
-    EtablissementsAll();
+    DriversAll();
   }, []);
   const handleFormClose = () => {
     setIsModalOpen(false)
   }
-
-  const filteredEtablissements = etablissements.filter(
-    (etab) =>
-      // user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      etab.establishment_name.toLowerCase().includes(searchQuery.toLowerCase())
+ 
+  const filteredDrivers = drivers.filter(
+    (user) =>
+      user.driver_name.toLowerCase().includes(searchQuery.toLowerCase()) 
   )
 
   return (
     <div>
       {isLoading && (<Loader />)}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">Gestion des etablissements</h1>
-        <p className="text-gray-600">Ajouter, modifier ou supprimer des etablissements</p>
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">Gestion des livreurs</h1>
+        <p className="text-gray-600">Ajouter, modifier ou supprimer des livreurs</p>
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="p-4 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h2 className="text-lg font-medium">Liste des etablissements</h2>
+          <h2 className="text-lg font-medium">Liste des livreurs</h2>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-            {/* <div className="relative">
+            <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <SearchIcon size={16} className="text-gray-400" />
               </div>
               <input
                 type="text"
                 className="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Rechercher un etablissement..."
+                placeholder="Rechercher un livreur..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-            </div> */}
+            </div>
 
             <button
               onClick={() => (setDataEdit([]), setIsModalOpen(true))}
               className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               <PlusIcon size={16} className="mr-2" />
-              Ajouter un etablissement
+              Ajouter un livreur
             </button>
           </div>
         </div>
@@ -139,33 +146,21 @@ const Etablissements = () => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Image
+                  Nom et Prénom
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Nom
+                  Piece d'identité
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Description
+                  Téléphone
                 </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Type
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Contact
-                </th>
-
+                
                 <th
                   scope="col"
                   className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -175,37 +170,28 @@ const Etablissements = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredEtablissements.map((etab) => (
-                <tr key={etab.id} className="hover:bg-gray-50">
+              {filteredDrivers.map((driver) => (
+                <tr key={driver.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {etab.image ? (
-                      <img src={etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
-                    ) : (
-                      <img src={restauImg} alt="placeholder" className="w-12 h-12 rounded-full" />
-                    )}
+                    <div className="font-medium text-gray-900">{driver.driver_name} </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="font-medium text-gray-900">{etab.establishment_name} </div>
+                  <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(driver.piece)}>
+                      <File size={16} /> {driver.piece}
+                    </button>
+                   
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-gray-500">{etab.description}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${etab.establishment_type?.establishment_type_name === 'restaurant' ? 'bg-orange-100 text-orange-800' : etab.establishment_type?.establishment_type_name === 'boulangerie' ? 'bg-yellow-100 text-yellow-800' : etab.establishment_type?.establishment_type_name === 'boutique' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
-                      {etab.establishment_type?.establishment_type_name}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-gray-500"><span className="text-red-700"> {etab.contact.telephone}</span> <br />
-                      {etab.contact.adresse}
+                    <div className="text-gray-500"><span className="text-red-700"> {driver.contact.telephone}</span> <br />
+                      {driver.contact.adresse}
                     </div>
                   </td>
-
+                  
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(etab)}>
+                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(driver)}>
                       <PencilIcon size={16} />
                     </button>
-                    <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(etab.id)}>
+                    <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(driver.id)}>
                       <TrashIcon size={16} />
                     </button>
                   </td>
@@ -218,8 +204,8 @@ const Etablissements = () => {
         <div className="px-4 py-3 border-t flex items-center justify-between">
           <div className="text-sm text-gray-700">
             Affichage de <span className="font-medium">1</span> à{" "}
-            <span className="font-medium">{filteredEtablissements.length}</span> sur{" "}
-            <span className="font-medium">{filteredEtablissements.length}</span> résultats
+            <span className="font-medium">{filteredDrivers.length}</span> sur{" "}
+            <span className="font-medium">{filteredDrivers.length}</span> résultats
           </div>
           <div className="flex space-x-2">
             <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
@@ -231,15 +217,15 @@ const Etablissements = () => {
           </div>
         </div>
       </div>
-
+      {isReadFile && (<ReadFile fileUrl={fileUrl} onClose={setIsReadFile} />)}
       {/* Modal personnalisé */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b">
               <div>
-                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un etablissement' : 'Modifier l\'etablissement'} </h3>
-                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel etablissement' : 'Modifiez les informations pour mettre à jour l\'etablissement'} </p>
+                <h3 className="text-lg font-medium">{dataEdit.length == 0 ? 'Ajouter un livreur' : 'Modifier le livreur'}  </h3>
+                <p className="text-sm text-gray-500">{dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel livreur' : 'Modifiez les informations pour mettre à jour le livreur'} </p>
               </div>
               <button onClick={handleFormClose} className="text-gray-500 hover:text-gray-700">
                 <X size={20} />
@@ -251,14 +237,14 @@ const Etablissements = () => {
               </div>
             )}
             <div className="p-4">
-              <EtablissementForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddEtablissements : UpdateEtablissements} dataEdit={dataEdit} />
+              <DriversForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddDrivers : UpdateDrivers} dataEdit={dataEdit} />
             </div>
           </div>
         </div>
       )}
+     
     </div>
-  )
-}
-
-export default Etablissements
+  );
+};
+export default Drivers
 
