@@ -14,18 +14,6 @@ import TypeEtablissement from "./TypeEtablissement";
 import Categorie from "./Categorie";
 
 
-const notify = (message) =>
-  toast.success("Connexion réussie !", {
-    position: "top-right",
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  });
-
 const Parametrage = () => {
   const [activeTab, setActiveTab] = useState("categories");
   const [isModalOpen, setIsModalOpen] = useState(false);
