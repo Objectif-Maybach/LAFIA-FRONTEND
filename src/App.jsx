@@ -4,7 +4,7 @@ import Login from './pages/Login.jsx';
 import Dashboard from './pages/Dashboard.jsx';  // Changer l'extension pour .jsx
 import Users from './pages/Users/index.jsx';  // Changer l'extension pour .jsx
 import Produits from './pages/Produits/index.jsx';  // Changer l'extension pour .jsx
-import Parametrages from './pages/Parametrages';  // Changer l'extension pour .jsx
+import Parametrages from './pages/Parametrages/index.jsx';  // Changer l'extension pour .jsx
 import Driver from './pages/Drivers/index.jsx';  // Changer l'extension pour .jsx
 import Layout from './components/Layout.jsx';  // Changer l'extension pour .jsx
 import { ToastContainer, toast } from 'react-toastify';
