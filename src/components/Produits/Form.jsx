@@ -8,7 +8,7 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
   const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm(
     { mode: "onTouched" }
   );
-  
+
   const [etablissements, setEtablissements] = useState([]);
   const [categories, setCategories] = useState([]);
   const AllCategories = async () => {
@@ -17,7 +17,7 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
       setCategories(response);
     } catch (error) {
       console.error(error);
-      
+
     }
   };
   const AllEtablissements = async () => {
@@ -38,14 +38,14 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
       setValue('product_name', dataEdit?.product_name);
       setValue('description', dataEdit?.description);
       setValue('price', dataEdit?.price);
-      setValue('establishment', dataEdit?.establishment);
-      setValue('category', dataEdit?.category);
+      setValue('establishment', dataEdit?.establishment?.id);
+      setValue('category', dataEdit?.category?.id);
     }
   }, [dataEdit, setValue]);
   const AddStore = data => {
     onSubmit(data);
   };
-  
+
   // console.log(getValues('product_name'), getValues('establishment'));
   return (
     <div className="p-1">
@@ -82,29 +82,29 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
               {errors?.price && <span className='text-sm text-red-600'>{errors.price.message}</span>}
             </div>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-6 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <div className="relative" >
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FileText size={16} className="text-gray-400" />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <div className="relative" >
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FileText size={16} className="text-gray-400" />
+                </div>
+                <textarea
+                  type="text"
+                  name="description"
+                  id="description"
+                  rows={1}
+                  {...register('description',
+                    { required: 'La description est obligatoire' })
+                  }
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder=" Description"
+                >
+                </textarea>
               </div>
-              <textarea
-                type="text"
-                name="description"
-                id="description"
-                rows={1}
-                {...register('description',
-                  { required: 'La description est obligatoire' })
-                }
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder=" Description"
-              >
-              </textarea>
+              {errors?.description && <span className='text-sm text-red-600'>{errors.description.message}</span>}
             </div>
-            {errors?.description && <span className='text-sm text-red-600'>{errors.description.message}</span>}
-          </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
               <input
@@ -118,24 +118,27 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
             {errors?.image && <span className='text-sm text-red-600'>{errors.image.message}</span>}
           </div>
           <div className="grid grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Etablissement</label>
-              <select
-                name="establishment"
-                {...register('establishment',
-                  { required: 'L\' etablissement est obligatoire' })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">-- Choisir --</option>
-                {etablissements.map(etab => (
-                  <option selected={dataEdit?.establishment === etab.id} key={etab.id} value={etab.id}>
-                    {etab.establishment_name}
-                  </option>
-                ))}
-              </select>
-              {errors?.establishment && <span className='text-sm text-red-600'>{errors.establishment.message}</span>}
-            </div>
+            {dataEdit.length === 0 &&
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Etablissement</label>
+                <select
+                  name="establishment"
+                  {...register('establishment',
+                    { required: 'L\' etablissement est obligatoire' })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">-- Choisir --</option>
+                  {etablissements.map(etab => (
+                    <option selected={dataEdit?.establishment?.id === etab.id} key={etab.id} value={etab.id}>
+                      {etab.establishment_name}
+                    </option>
+                  ))}
+                </select>
+                {errors?.establishment && <span className='text-sm text-red-600'>{errors.establishment.message}</span>}
+              </div>
+            }
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Categorie</label>
               <select
@@ -144,10 +147,10 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
                   { required: 'La categorie est obligatoire' })
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              > 
+              >
                 <option value="">-- Choisir --</option>
                 {categories.map(cat => (
-                  <option selected={dataEdit?.category === cat.id} key={cat.id} value={cat.id}>
+                  <option selected={dataEdit?.category?.id === cat.id} key={cat.id} value={cat.id}>
                     {cat.category_name}
                   </option>
                 ))}

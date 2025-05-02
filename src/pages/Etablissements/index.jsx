@@ -7,6 +7,7 @@ import { AddEtablissement, DeleteEtablissement, GetAllEtablissements, UpdateEtab
 import restauImg from '../../assets/images/restau.jpg';
 import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
+import ReadFile from "../../components/ReadFile"
 const Etablissements = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -179,10 +180,14 @@ const Etablissements = () => {
                 <tr key={etab.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     {etab.image ? (
-                      <img src={etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
+
+                      <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(etab.image)}>
+                        <img src={etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
+                      </button>
                     ) : (
                       <img src={restauImg} alt="placeholder" className="w-12 h-12 rounded-full" />
                     )}
+
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">{etab.establishment_name} </div>
@@ -232,6 +237,7 @@ const Etablissements = () => {
         </div>
       </div>
 
+      {isReadFile && (<ReadFile url={fileUrl} onClose={() => setIsReadFile(false)} />)}
       {/* Modal personnalisé */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
