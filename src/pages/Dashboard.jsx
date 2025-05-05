@@ -36,7 +36,7 @@ const Dashboard = () => {
         <p className="text-gray-600">Aperçu des performances de livraison</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard title="Commandes totales" value="1,284" icon={<ShoppingBagIcon className="text-white" size={24} />} color="bg-blue-600" />
+        <StatCard title="Commandes totales" value={nbrOrders} icon={<ShoppingBagIcon className="text-white" size={24} />} color="bg-blue-600" />
         <StatCard title="Utilisateurs" value={nbrUsers} icon={<UserIcon className="text-white" size={24} />} color="bg-green-600" />
         <StatCard title="Livraisons en cours" value="42" icon={<TruckIcon className="text-white" size={24} />} color="bg-orange-500" />
         <StatCard title="Revenus" value="9,254 €" icon={<CreditCardIcon className="text-white" size={24} />} color="bg-purple-600" />

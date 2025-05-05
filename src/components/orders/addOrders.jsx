@@ -54,11 +54,12 @@ export default function AddOrders() {
         "telephone": clientContact,
         "adresse": clientAddress
       },
-      "driver_id": selectedDriver,
-      "order_products": cart.map((item) => ({
-        "product_id": item.product_id,
+      "driver": selectedDriver,
+      "products": cart.map((item) => ({
+        "id": item.product_id,
         "quantity": item.quantity
-      }))
+      })),
+      "order_date": '2025-05-05 12:49:48',
     }
    await AddCommande(commandeData)
    clean()
