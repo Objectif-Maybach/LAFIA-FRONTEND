@@ -16,7 +16,7 @@ export const editProduit = async (
 ) => {
     try {
         const { data }: { data: PRODUIT_T } = await axios.put(
-            `${Api_Url}products/${id}/`,
+            `${Api_Url}products/${id}`,
             params
         );
         return data;

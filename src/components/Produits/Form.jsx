@@ -43,7 +43,21 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
     }
   }, [dataEdit, setValue]);
   const AddStore = data => {
-    onSubmit(data);
+    const formData = new FormData();
+    formData.append("product_name", data.product_name);
+    formData.append("description", data.description);
+    formData.append("price", data.price);
+
+    if (data.product_images.length > 0) {
+      for (let i = 0; i < data.product_images.length; i++) {
+        formData.append("product_images", data.product_images[i]);
+      }
+    }
+    formData.append("establishment", data.establishment);
+    formData.append("category", data.category);
+    console.log(data);
+
+    onSubmit(formData);
   };
 
   // console.log(getValues('product_name'), getValues('establishment'));
@@ -109,13 +123,14 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
               <input
                 type="file"
-                name="image"
-                {...register('image')}
+                name="product_images"
+                id="product_images"
+                {...register('product_images')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="URL de l'image"
+                placeholder="URL de l'image" multiple
               />
             </div>
-            {errors?.image && <span className='text-sm text-red-600'>{errors.image.message}</span>}
+            {errors?.product_images && <span className='text-sm text-red-600'>{errors.product_images.message}</span>}
           </div>
           <div className="grid grid-cols-2 gap-6 mb-6">
             {dataEdit.length === 0 &&
@@ -143,7 +158,7 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Categorie</label>
               <select
                 name="category"
-                {...register('category')
+                {...register('category', {required: 'La categorie est obligatoire' })
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >

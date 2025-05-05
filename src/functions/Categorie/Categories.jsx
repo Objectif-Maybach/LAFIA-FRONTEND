@@ -2,7 +2,7 @@ import axiosClient from "../../axiosClient";
 // Recuperation de la liste des types types categories
 export const GetAllCategories = async () => {
   try {
-    const response = await axiosClient.get(`categories/`);
+    const response = await axiosClient.get(`categories`);
     return response.data;
   } catch (error) {
     console.error('Error fetching types types categories:', error);
@@ -12,7 +12,7 @@ export const GetAllCategories = async () => {
 // Recuperation d'un types categorie par son id
 export const GetCategorieById = async (typesCategorieId) => {
   try {
-    const response = await axiosClient.get(`establishments-types/${typesCategorieId}/`);
+    const response = await axiosClient.get(`establishments-types/${typesCategorieId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching types categorie:', error);
@@ -22,7 +22,7 @@ export const GetCategorieById = async (typesCategorieId) => {
 // Ajout d'un type categorie
 export const AddCategorie = async (typesCategorieData) => {
   try {
-    const response = await axiosClient.post(`categories/`, typesCategorieData, {
+    const response = await axiosClient.post(`categories`, typesCategorieData, {
      
 });
     return response.data;
@@ -35,7 +35,7 @@ export const AddCategorie = async (typesCategorieData) => {
 // Modification d'un types categorie
 export const updateCategorie = async (typesCategorieId, typesCategorieData) => {
   try {
-    const response = await axiosClient.put(`categories/${typesCategorieId}/`, typesCategorieData);
+    const response = await axiosClient.put(`categories/${typesCategorieId}`, typesCategorieData);
     return response.data;
   } catch (error) {
     console.error('Error updating types categorie:', error);
@@ -45,7 +45,7 @@ export const updateCategorie = async (typesCategorieId, typesCategorieData) => {
 // Suppression d'un types categorie 
 export const DeleteCategorie = async (typesCategorieId) => {
   try {
-    const response = await axiosClient.delete(`categories/${typesCategorieId}/`);
+    const response = await axiosClient.delete(`categories/${typesCategorieId}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting types categorie:', error);

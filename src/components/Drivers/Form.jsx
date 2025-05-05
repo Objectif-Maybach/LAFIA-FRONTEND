@@ -16,8 +16,8 @@ const DriversForm = ({ onClose, onSubmit, dataEdit }) => {
     }
 
     // Ajouter les champs imbriqués manuellement avec le bon préfixe
-    formData.append("contact.telephone", driver.telephone);
-    formData.append("contact.adresse", driver.adresse);
+    formData.append("contact[telephone]", driver.telephone);
+    formData.append("contact[adresse]", driver.adresse);
     onSubmit(formData);
   };
   useEffect(() => {

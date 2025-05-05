@@ -16,7 +16,7 @@ export const editDriver = async (
 ) => {
     try {
         const { data }: { data: PRODUIT_T } = await axios.put(
-            `${Api_Url}drivers/${id}/`,
+            `${Api_Url}drivers/${id}`,
             params
         );
         return data;

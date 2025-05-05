@@ -33,8 +33,8 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
     formData.append("establishment_type", etab.establishment_type);
 
     // Ajouter les champs imbriqués manuellement avec le bon préfixe
-    formData.append("contact.telephone", etab.telephone);
-    formData.append("contact.adresse", etab.adresse);
+    formData.append("contact[telephone]", etab.telephone);
+    formData.append("contact[adresse]", etab.adresse);
     onSubmit(formData);
   };
   useEffect(() => {
@@ -123,7 +123,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
               <option value="">-- Choisir --</option>
               {types.map(type => (
                 <option selected={dataEdit?.establishment_type?.id === type.id} key={type.id} value={type.id}>
-                  {type.establishment_type_name}
+                  {type.establishment_types_name}
                 </option>
               ))}
             </select>

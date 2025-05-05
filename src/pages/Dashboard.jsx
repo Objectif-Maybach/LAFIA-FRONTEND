@@ -1,6 +1,33 @@
+import { useEffect, useState } from 'react';
 import StatCard from '../components/StatCard';
 import { ShoppingBagIcon, UserIcon, TruckIcon, CreditCardIcon } from 'lucide-react';
+import { GetAllUsers } from '../functions/User/Users';
+import { GetAllCommandes } from '../functions/Commandes/Commandes';
 const Dashboard = () => {
+  const [nbrUsers, setNbrUsers] = useState(0);
+  const [nbrOrders, setNbrOrders] = useState(0);
+  const getCountUsers = async () => {
+    try {
+      const response = await GetAllUsers();
+      setNbrUsers(response.length);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const getCountOrders = async () => {
+    try {
+      const response = await GetAllCommandes();
+      setNbrOrders(response.length);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getCountUsers();
+    getCountOrders();
+  },[]);
+
   return <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">
@@ -10,7 +37,7 @@ const Dashboard = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard title="Commandes totales" value="1,284" icon={<ShoppingBagIcon className="text-white" size={24} />} color="bg-blue-600" />
-        <StatCard title="Utilisateurs" value="854" icon={<UserIcon className="text-white" size={24} />} color="bg-green-600" />
+        <StatCard title="Utilisateurs" value={nbrUsers} icon={<UserIcon className="text-white" size={24} />} color="bg-green-600" />
         <StatCard title="Livraisons en cours" value="42" icon={<TruckIcon className="text-white" size={24} />} color="bg-orange-500" />
         <StatCard title="Revenus" value="9,254 €" icon={<CreditCardIcon className="text-white" size={24} />} color="bg-purple-600" />
       </div>

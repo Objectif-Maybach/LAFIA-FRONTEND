@@ -16,7 +16,7 @@ export const addDriver = async (
 ) => {
     try {
         const { data }: { data: DRIVER_T } = await axios.post(
-            `${Api_Url}drivers/`,
+            `${Api_Url}drivers`,
             params
         );
         return data;

@@ -6,7 +6,7 @@ const Api_Url = import.meta.env.VITE_API_URL;
 
 export const getAllProduit = async () => {
     try {
-        const { data }: { data: PRODUIT_T[] } = await axios.get(`${Api_Url}products/`);
+        const { data }: { data: PRODUIT_T[] } = await axios.get(`${Api_Url}products`);
         console.log('====================================');
         console.log("getAllProduit", data);
         console.log('====================================');
