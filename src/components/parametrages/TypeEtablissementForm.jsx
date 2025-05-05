@@ -11,7 +11,7 @@ const EtablissementForm = ({ onClose, onSubmit, dataEdit}) => {
     onSubmit(data);
   };
   if (dataEdit.length != 0) {
-  setValue('establishment_type_name', dataEdit?.establishment_type_name);
+  setValue('establishment_types_name', dataEdit?.establishment_types_name);
   setValue('description', dataEdit?.description);
   setValue('id', dataEdit?.id);
   }
@@ -27,15 +27,15 @@ const EtablissementForm = ({ onClose, onSubmit, dataEdit}) => {
               </div>
               <input
                 type="text"
-                name="establishment_type_name"
-                {...register('establishment_type_name',
+                name="establishment_types_name"
+                {...register('establishment_types_name',
                   { required: 'Le nom est obligatoire' })
                 }
                 className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nom de l'établissement"
               />
             </div>
-            {errors?.establishment_type_name && <span className='text-sm text-red-600'>{errors.nom.message}</span>}
+            {errors?.establishment_types_name && <span className='text-sm text-red-600'>{errors.nom.message}</span>}
           </div>
          
           <div className="mt-4">

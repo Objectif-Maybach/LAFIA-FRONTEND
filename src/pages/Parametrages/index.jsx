@@ -192,7 +192,7 @@ const Parametrage = () => {
 
   const filteredTypesEtablissements = typesEtablissements.filter(
     (type) =>
-      type.establishment_type_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      type.establishment_types_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       type.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
