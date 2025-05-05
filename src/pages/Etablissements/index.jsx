@@ -237,7 +237,7 @@ const Etablissements = () => {
         </div>
       </div>
 
-      {isReadFile && (<ReadFile url={fileUrl} onClose={() => setIsReadFile(false)} />)}
+      {/* {isReadFile && (<ReadFile url={fileUrl} onClose={() => setIsReadFile(false)} />)} */}
       {/* Modal personnalisé */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
