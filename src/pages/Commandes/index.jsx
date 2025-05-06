@@ -17,17 +17,20 @@ const CommandePage = () => {
 
   return (
 
-    <div className="min-h-screen bg-gray-50">
+    <div className="">
     {isLoading && (<Loader />)}
 
       {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="container mx-auto py-6 px-4">
-          <h1 className="text-3xl font-bold text-gray-800">Gestion des commandes</h1>
-          <p className="text-gray-500 mt-2">Passez une nouvelle commande et gérez votre panier</p>
-        </div>
+     
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">Gestion des commandes</h1>
+        <p className="text-gray-600">Passez une nouvelle commande et gérez votre panier</p>
+      
+
+
+        
       </div>
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full bg-white rounded-lg shadow">
           <div className="relative border-b border-gray-200 mb-6">
             <TabsList className="relative flex w-full justify-start bg-transparent p-0 h-auto">
               <TabsTrigger
