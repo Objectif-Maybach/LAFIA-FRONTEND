@@ -183,8 +183,8 @@ const Drivers = () => {
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-gray-500"><span className="text-red-700"> {driver.contact.telephone}</span> <br />
-                      {driver.contact.adresse}
+                    <div className="text-gray-500"><span className="text-red-700"> {driver.contacts.telephone}</span> <br />
+                      {driver.contacts.adresse}
                     </div>
                   </td>
 
