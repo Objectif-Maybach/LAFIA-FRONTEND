@@ -34,7 +34,7 @@ export const AddCommande = async (CommandeData) => {
 // Modification d'un  categorie
 export const updateCommande = async (CommandeId, CommandeData) => {
   try {
-    const response = await axiosClient.put(`orders${CommandeId}`, CommandeData);
+    const response = await axiosClient.post(`orders${CommandeId}`, CommandeData);
     return response.data;
   } catch (error) {
     console.error('Error updating  categorie:', error);

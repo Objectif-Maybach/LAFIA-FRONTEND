@@ -12,7 +12,7 @@ export const GetAllUsers = async () => {
 // Reinitialser le mot de passe d'un utilisateur
 export const ResetPassword = async (userId, password) => {
   try {
-    const response = await axiosClient.patch(`user/${userId}`,  password);
+    const response = await axiosClient.post(`user/reset/${userId}`,  password);
     return response.data;
   } catch (error) {
     console.error('Error resetting password:', error);
@@ -43,7 +43,7 @@ export const AddUser = async (userData) => {
 // Modification d'un utilisateur
 export const UpdateUser = async (userId, userData) => {
   try {
-    const response = await axiosClient.patch(`user/${userId}`, userData);
+    const response = await axiosClient.post(`user/${userId}`, userData);
     return response.data;
   } catch (error) {
     console.error('Error updating user:', error);

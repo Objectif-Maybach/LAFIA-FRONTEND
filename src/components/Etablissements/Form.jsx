@@ -100,8 +100,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
                 type="text"
                 name="adresse"
                 defaultValue={dataEdit?.contact?.adresse}
-                {...register('adresse',
-                  { required: 'L\'adresse est obligatoire' })
+                {...register('adresse')
                 }
                 className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="123 Rue de la Paix, BKO"
@@ -141,8 +140,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
                 id="description"
                 defaultValue={dataEdit?.description}
                 rows={1}
-                {...register('description',
-                  { required: 'La description est obligatoire' })
+                {...register('description')
                 }
                 className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder=""

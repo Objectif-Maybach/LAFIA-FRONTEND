@@ -14,12 +14,12 @@ export const LoginPage = () => {
   const login = async (data) => {
     setLoding(true);
     try {
-      const response = await axios.post(`${Api_Url}login/`, data);
-      const role = response.data.user.role?.nom_role;
+      const response = await axios.post(`${Api_Url}login`, data);
+      const role = response.data.role?.nom_role;
       if (role === 'admin') {
-        localStorage.setItem('isLogged', response.data.user.id);
-        localStorage.setItem('username', response.data.user.username);
-        localStorage.setItem('full_name', response.data.user.full_name);
+        localStorage.setItem('isLogged', response.data.id);
+        localStorage.setItem('username', response.data.username);
+        localStorage.setItem('full_name', response.data.full_name);
         navigate('/accueil');
       } else {
         setError('Vous n\'avez pas les droits d\'accès');

@@ -35,7 +35,7 @@ export const AddTypeEtablissement = async (typesEtablissementData) => {
 // Modification d'un types etablissement
 export const updateTypeEtablissement = async (typesEtablissementId, typesEtablissementData) => {
   try {
-    const response = await axiosClient.put(`establishment-types/${typesEtablissementId}`, typesEtablissementData);
+    const response = await axiosClient.post(`establishment-types/${typesEtablissementId}`, typesEtablissementData);
     return response.data;
   } catch (error) {
     console.error('Error updating types etablissement:', error);

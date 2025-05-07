@@ -12,22 +12,23 @@ import Etablissements from './pages/Etablissements/index.jsx';
 import Commandes from './pages/Commandes/index.jsx'
 
 // Fonction RequireAuth pour protéger les routes
-// const RequireAuth = ({ children }) => {
-//   const isLogged = localStorage.getItem('isLogged');
-//   return isLogged ? children : <Navigate to="/" replace />;
-// }; 
+const RequireAuth = ({ children }) => {
+  const isLogged = localStorage.getItem('isLogged');
+  return isLogged ? children : <Navigate to="/" replace />;
+};
 
 // Composant principal App avec routing
 export function App() {
   return (
     <Router>
-      <ToastContainer/>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/accueil" element={
-        
+          <RequireAuth>
             <Layout />
-        
+          </RequireAuth>
+
         }>
           <Route index element={<Dashboard />} />
           <Route path="users" element={<Users />} />
