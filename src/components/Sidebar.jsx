@@ -32,7 +32,7 @@ const Sidebar = () => {
     label: 'Paramétrages'
   },
   {
-    path: 'commandes',
+    path: '/accueil/commandes',
     icon: <PackageIcon size={20} />,
     label: 'Commandes'
   }
