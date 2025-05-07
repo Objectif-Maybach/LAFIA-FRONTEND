@@ -2,7 +2,7 @@ import axiosClient from "../../axiosClient";
 // Recuperation de la liste des   orders
 export const GetAllCommandes = async () => {
   try {
-    const response = await axiosClient.get(`orders`);
+    const response = await axiosClient.get(`orders/`);
     return response.data;
   } catch (error) {
     console.error('Error fetching   orders:', error);
@@ -44,7 +44,7 @@ export const updateCommande = async (CommandeId, CommandeData) => {
 // Suppression d'un  categorie 
 export const DeleteCommande = async (CommandeId) => {
   try {
-    const response = await axiosClient.delete(`orders${CommandeId}`);
+    const response = await axiosClient.delete(`orders/${CommandeId}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting  categorie:', error);

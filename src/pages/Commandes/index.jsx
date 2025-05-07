@@ -12,22 +12,26 @@ const CommandePage = () => {
   // Sample products data
   const [activeTab, setActiveTab] = useState("addOrders");
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
 
 
   return (
 
-    <div className="min-h-screen bg-gray-50">
+    <div className="">
     {isLoading && (<Loader />)}
 
       {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="container mx-auto py-6 px-4">
-          <h1 className="text-3xl font-bold text-gray-800">Gestion des commandes</h1>
-          <p className="text-gray-500 mt-2">Passez une nouvelle commande et gérez votre panier</p>
-        </div>
+     
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">Gestion des commandes</h1>
+        <p className="text-gray-600">Passez une nouvelle commande et gérez votre panier</p>
+      
+
+
+        
       </div>
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full bg-white rounded-lg shadow">
           <div className="relative border-b border-gray-200 mb-6">
             <TabsList className="relative flex w-full justify-start bg-transparent p-0 h-auto">
               <TabsTrigger
@@ -63,22 +67,13 @@ const CommandePage = () => {
             </TabsList>
           </div>
 
-          <div className="p-4 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h2 className="text-lg font-medium">
-              {activeTab === "addOrders"
-                ? "Ajout d'une nouvelle commande"
-                : "Liste des commandes"
-               }
-            </h2>
-
-           
-          </div>
+     
 
           <TabsContent value="addOrders" className="p-0">
             <AddOrders />
           </TabsContent>
           <TabsContent value="listOrders" className="p-0">
-            <ListOrders />
+            <ListOrders search={searchQuery} />
           </TabsContent>
         </Tabs>
 
