@@ -38,7 +38,9 @@ const Sidebar = () => {
   }
 ];
   const Logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('isLogged');
+    localStorage.removeItem('username');
+    localStorage.removeItem('full_name');
     navigate('/');
   }
   return <div className="w-64 bg-white shadow-lg h-full flex flex-col">

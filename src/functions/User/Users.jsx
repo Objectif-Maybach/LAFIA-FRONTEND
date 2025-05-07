@@ -12,7 +12,7 @@ export const GetAllUsers = async () => {
 // Reinitialser le mot de passe d'un utilisateur
 export const ResetPassword = async (userId, password) => {
   try {
-    const response = await axiosClient.patch(`user/${userId}`,  password);
+    const response = await axiosClient.post(`user/reset/${userId}`,  password);
     return response.data;
   } catch (error) {
     console.error('Error resetting password:', error);
