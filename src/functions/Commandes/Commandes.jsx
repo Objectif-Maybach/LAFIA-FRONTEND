@@ -44,7 +44,7 @@ export const updateCommande = async (CommandeId, CommandeData) => {
 // Suppression d'un  categorie 
 export const DeleteCommande = async (CommandeId) => {
   try {
-    const response = await axiosClient.delete(`orders${CommandeId}`);
+    const response = await axiosClient.delete(`orders/${CommandeId}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting  categorie:', error);

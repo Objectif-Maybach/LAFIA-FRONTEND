@@ -3,12 +3,15 @@ import { GetAllCommandes, DeleteCommande } from "../../functions/Commandes/Comma
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { TrashIcon, X } from "lucide-react"
+import OneOrder from './oneOrder'
 
 export default function ListOrders( { search }) {
     const [isLoading, setIsLoading] = useState(false);
     const [commandes, setCommandes] = useState([]);
     const [isDelete, setIsDelete] = useState(false);
     const [id, setId] = useState('');
+    const [isOneOrder, setIsOneOrder] = useState(false);
+    const [order, setOrder] = useState({});
  
 
     const CommandesAll = async () => {
@@ -29,16 +32,21 @@ export default function ListOrders( { search }) {
             setIsLoading(true)
             try {
               const response = await DeleteCommande(userId);
-              toast.success('etablissement supprimé avec succès')
               CommandesAll()
+              toast.success('Commande supprimée avec succès')
             } catch (error) {
-              toast.error('Erreur lors de la suppression de l\'etablissement')
+              toast.error('Erreur lors de la suppression de la commande')
               console.error(error);
             }
             finally {
               setIsLoading(false)
             }
           
+        }
+      
+       const clean = () => {
+          setIsOneOrder(false)
+          setOrder({})
         }
         useEffect(() => {
           CommandesAll();
@@ -56,7 +64,9 @@ export default function ListOrders( { search }) {
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
 
-        <div className="overflow-x-auto">
+        {!isOneOrder && (
+          <>
+          <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -96,7 +106,14 @@ export default function ListOrders( { search }) {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredCommandess.map((etab) => (
-                <tr key={etab.id} className="hover:bg-gray-50">
+                <tr
+                key={etab.id}
+                className="hover:bg-gray-50 cursor-pointer"
+                onClick={() => {
+                  setOrder(etab); 
+                  setIsOneOrder(true);
+                }}
+              >
                   <td className="px-6 py-4 whitespace-nowrap">
                   <span>{new Date(etab.order_date).toLocaleDateString("fr-FR")}</span>
 
@@ -143,6 +160,8 @@ export default function ListOrders( { search }) {
             </button>
           </div>
         </div>
+        </>
+        )}
       </div>
       {isDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -184,6 +203,11 @@ export default function ListOrders( { search }) {
           </div>
         </div>
       )}
+      {isOneOrder && <OneOrder order={order} clean={clean} />}
+        
+      
+
+      
         </div>
         
        
