@@ -35,7 +35,7 @@ export const AddCategorie = async (typesCategorieData) => {
 // Modification d'un types categorie
 export const updateCategorie = async (typesCategorieId, typesCategorieData) => {
   try {
-    const response = await axiosClient.put(`categories/${typesCategorieId}`, typesCategorieData);
+    const response = await axiosClient.post(`categories/${typesCategorieId}`, typesCategorieData);
     return response.data;
   } catch (error) {
     console.error('Error updating types categorie:', error);

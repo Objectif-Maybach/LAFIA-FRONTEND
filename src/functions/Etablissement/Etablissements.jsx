@@ -39,7 +39,7 @@ export const AddEtablissement = async (etablissementData) => {
 // Modification d'un etablissement
 export const UpdateEtablissement = async (etablissementId, etablissementData) => {
   try {
-    const response = await axiosClient.put(`establishments/${etablissementId}`, etablissementData);
+    const response = await axiosClient.post(`establishments/${etablissementId}`, etablissementData);
     return response.data;
   } catch (error) {
     console.error('Error updating etablissement:', error);
