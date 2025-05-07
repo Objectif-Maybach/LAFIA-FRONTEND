@@ -2,19 +2,21 @@ import Loader from '../../components/loading/loader'
 import { GetAllCommandes, DeleteCommande } from "../../functions/Commandes/Commandes"
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline'
+import { TrashIcon, X } from "lucide-react"
 
-export default function ListOrders(){
+export default function ListOrders( { search }) {
     const [isLoading, setIsLoading] = useState(false);
-    const [commandes, setCommandess] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [commandes, setCommandes] = useState([]);
+    const [isDelete, setIsDelete] = useState(false);
+    const [id, setId] = useState('');
+ 
 
-    const CommandessAll = async () => {
+    const CommandesAll = async () => {
         setIsLoading(true)
         try {
           const response = await GetAllCommandes()
           console.log(response)
-          setCommandess(response)
+          setCommandes(response)
         } catch (err) {
           console.error(err)
         }
@@ -23,12 +25,12 @@ export default function ListOrders(){
         }
       }
        const handleDelete = async (userId) => {
-          if (confirm('Êtes-vous sûr de vouloir supprimer cet etablissement ?')) {
+
             setIsLoading(true)
             try {
               const response = await DeleteCommande(userId);
               toast.success('etablissement supprimé avec succès')
-              CommandessAll()
+              CommandesAll()
             } catch (error) {
               toast.error('Erreur lors de la suppression de l\'etablissement')
               console.error(error);
@@ -36,24 +38,23 @@ export default function ListOrders(){
             finally {
               setIsLoading(false)
             }
-          }
+          
         }
         useEffect(() => {
-          CommandessAll();
+          CommandesAll();
         }, []);
 
         const filteredCommandess = commandes.filter(
             (etab) =>
               // user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              etab.establishment_name.toLowerCase().includes(searchQuery.toLowerCase())
+              etab.order_date.toLowerCase().includes(search.toLowerCase())
           )
     
     return(
         <div>
     {isLoading && (<Loader />)}
 
-             <div className="bg-white rounded-lg shadow overflow-hidden">
-       
+        <div className="bg-white rounded-lg shadow overflow-hidden">
 
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -97,38 +98,27 @@ export default function ListOrders(){
               {filteredCommandess.map((etab) => (
                 <tr key={etab.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {etab.image ? (
-
-                      <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(etab.image)}>
-                        <img src={etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
-                      </button>
-                    ) : (
-                      <img src={restauImg} alt="placeholder" className="w-12 h-12 rounded-full" />
-                    )}
+                  <span>{new Date(etab.order_date).toLocaleDateString("fr-FR")}</span>
 
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="font-medium text-gray-900">{etab.establishment_name} </div>
+                    <div className="font-medium text-gray-900">{etab.contact.adresse} </div>
+                    <div className="font-medium text-gray-900">{etab.contact.telephone} </div>
+
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-gray-500">{etab.description}</div>
+                    <div className="text-gray-500">{etab.driver? etab.driver.driver_name: 'Inconnu'}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${etab.establishment_type?.establishment_type_name === 'restaurant' ? 'bg-orange-100 text-orange-800' : etab.establishment_type?.establishment_type_name === 'boulangerie' ? 'bg-yellow-100 text-yellow-800' : etab.establishment_type?.establishment_type_name === 'boutique' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
-                      {etab.establishment_type?.establishment_type_name}
+                  <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                      {etab.order_products.length} produits
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-gray-500"><span className="text-red-700"> {etab.contact.telephone}</span> <br />
-                      {etab.contact.adresse}
-                    </div>
-                  </td>
+                  
 
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(etab)}>
-                      <PencilIcon size={16} />
-                    </button>
-                    <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(etab.id)}>
+                    
+                    <button className="text-red-600 hover:text-red-900" onClick={() => { setIsDelete(true); setId(etab.id) }}>
                       <TrashIcon size={16} />
                     </button>
                   </td>
@@ -154,6 +144,46 @@ export default function ListOrders(){
           </div>
         </div>
       </div>
+      {isDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b">
+              <div>
+                <h3 className="text-lg font-medium">
+                Supprimer une commande
+                </h3>
+              </div>
+              <button onClick={() => { setIsDelete(false); setId('') }} className="text-gray-500 hover:text-gray-700">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-4">
+              <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => { setIsDelete(false); setId('') }}
+                  className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+                >
+                  <X size={18} className="mr-2" />
+                  Annuler
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleDelete(id);
+                    setIsDelete(false);
+                    setId('');
+                  }}
+                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                >
+                  Confirmer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
         </div>
         
        

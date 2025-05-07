@@ -106,7 +106,16 @@ export default function AddOrders() {
       quantity: quantity,
       type: type,
     }
-
+    if (cart.map(item => item.product_id).includes(product.id)) {
+      const updatedCart = cart.map(item => {
+        if (item.product_id === product.id) {
+          return { ...item, quantity: item.quantity + quantity }
+        }
+        return item
+      })
+      setCart(updatedCart)
+      return
+    }
     setCart([...cart, newItem])
 
     setSelectedProduct("")
