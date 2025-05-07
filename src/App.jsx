@@ -15,19 +15,20 @@ import Commandes from './pages/Commandes/index.jsx'
 const RequireAuth = ({ children }) => {
   const isLogged = localStorage.getItem('isLogged');
   return isLogged ? children : <Navigate to="/" replace />;
-}; 
+};
 
 // Composant principal App avec routing
 export function App() {
   return (
     <Router>
-      <ToastContainer/>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/accueil" element={
-        
+          <RequireAuth>
             <Layout />
-        
+          </RequireAuth>
+
         }>
           <Route index element={<Dashboard />} />
           <Route path="users" element={<Users />} />
