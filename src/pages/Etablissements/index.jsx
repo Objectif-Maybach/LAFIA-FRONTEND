@@ -15,6 +15,7 @@ const Etablissements = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const fileUrl = import.meta.env.VITE_FILE_URL ;
 
   const EtablissementsAll = async () => {
     setIsLoading(true)
@@ -182,7 +183,7 @@ const Etablissements = () => {
                     {etab.image ? (
 
                       <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(etab.image)}>
-                        <img src={etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
+                        <img src={fileUrl+etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
                       </button>
                     ) : (
                       <img src={restauImg} alt="placeholder" className="w-12 h-12 rounded-full" />
@@ -190,7 +191,7 @@ const Etablissements = () => {
 
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="font-medium text-gray-900">{etab.establishment_name}  {etab.establishment_type?.establishment_types_name}</div>
+                    <div className="font-medium text-gray-900"> {etab.establishment_name}  {etab.establishment_type?.establishment_types_name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-gray-500">{etab.description}</div>

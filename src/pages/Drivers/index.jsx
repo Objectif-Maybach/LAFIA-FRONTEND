@@ -86,7 +86,8 @@ const Drivers = () => {
     }
   }
   const readingFileUrl = (file_url) => {
-    window.open(file_url, '_blank');
+    const url = import.meta.env.VITE_FILE_URL + file_url;
+    window.open(url, '_blank');
     // setFileUrl(file_url);
     // setIsReadFile(true);
   };

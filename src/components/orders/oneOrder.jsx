@@ -18,6 +18,8 @@ export default function OneOrder({ order, clean }) {
         
             
     }, [])
+    
+  const fileUrl = import.meta.env.VITE_FILE_URL ;
   const calculateTotal = () => {
     let total = 0;
     order.order_products.forEach(item => {
@@ -115,7 +117,7 @@ export default function OneOrder({ order, clean }) {
                 >
                   <div className="flex items-center space-x-4">
                     <img
-                      src={item.product.images[0].file_name}
+                      src={fileUrl+item.product.images[0].file_name}
                       alt={item.product.product_name}
                       className="w-12 h-12 object-cover rounded-md"
                     /> 

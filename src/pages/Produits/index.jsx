@@ -16,6 +16,7 @@ const Produits = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const fileUrl = import.meta.env.VITE_FILE_URL ;
 
   const ProduitsAll = async () => {
     setIsLoading(true)
@@ -170,10 +171,10 @@ const Produits = () => {
                 {filteredProduits.map(produit => <tr key={produit.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <img
-                      src={produit.images.length ? produit.images[0].file_name : no_image}
-                      alt={produit.product_name}
+                      src={produit.images.length ? fileUrl+ produit.images[0].file_name : no_image}
+                      alt={produit.product_name} 
                       className="w-16 h-16 object-cover rounded-md"
-                    />
+                    /> 
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">

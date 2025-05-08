@@ -5,162 +5,168 @@ import { toast } from 'react-toastify'
 import { TrashIcon, X } from "lucide-react"
 import OneOrder from './oneOrder'
 
-export default function ListOrders( { search }) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [commandes, setCommandes] = useState([]);
-    const [isDelete, setIsDelete] = useState(false);
-    const [id, setId] = useState('');
-    const [isOneOrder, setIsOneOrder] = useState(false);
-    const [order, setOrder] = useState({});
- 
+export default function ListOrders({ search }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [commandes, setCommandes] = useState([]);
+  const [isDelete, setIsDelete] = useState(false);
+  const [id, setId] = useState('');
+  const [isOneOrder, setIsOneOrder] = useState(false);
+  const [order, setOrder] = useState({});
 
-    const CommandesAll = async () => {
-        setIsLoading(true)
-        try {
-          const response = await GetAllCommandes()
-          console.log(response)
-          setCommandes(response)
-        } catch (err) {
-          console.error(err)
-        }
-        finally {
-          setIsLoading(false)
-        }
-      }
-       const handleDelete = async (userId) => {
 
-            setIsLoading(true)
-            try {
-              const response = await DeleteCommande(userId);
-              CommandesAll()
-              toast.success('Commande supprimée avec succès')
-            } catch (error) {
-              toast.error('Erreur lors de la suppression de la commande')
-              console.error(error);
-            }
-            finally {
-              setIsLoading(false)
-            }
-          
-        }
-      
-       const clean = () => {
-          setIsOneOrder(false)
-          setOrder({})
-        }
-        useEffect(() => {
-          CommandesAll();
-        }, []);
+  const CommandesAll = async () => {
+    setIsLoading(true)
+    try {
+      const response = await GetAllCommandes()
+      console.log(response)
+      setCommandes(response)
+    } catch (err) {
+      console.error(err)
+    }
+    finally {
+      setIsLoading(false)
+    }
+  }
+  const handleDelete = async (userId) => {
 
-        const filteredCommandess = commandes.filter(
-            (etab) =>
-              // user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              etab.order_date.toLowerCase().includes(search.toLowerCase())
-          )
-    
-    return(
-        <div>
-    {isLoading && (<Loader />)}
+    setIsLoading(true)
+    try {
+      const response = await DeleteCommande(userId);
+      CommandesAll()
+      toast.success('Commande supprimée avec succès')
+    } catch (error) {
+      toast.error('Erreur lors de la suppression de la commande')
+      console.error(error);
+    }
+    finally {
+      setIsLoading(false)
+    }
 
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+  }
+
+  const clean = () => {
+    setIsOneOrder(false)
+    setOrder({})
+  }
+  useEffect(() => {
+    CommandesAll();
+  }, []);
+
+  const filteredCommandess = commandes.filter(
+    (etab) =>
+      // user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      etab.order_date.toLowerCase().includes(search.toLowerCase())
+  )
+
+  return (
+    <div>
+      {isLoading && (<Loader />)}
+
+      <div className="bg-white rounded-lg shadow overflow-hidden">
 
         {!isOneOrder && (
           <>
-          <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Date
-                </th>
-               
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Informations du client
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Livreur
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Nombres de produits
-                </th>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Date
+                    </th>
 
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredCommandess.map((etab) => (
-                <tr
-                key={etab.id}
-                className="hover:bg-gray-50 cursor-pointer"
-                onClick={() => {
-                  setOrder(etab); 
-                  setIsOneOrder(true);
-                }}
-              >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                  <span>{new Date(etab.order_date).toLocaleDateString("fr-FR")}</span>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Informations du client
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Livreur
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Nombres de produits
+                    </th>
 
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="font-medium text-gray-900">{etab.contact.adresse} </div>
-                    <div className="font-medium text-gray-900">{etab.contact.telephone} </div>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredCommandess.map((etab) => (
+                    <tr
+                      key={etab.id}
+                      className="hover:bg-gray-50 cursor-pointer"
 
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-gray-500">{etab.driver? etab.driver.driver_name: 'Inconnu'}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                      {etab.order_products.length} produits
-                    </span>
-                  </td>
-                  
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap" onClick={() => {
+                        setOrder(etab);
+                        setIsOneOrder(true);
+                      }}>
+                        <span>{new Date(etab.order_date).toLocaleDateString("fr-FR")}</span>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    
-                    <button className="text-red-600 hover:text-red-900" onClick={() => { setIsDelete(true); setId(etab.id) }}>
-                      <TrashIcon size={16} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="font-medium text-gray-900">{etab.contact.adresse} </div>
+                        <div className="font-medium text-gray-900">{etab.contact.telephone} </div>
 
-        <div className="px-4 py-3 border-t flex items-center justify-between">
-          <div className="text-sm text-gray-700">
-            Affichage de <span className="font-medium">1</span> à{" "}
-            <span className="font-medium">{filteredCommandess.length}</span> sur{" "}
-            <span className="font-medium">{filteredCommandess.length}</span> résultats
-          </div>
-          <div className="flex space-x-2">
-            <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-              Précédent
-            </button>
-            <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-              Suivant
-            </button>
-          </div>
-        </div>
-        </>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap" onClick={() => {
+                        setOrder(etab);
+                        setIsOneOrder(true);
+                      }}>
+                        <div className="text-gray-500">{etab.driver ? etab.driver.driver_name : 'Inconnu'}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap" onClick={() => {
+                        setOrder(etab);
+                        setIsOneOrder(true);
+                      }}>
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                          {etab.order_products.length} produits
+                        </span>
+                      </td>
+
+
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+
+                        <button className="text-red-600 hover:text-red-900" onClick={() => { setIsDelete(true); setId(etab.id) }}>
+                          <TrashIcon size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="px-4 py-3 border-t flex items-center justify-between">
+              <div className="text-sm text-gray-700">
+                Affichage de <span className="font-medium">1</span> à{" "}
+                <span className="font-medium">{filteredCommandess.length}</span> sur{" "}
+                <span className="font-medium">{filteredCommandess.length}</span> résultats
+              </div>
+              <div className="flex space-x-2">
+                <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
+                  Précédent
+                </button>
+                <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
+                  Suivant
+                </button>
+              </div>
+            </div>
+          </>
         )}
       </div>
       {isDelete && (
@@ -169,7 +175,7 @@ export default function ListOrders( { search }) {
             <div className="flex items-center justify-between p-4 border-b">
               <div>
                 <h3 className="text-lg font-medium">
-                Supprimer une commande
+                  Supprimer une commande
                 </h3>
               </div>
               <button onClick={() => { setIsDelete(false); setId('') }} className="text-gray-500 hover:text-gray-700">
@@ -204,12 +210,12 @@ export default function ListOrders( { search }) {
         </div>
       )}
       {isOneOrder && <OneOrder order={order} clean={clean} />}
-        
-      
 
-      
-        </div>
-        
-       
-    )
+
+
+
+    </div>
+
+
+  )
 }
