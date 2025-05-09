@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
@@ -13,18 +11,6 @@ import Loader from "../../components/loading/loader";
 import TypeEtablissement from "./TypeEtablissement";
 import Categorie from "./Categorie";
 
-
-const notify = (message) =>
-  toast.success("Connexion réussie !", {
-    position: "top-right",
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  }); 
 
 const Parametrage = () => {
   const [activeTab, setActiveTab] = useState("categories");
@@ -160,21 +146,20 @@ const Parametrage = () => {
     }
 
   }
-  
- }
- const updateDataCategorie = async (data) => {
-  try{
-    await updateCategorie(dataEdit.id, data);
-    setUpdate(false)
-    clean();
-    dataCategorie();
-    setIsModalOpen(false);
-    setModalType("");
-    toast.success('Modification effectuée avec succès')
-   
-  }catch (error){
-    toast.error('Erreur lors de la modification')
-    console.error("Error sending data:", error);
+  const updateDataCategorie = async (data) => {
+    try {
+      await updateCategorie(dataEdit.id, data);
+      setUpdate(false)
+      clean();
+      dataCategorie();
+      setIsModalOpen(false);
+      setModalType("");
+      toast.success('Modification effectuée avec succès')
+
+    } catch (error) {
+      toast.error('Erreur lors de la modification')
+      console.error("Error sending data:", error);
+    }
   }
   const deleteDataCategorie = async (id) => {
     setIsLoading(true)
@@ -207,7 +192,7 @@ const Parametrage = () => {
 
   const filteredTypesEtablissements = typesEtablissements.filter(
     (type) =>
-      type.establishment_type_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      type.establishment_types_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       type.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -299,14 +284,13 @@ const Parametrage = () => {
           </div>
 
           <TabsContent value="categories" className="p-0">
-            <Categorie filteredCategories={filteredCategories} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab}/>
+            <Categorie filteredCategories={filteredCategories} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab} />
           </TabsContent>
           <TabsContent value="typesEtablissements" className="p-0">
-            <TypeEtablissement filteredTypesEtablissements={filteredTypesEtablissements} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab}/>
+            <TypeEtablissement filteredTypesEtablissements={filteredTypesEtablissements} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab} />
           </TabsContent>
         </Tabs>
       </div>
-      {/* Modal personnalisé */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">

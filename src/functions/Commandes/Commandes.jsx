@@ -12,7 +12,7 @@ export const GetAllCommandes = async () => {
 // Recuperation d'un  categorie par son id
 export const GetCommandeById = async (CommandeId) => {
   try {
-    const response = await axiosClient.get(`establishments-/${CommandeId}/`);
+    const response = await axiosClient.get(`establishments-/${CommandeId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching  categorie:', error);
@@ -22,7 +22,7 @@ export const GetCommandeById = async (CommandeId) => {
 // Ajout d'un type categorie
 export const AddCommande = async (CommandeData) => {
   try {
-    const response = await axiosClient.post(`orders/`, CommandeData, 
+    const response = await axiosClient.post(`orders`, CommandeData, 
      );
     return response.data;
   } catch (error) {
@@ -34,7 +34,7 @@ export const AddCommande = async (CommandeData) => {
 // Modification d'un  categorie
 export const updateCommande = async (CommandeId, CommandeData) => {
   try {
-    const response = await axiosClient.put(`orders${CommandeId}/`, CommandeData);
+    const response = await axiosClient.post(`orders${CommandeId}`, CommandeData);
     return response.data;
   } catch (error) {
     console.error('Error updating  categorie:', error);
@@ -44,7 +44,7 @@ export const updateCommande = async (CommandeId, CommandeData) => {
 // Suppression d'un  categorie 
 export const DeleteCommande = async (CommandeId) => {
   try {
-    const response = await axiosClient.delete(`orders${CommandeId}/`);
+    const response = await axiosClient.delete(`orders/${CommandeId}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting  categorie:', error);

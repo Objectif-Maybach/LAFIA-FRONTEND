@@ -32,13 +32,15 @@ const Sidebar = () => {
     label: 'Paramétrages'
   },
   {
-    path: 'commandes',
+    path: '/accueil/commandes',
     icon: <PackageIcon size={20} />,
     label: 'Commandes'
   }
 ];
   const Logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('isLogged');
+    localStorage.removeItem('username');
+    localStorage.removeItem('full_name');
     navigate('/');
   }
   return <div className="w-64 bg-white shadow-lg h-full flex flex-col">

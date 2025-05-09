@@ -33,8 +33,8 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
     formData.append("establishment_type", etab.establishment_type);
 
     // Ajouter les champs imbriqués manuellement avec le bon préfixe
-    formData.append("contact.telephone", etab.telephone);
-    formData.append("contact.adresse", etab.adresse);
+    formData.append("contact[telephone]", etab.telephone);
+    formData.append("contact[adresse]", etab.adresse);
     onSubmit(formData);
   };
   useEffect(() => {
@@ -100,8 +100,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
                 type="text"
                 name="adresse"
                 defaultValue={dataEdit?.contact?.adresse}
-                {...register('adresse',
-                  { required: 'L\'adresse est obligatoire' })
+                {...register('adresse')
                 }
                 className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="123 Rue de la Paix, BKO"
@@ -123,7 +122,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
               <option value="">-- Choisir --</option>
               {types.map(type => (
                 <option selected={dataEdit?.establishment_type?.id === type.id} key={type.id} value={type.id}>
-                  {type.establishment_type_name}
+                  {type.establishment_types_name}
                 </option>
               ))}
             </select>
@@ -141,8 +140,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
                 id="description"
                 defaultValue={dataEdit?.description}
                 rows={1}
-                {...register('description',
-                  { required: 'La description est obligatoire' })
+                {...register('description')
                 }
                 className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder=""

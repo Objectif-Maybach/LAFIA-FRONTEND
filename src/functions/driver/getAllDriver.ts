@@ -6,7 +6,7 @@ const Api_Url = import.meta.env.VITE_API_URL;
 
 export const getAllDriver = async () => {
     try {
-        const { data }: { data: DRIVER_T[] } = await axios.get(`${Api_Url}drivers/`);
+        const { data }: { data: DRIVER_T[] } = await axios.get(`${Api_Url}drivers`);
         console.log('====================================');
         console.log("la liste des chauffeurs : ", data);
         console.log('====================================');

@@ -18,7 +18,7 @@ const Drivers = () => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isReadFile, setIsReadFile] = useState(false)
-  const [fileUrl, setFileUrl] = useState('')
+  const [fileUrl, setFileUrl] = useState(null)
 
   const DriversAll = async () => {
     setIsLoading(true)
@@ -48,7 +48,7 @@ const Drivers = () => {
       setIsLoading(false)
     }
   }
-  
+
   const UpdateDrivers = async (user) => {
     setIsLoading(true)
     try {
@@ -69,7 +69,7 @@ const Drivers = () => {
     setIsModalOpen(true)
     setDataEdit(user)
   }
- 
+
   const handleDelete = async (userId) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce livreur ?')) {
       setIsLoading(true)
@@ -85,10 +85,13 @@ const Drivers = () => {
       }
     }
   }
-  const readingFileUrl = (file) => {
-    setFileUrl(file)
-    setIsReadFile(true)
-  }
+  const readingFileUrl = (file_url) => {
+    const url = import.meta.env.VITE_FILE_URL + file_url;
+    window.open(url, '_blank');
+    // setFileUrl(file_url);
+    // setIsReadFile(true);
+  };
+
 
   useEffect(() => {
     DriversAll();
@@ -96,10 +99,10 @@ const Drivers = () => {
   const handleFormClose = () => {
     setIsModalOpen(false)
   }
- 
+
   const filteredDrivers = drivers.filter(
     (user) =>
-      user.driver_name.toLowerCase().includes(searchQuery.toLowerCase()) 
+      user.driver_name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
@@ -146,13 +149,13 @@ const Drivers = () => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Nom et Prénom
+                  Piece d'identité
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Piece d'identité
+                  Nom et Prénom
                 </th>
                 <th
                   scope="col"
@@ -160,7 +163,7 @@ const Drivers = () => {
                 >
                   Téléphone
                 </th>
-                
+
                 <th
                   scope="col"
                   className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -171,22 +174,21 @@ const Drivers = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredDrivers.map((driver) => (
-                <tr key={driver.id} className="hover:bg-gray-50">
+                <tr key={driver.id} className="hover:bg-gray-50"><td className="px-6 py-4 whitespace-nowrap">
+                  <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(driver.piece)}>
+                    <File size={25} />
+                  </button>
+                </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">{driver.driver_name} </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                  <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(driver.piece)}>
-                      <File size={16} /> {driver.piece}
-                    </button>
-                   
-                  </td>
+
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-gray-500"><span className="text-red-700"> {driver.contact.telephone}</span> <br />
                       {driver.contact.adresse}
                     </div>
                   </td>
-                  
+
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(driver)}>
                       <PencilIcon size={16} />
@@ -217,7 +219,7 @@ const Drivers = () => {
           </div>
         </div>
       </div>
-      {isReadFile && (<ReadFile fileUrl={fileUrl} onClose={setIsReadFile} />)}
+      {isReadFile && (<ReadFile url={fileUrl} onClose={() => setIsReadFile(false)} />)}
       {/* Modal personnalisé */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -242,7 +244,7 @@ const Drivers = () => {
           </div>
         </div>
       )}
-     
+
     </div>
   );
 };

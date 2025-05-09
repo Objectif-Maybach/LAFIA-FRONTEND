@@ -15,7 +15,7 @@ export const addProduit = async (
 ) => {
     try {
         const { data }: { data: PRODUIT_T } = await axios.post(
-            `${Api_Url}products/`,
+            `${Api_Url}products`,
             params
         );
         return data;

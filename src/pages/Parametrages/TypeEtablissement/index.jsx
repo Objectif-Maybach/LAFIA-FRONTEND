@@ -43,7 +43,7 @@ const TypeEtablissement = ({filteredTypesEtablissements, updateState, setIsDelet
                                     <div className="font-medium text-gray-900">{type.id}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="font-medium text-gray-900">{type.establishment_type_name}</div>
+                                    <div className="font-medium text-gray-900">{type.establishment_types_name}</div>
                                 </td>
 
                                 <td className="px-6 py-4">

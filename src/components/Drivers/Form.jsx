@@ -10,14 +10,13 @@ const DriversForm = ({ onClose, onSubmit, dataEdit }) => {
   const AddUser = driver => {
     const formData = new FormData();
     formData.append("driver_name", driver.driver_name);
-    formData.append("is_active", true);
     if(driver.piece.length > 0) {
     formData.append("piece", driver.piece[0]);
     }
 
     // Ajouter les champs imbriqués manuellement avec le bon préfixe
-    formData.append("contact.telephone", driver.telephone);
-    formData.append("contact.adresse", driver.adresse);
+    formData.append("contact[telephone]", driver.telephone);
+    formData.append("contact[adresse]", driver.adresse);
     onSubmit(formData);
   };
   useEffect(() => {
@@ -79,8 +78,7 @@ const DriversForm = ({ onClose, onSubmit, dataEdit }) => {
                 type="text"
                 name="adresse"
 
-                {...register('adresse',
-                  { required: 'L\'adresse est obligatoire' })
+                {...register('adresse')
                 }
                 className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="123 Rue de la Paix, BKO"

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
 const axiosClient = axios.create({
-    baseURL: 'http://192.168.1.29:8000/api/',
+    baseURL: 'https://temp2.karlocar.com/public/api/',
 });
 export default axiosClient

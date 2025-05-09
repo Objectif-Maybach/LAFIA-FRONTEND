@@ -7,6 +7,7 @@ import { AddEtablissement, DeleteEtablissement, GetAllEtablissements, UpdateEtab
 import restauImg from '../../assets/images/restau.jpg';
 import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
+import ReadFile from "../../components/ReadFile"
 const Etablissements = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -14,6 +15,7 @@ const Etablissements = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const fileUrl = import.meta.env.VITE_FILE_URL ;
 
   const EtablissementsAll = async () => {
     setIsLoading(true)
@@ -179,20 +181,24 @@ const Etablissements = () => {
                 <tr key={etab.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     {etab.image ? (
-                      <img src={etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
+
+                      <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(etab.image)}>
+                        <img src={fileUrl+etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
+                      </button>
                     ) : (
                       <img src={restauImg} alt="placeholder" className="w-12 h-12 rounded-full" />
                     )}
+
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="font-medium text-gray-900">{etab.establishment_name} </div>
+                    <div className="font-medium text-gray-900"> {etab.establishment_name}  {etab.establishment_type?.establishment_types_name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-gray-500">{etab.description}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${etab.establishment_type?.establishment_type_name === 'restaurant' ? 'bg-orange-100 text-orange-800' : etab.establishment_type?.establishment_type_name === 'boulangerie' ? 'bg-yellow-100 text-yellow-800' : etab.establishment_type?.establishment_type_name === 'boutique' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
-                      {etab.establishment_type?.establishment_type_name}
+                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${etab.establishment_type?.establishment_types_name === 'restaurant' ? 'bg-orange-100 text-orange-800' : etab.establishment_type?.establishment_types_name === 'boulangerie' ? 'bg-yellow-100 text-yellow-800' : etab.establishment_type?.establishment_types_name === 'boutique' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
+                      {etab.establishment_type?.establishment_types_name}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -232,6 +238,7 @@ const Etablissements = () => {
         </div>
       </div>
 
+      {/* {isReadFile && (<ReadFile url={fileUrl} onClose={() => setIsReadFile(false)} />)} */}
       {/* Modal personnalisé */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
