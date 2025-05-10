@@ -203,6 +203,7 @@ export default function AddOrders() {
                       id="price"
                       type="number"
                       value={price}
+                      readOnly
                       onChange={(e) => setPrice(Number.parseFloat(e.target.value) || 0)}
                       placeholder="Prix en FCFA"
                     />

@@ -4,6 +4,7 @@ import { Button } from "../../components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card"
 import { Badge } from "../../components/ui/badge"
 import {getAllProduit} from "../../functions/Produit/getAllProduit"
+import no_image from '../../assets/images/no_image.png';
 import { motion } from "framer-motion"
 import { Separator } from "../ui/separator"
 
@@ -14,6 +15,7 @@ export default function OneOrder({ order, clean }) {
     //     const response = await getAllProduit();
     //     return response.filter(item => item.id === id)[0].price
     //    }
+    console.log('oder',order)
     useEffect(() => {
         
             
@@ -117,7 +119,7 @@ export default function OneOrder({ order, clean }) {
                 >
                   <div className="flex items-center space-x-4">
                     <img
-                      src={fileUrl+item.product.images[0].file_name}
+                      src={item.product.images.length > 0 ? fileUrl+item.product.images[0].file_name : no_image}
                       alt={item.product.product_name}
                       className="w-12 h-12 object-cover rounded-md"
                     /> 

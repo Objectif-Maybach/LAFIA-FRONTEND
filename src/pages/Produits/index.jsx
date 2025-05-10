@@ -8,6 +8,7 @@ import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from 'lucide-react';
 import no_image from '../../assets/images/no_image.png';
 import { toast } from 'react-toastify';
 import Loader from '../../components/loading/loader';
+import ProductGallery from '../../components/Produits/Galerie';
 
 const Produits = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -16,7 +17,9 @@ const Produits = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const fileUrl = import.meta.env.VITE_FILE_URL ;
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
+  const fileUrl = import.meta.env.VITE_FILE_URL;
 
   const ProduitsAll = async () => {
     setIsLoading(true)
@@ -171,10 +174,14 @@ const Produits = () => {
                 {filteredProduits.map(produit => <tr key={produit.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <img
-                      src={produit.images.length ? fileUrl+ produit.images[0].file_name : no_image}
-                      alt={produit.product_name} 
-                      className="w-16 h-16 object-cover rounded-md"
-                    /> 
+                      src={produit.images.length ? fileUrl + produit.images[0].file_name : no_image}
+                      alt={produit.product_name}
+                      className="w-16 h-16 object-cover rounded-md cursor-pointer"
+                      onClick={() => {
+                        setCurrentProduct(produit);
+                        setGalleryOpen(true);
+                      }}
+                    />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">
@@ -242,7 +249,17 @@ const Produits = () => {
           </div>
         </div>
       )}
+      {galleryOpen && currentProduct && (
+        <ProductGallery
+          images={currentProduct.images || []}
+          productName={currentProduct.product_name}
+          productId={currentProduct.id}
+          onClose={() => setGalleryOpen(false)}
+          fileUrl={fileUrl}
+        />
+      )}
     </div>
+
   );
 
 };
