@@ -6,6 +6,11 @@ export interface PRODUIT_T {
     establishment: string,
     category?: string,
 }
+export interface PRODUIT_IMAGE_T {
+    images: string,
+    product: string,
+    id: string,
+}
 
 export interface DRIVER_T {
     driver_name: string,

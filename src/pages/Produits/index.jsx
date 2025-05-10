@@ -251,11 +251,11 @@ const Produits = () => {
       )}
       {galleryOpen && currentProduct && (
         <ProductGallery
-          images={currentProduct.images || []}
           productName={currentProduct.product_name}
           productId={currentProduct.id}
           onClose={() => setGalleryOpen(false)}
           fileUrl={fileUrl}
+          isLoading={isLoading}
         />
       )}
     </div>
