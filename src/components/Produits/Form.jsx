@@ -48,7 +48,7 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
     formData.append("description", data.description);
     formData.append("price", data.price);
 
-    if (data.product_images.length > 0) {
+    if (data.product_images && data.product_images.length > 0) {
       for (let i = 0; i < data.product_images.length; i++) {
         formData.append("product_images[]", data.product_images[i]);
       }
