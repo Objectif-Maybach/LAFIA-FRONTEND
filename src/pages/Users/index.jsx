@@ -110,7 +110,7 @@ const Users = () => {
 
   const filteredUsers = users.filter(
     (user) =>
-      // user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
@@ -142,7 +142,7 @@ const Users = () => {
 
             <button
               onClick={() => (setDataEdit([]), setIsModalOpen(true))}
-              className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700"
             >
               <PlusIcon size={16} className="mr-2" />
               Ajouter un utilisateur
@@ -216,7 +216,7 @@ const Users = () => {
                     <button className="text-yellow-600 hover:text-yellow-900 mr-3" onClick={() => handleReset(user)}>
                       <LockIcon size={16} />
                     </button>
-                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(user)}>
+                    <button className="text-orange-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(user)}>
                       <PencilIcon size={16} />
                     </button>
                     <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(user.id)}>

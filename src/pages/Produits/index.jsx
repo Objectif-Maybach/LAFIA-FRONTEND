@@ -133,7 +133,7 @@ const Produits = () => {
 
                 <button
 
-                  className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700"
                   onClick={() => (setDataEdit([]), setIsModalOpen(true))}
                 >
                   <PlusIcon size={16} className="mr-2" />
@@ -202,7 +202,7 @@ const Produits = () => {
                     <div className="text-gray-500">{produit.category?.category_name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(produit)}>
+                    <button className="text-orange-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(produit)}>
                       <PencilIcon size={16} />
                     </button>
                     <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(produit.id)}>
@@ -256,6 +256,7 @@ const Produits = () => {
           onClose={() => setGalleryOpen(false)}
           fileUrl={fileUrl}
           isLoading={isLoading}
+          ProduitsAll={ProduitsAll}
         />
       )}
     </div>

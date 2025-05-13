@@ -65,7 +65,7 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
           </button>
           <button
             type="submit"
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm"
           >
             <CheckCircle size={18} className="mr-2" />
             Valider

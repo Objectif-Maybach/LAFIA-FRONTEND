@@ -102,43 +102,6 @@ const DriversForm = ({ onClose, onSubmit, dataEdit }) => {
             </div>
             {errors?.piece && <span className='text-sm text-red-600'>{errors.piece.message}</span>}
           </div>  
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
-            <div className="relative" >
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MapPinIcon size={16} className="text-gray-400" />
-              </div>
-              <input
-                type="text"
-                name="longitude"
-                {...register('longitude',
-                  { required: 'La longitude est obligatoire' })
-                }
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="JeanD123"
-              />
-            </div>
-            {errors?.longitude && <span className='text-sm text-red-600'>{errors.longitude.message}</span>}
-          </div>
-            <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MapPinIcon size={16} className="text-gray-400" />
-              </div>
-              <input
-                type="text"
-                name="latitude"
-                {...register("password", {
-                  required: "La latitude est obligatoire"
-                })}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="JeanD123"
-              />
-
-            </div>
-            {errors?.latitude && <span className='text-sm text-red-600'>{errors.latitude.message}</span>}
-          </div> */}
         </div>
         <div className="flex justify-end gap-3 mt-6">
           <button
@@ -151,7 +114,7 @@ const DriversForm = ({ onClose, onSubmit, dataEdit }) => {
           </button>
           <button
             type="submit"
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm"
           >
             <CheckCircle size={18} className="mr-2" />
             Valider

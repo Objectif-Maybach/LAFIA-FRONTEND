@@ -5,8 +5,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "../../components/ui/input"
 import { Label } from "../../components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
-import {getAllDriver} from "../../functions/driver/getAllDriver"
-import {getAllProduit} from "../../functions/Produit/getAllProduit"
+import { getAllDriver } from "../../functions/driver/getAllDriver"
+import { getAllProduit } from "../../functions/Produit/getAllProduit"
 import Panier from "../../components/orders/panier"
 import { AddCommande } from "../../functions/Commandes/Commandes"
 import { toast } from "react-toastify"
@@ -26,51 +26,51 @@ export default function AddOrders() {
   const [isLoading, setIsLoading] = useState(false)
 
 
- const dataDriver = async ()=>{
-  const response = await getAllDriver();
-  setDrivers(response)
-  
- }
- const dataProduct = async ()=>{
-  const response = await getAllProduit();
-  setProducts(response)
- }
- const clean= () =>{
-  setSelectedProduct("")
-  setQuantity(1)
-  setPrice(0)
-  setType("")
-  setClientContact("")
-  setClientAddress("")
-  setCart([])
-  setSelectedDriver('')
- }
- const handleSubmit = async (e) => {
-  e.preventDefault()
- 
-  try{
-    const commandeData = {
-      "contact": {
-        "telephone": clientContact,
-        "adresse": clientAddress
-      },
-      "driver": selectedDriver,
-      "products": cart.map((item) => ({
-        "id": item.product_id,
-        "quantity": item.quantity
-      })),
-      "order_date": '2025-05-05 12:49:48',
-    }
-   await AddCommande(commandeData)
-   clean()
-   toast.success("Commande ajoutée avec succès")
+  const dataDriver = async () => {
+    const response = await getAllDriver();
+    setDrivers(response)
 
-  }catch (error) {
-    console.error("Error adding commande:", error)
-    toast.error("Erreur lors de l'ajout de la commande")
   }
-  
- }
+  const dataProduct = async () => {
+    const response = await getAllProduit();
+    setProducts(response)
+  }
+  const clean = () => {
+    setSelectedProduct("")
+    setQuantity(1)
+    setPrice(0)
+    setType("")
+    setClientContact("")
+    setClientAddress("")
+    setCart([])
+    setSelectedDriver('')
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      const commandeData = {
+        "contact": {
+          "telephone": clientContact,
+          "adresse": clientAddress
+        },
+        "driver": selectedDriver,
+        "products": cart.map((item) => ({
+          "id": item.product_id,
+          "quantity": item.quantity
+        })),
+        "order_date": '2025-05-05 12:49:48',
+      }
+      await AddCommande(commandeData)
+      clean()
+      toast.success("Commande ajoutée avec succès")
+
+    } catch (error) {
+      console.error("Error adding commande:", error)
+      toast.error("Erreur lors de l'ajout de la commande")
+    }
+
+  }
 
   useEffect(() => {
     dataProduct()
@@ -85,7 +85,7 @@ export default function AddOrders() {
 
   // Add to cart
   const addToCart = () => {
-    if (!selectedProduct || !quantity ) {
+    if (!selectedProduct || !quantity) {
 
       // toast({
       //   title: "Erreur",
@@ -128,136 +128,152 @@ export default function AddOrders() {
   const removeFromCart = (id) => {
     setCart(cart.filter((item) => item.id !== id))
   }
-  
+
   const calculateTotal = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0)
   }
 
+  const [search, setSearch] = useState("");
+
+  const filteredProducts = products.filter((product) =>
+    product.product_name.toLowerCase().includes(search.toLowerCase())
+  );
 
 
-    return (
-        <div className="container mx-auto py-8 px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Order Form */}
-          <Card>
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
-              <CardTitle className="text-xl text-blue-700">Passer une commande</CardTitle>
-              <CardDescription>Sélectionnez vos produits et ajoutez-les au panier</CardDescription>
-            </CardHeader>
-            <CardContent className="pt-6 ">
+  return (
+    <div className="container mx-auto py-8 px-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Order Form */}
+        <Card>
+          <CardHeader className="bg-gradient-to-r from-orange-50 to-indigo-50">
+            <CardTitle className="text-xl text-orange-700">Passer une commande</CardTitle>
+            <CardDescription>Sélectionnez vos produits et ajoutez-les au panier</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-6 ">
             <div className="space-y-4 relative">
               <div className="space-y-2">
-                <Label htmlFor="product">Produit</Label>
-                <Select
-                  value={selectedProduct}
-                  onValueChange={setSelectedProduct}
-                >
+                <label htmlFor="product">Produit</label>
+                <Select value={selectedProduct} onValueChange={setSelectedProduct}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez un produit" />
                   </SelectTrigger>
-                  <SelectContent className=" bg-white border shadow-lg">
-                    {products.map((product) => (
+                  <SelectContent className="bg-white border shadow-lg">
+                    {/* Champ de recherche */}
+                    <div className="p-2">
+                      <input
+                        type="text"
+                        placeholder="Rechercher..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full px-2 py-1 border rounded"
+                      />
+                    </div>
+
+                    {/* Résultats filtrés */}
+                    {filteredProducts.map((product) => (
                       <SelectItem key={product.id} value={product.id}>
                         {product.product_name} - {product.price} FCFA
                       </SelectItem>
                     ))}
+
+                    {filteredProducts.length === 0 && (
+                      <div className="p-2 text-sm text-gray-500">Aucun résultat</div>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
-
-
-                <div className="">
-                  <div className="space-y-2">
-                    <Label htmlFor="quantity">Quantité</Label>
-                    <div className="flex items-center">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="rounded-r-none"
-                      >
-                        <MinusIcon className="h-4 w-4" />
-                      </Button>
-                      <Input
-                        id="quantity"
-                        type="number"
-                        min="1"
-                        value={quantity}
-                        onChange={(e) => setQuantity(Number.parseInt(e.target.value) || 1)}
-                        className="rounded-none text-center"
-                      />
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => setQuantity(quantity + 1)}
-                        className="rounded-l-none"
-                      >
-                        <PlusIcon className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="price">Prix unitaire (FCFA)</Label>
+              <div className="">
+                <div className="space-y-2">
+                  <Label htmlFor="quantity">Quantité</Label>
+                  <div className="flex items-center">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="rounded-r-none"
+                    >
+                      <MinusIcon className="h-4 w-4" />
+                    </Button>
                     <Input
-                      id="price"
+                      id="quantity"
                       type="number"
-                      value={price}
-                      readOnly
-                      onChange={(e) => setPrice(Number.parseFloat(e.target.value) || 0)}
-                      placeholder="Prix en FCFA"
+                      min="1"
+                      value={quantity}
+                      onChange={(e) => setQuantity(Number.parseInt(e.target.value) || 1)}
+                      className="rounded-none text-center"
                     />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="rounded-l-none"
+                    >
+                      <PlusIcon className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
 
-       <div className="pt-4">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={addToCart }>
-                    <PlusIcon className="mr-2 h-4 w-4" />
-                    Ajouter au panier
-                  </Button>
+                <div className="space-y-2">
+                  <Label htmlFor="price">Prix unitaire (FCFA)</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    value={price}
+                    readOnly
+                    onChange={(e) => setPrice(Number.parseFloat(e.target.value) || 0)}
+                    placeholder="Prix en FCFA"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-4">
+                <Button className="w-full bg-orange-500 hover:bg-orange-700" onClick={addToCart}>
+                  <PlusIcon className="mr-2 h-4 w-4" />
+                  Ajouter au panier
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Client and Driver Information */}
+        <div className="space-y-8">
+          <Card>
+            <CardHeader className="bg-gradient-to-r from-orange-50 to-indigo-50">
+              <CardTitle className="text-xl text-orange-700">Informations sur le client</CardTitle>
+              <CardDescription>Détails du client pour la livraison</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="clientContact">Contact</Label>
+                  <Input
+                    id="clientContact"
+                    value={clientContact}
+                    onChange={(e) => setClientContact(e.target.value)}
+                    placeholder="Téléphone du client"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="clientAddress">Adresse</Label>
+                  <Input
+                    id="clientAddress"
+                    value={clientAddress}
+                    onChange={(e) => setClientAddress(e.target.value)}
+                    placeholder="Adresse de livraison"
+                  />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Client and Driver Information */}
-          <div className="space-y-8">
-            <Card>
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
-                <CardTitle className="text-xl text-blue-700">Informations sur le client</CardTitle>
-                <CardDescription>Détails du client pour la livraison</CardDescription>
-              </CardHeader>
-              <CardContent className="pt-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="clientContact">Contact</Label>
-                    <Input
-                      id="clientContact"
-                      value={clientContact}
-                      onChange={(e) => setClientContact(e.target.value)}
-                      placeholder="Téléphone du client"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="clientAddress">Adresse</Label>
-                    <Input
-                      id="clientAddress"
-                      value={clientAddress}
-                      onChange={(e) => setClientAddress(e.target.value)}
-                      placeholder="Adresse de livraison"
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
-                <CardTitle className="text-xl text-blue-700">Informations sur le chauffeur</CardTitle>
-                <CardDescription>Détails du chauffeur pour la livraison</CardDescription>
-              </CardHeader>
-              <CardContent className="pt-6">
+          <Card>
+            <CardHeader className="bg-gradient-to-r from-orange-50 to-indigo-50">
+              <CardTitle className="text-xl text-orange-700">Informations sur le chauffeur</CardTitle>
+              <CardDescription>Détails du chauffeur pour la livraison</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
               <div className="space-y-2">
                 <Label htmlFor="product" >Chauffeur</Label>
                 <Select
@@ -276,20 +292,20 @@ export default function AddOrders() {
                   </SelectContent>
                 </Select>
               </div>
-              </CardContent>
-            </Card>
+            </CardContent>
+          </Card>
 
-          </div>
         </div>
+      </div>
 
-        <Panier
+      <Panier
         calculateTotal={calculateTotal}
         cart={cart}
         removeFromCart={removeFromCart}
         onSubmit={handleSubmit}
       />
-   
-        
-      </div>
-    )
+
+
+    </div>
+  )
 }
