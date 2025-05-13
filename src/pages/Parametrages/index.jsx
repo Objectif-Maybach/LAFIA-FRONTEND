@@ -270,7 +270,7 @@ const Parametrage = () => {
 
               <button
                 onClick={() => (openModal(activeTab), clean())}
-                className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700"
               >
                 <PlusIcon size={16} className="mr-2" />
                 Ajouter{" "}
@@ -365,7 +365,7 @@ const Parametrage = () => {
                     setIsDelete(false);
                     setId('');
                   }}
-                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                  className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm"
                 >
                   Confirmer
                 </button>

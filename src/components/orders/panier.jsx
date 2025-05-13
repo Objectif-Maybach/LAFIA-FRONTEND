@@ -7,11 +7,11 @@ import { Badge } from "../../components/ui/badge"
 export default function Panier({ calculateTotal, cart, removeFromCart, onSubmit }) {
   return (
     <div className="mt-12">
-          <Card className="border-t-4 border-blue-500">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+          <Card className="border-t-4 border-orange-500">
+            <CardHeader className="bg-gradient-to-r from-orange-50 to-indigo-50">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-2xl text-blue-700 flex items-center">
+                  <CardTitle className="text-2xl text-orange-700 flex items-center">
                     <ShoppingCart className="mr-2 h-5 w-5" />
                     Panier
                   </CardTitle>
@@ -40,7 +40,7 @@ export default function Panier({ calculateTotal, cart, removeFromCart, onSubmit 
                       <div key={item.product_id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                         <div className="flex items-center space-x-4">
                           <div className="bg-white p-2 rounded-md">
-                            <ShoppingCart className="h-6 w-6 text-blue-500" />
+                            <ShoppingCart className="h-6 w-6 text-orange-500" />
                           </div>
                           <div>
                             <h3 className="font-medium">{item.name}</h3>
@@ -77,7 +77,7 @@ export default function Panier({ calculateTotal, cart, removeFromCart, onSubmit 
                 <p className="text-sm text-gray-500">Sous-total: {calculateTotal().toLocaleString()} FCFA</p>
                 <p className="text-sm text-gray-500">Livraison: À déterminer</p>
               </div>
-              <Button className="bg-blue-600 hover:bg-blue-700" disabled={cart.length === 0} onClick={onSubmit}>
+              <Button className="bg-orange-500 hover:bg-orange-700" disabled={cart.length === 0} onClick={onSubmit}>
                 Finaliser la commande
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>

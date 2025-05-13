@@ -15,7 +15,7 @@ const Etablissements = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const fileUrl = import.meta.env.VITE_FILE_URL ;
+  const fileUrl = import.meta.env.VITE_FILE_URL;
 
   const EtablissementsAll = async () => {
     setIsLoading(true)
@@ -110,7 +110,7 @@ const Etablissements = () => {
           <h2 className="text-lg font-medium">Liste des etablissements</h2>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-            {/* <div className="relative">
+            <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <SearchIcon size={16} className="text-gray-400" />
               </div>
@@ -121,11 +121,11 @@ const Etablissements = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-            </div> */}
+            </div>
 
             <button
               onClick={() => (setDataEdit([]), setIsModalOpen(true))}
-              className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700"
             >
               <PlusIcon size={16} className="mr-2" />
               Ajouter un etablissement
@@ -182,8 +182,8 @@ const Etablissements = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     {etab.image ? (
 
-                      <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(etab.image)}>
-                        <img src={fileUrl+etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
+                      <button className="text-orange-500 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(etab.image)}>
+                        <img src={fileUrl + etab.image} alt={etab.establishment_name} className="w-12 h-12 rounded-full" />
                       </button>
                     ) : (
                       <img src={restauImg} alt="placeholder" className="w-12 h-12 rounded-full" />
@@ -208,7 +208,7 @@ const Etablissements = () => {
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(etab)}>
+                    <button className="text-orange-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(etab)}>
                       <PencilIcon size={16} />
                     </button>
                     <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(etab.id)}>

@@ -34,29 +34,29 @@ export default function OneOrder({ order, clean }) {
 
 
    return(
-    <Card className="border-t-4 border-blue-500">
-    <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+    <Card className="border-t-4 border-orange-500">
+    <CardHeader className="bg-gradient-to-r from-orange-50 to-orange-50">
       <div className="flex items-center justify-between">
         <div>
            < div className="flex justify-between items-center">
 
         <motion.div whileHover={{ x: -5 }} className="flex items-center">
                 <div
-                  className="mr-4 cursor-pointer hover:text-blue-700 transition-colors duration-200 bg-white p-2 rounded-full shadow-sm"
+                  className="mr-4 cursor-pointer hover:text-orange-700 transition-colors duration-200 bg-white p-2 rounded-full shadow-sm"
                   onClick={() => {clean()}}
                 
                 >
-                  <ArrowLeft size={20} className={isHovering ? "text-blue-600" : ""} />
+                  <ArrowLeft size={20} className={isHovering ? "text-orange-500" : ""} />
                 </div>
               </motion.div>
-              <CardTitle className="text-2xl text-blue-800 font-bold">Détail de la commande </CardTitle>
+              <CardTitle className="text-2xl text-orange-800 font-bold">Détail de la commande </CardTitle>
 
         
         </div>
         </div>
 
         <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
-              <Badge variant="outline" className="text-lg px-4 py-1.5 bg-blue-600 text-white border-blue-600 shadow-sm">
+              <Badge variant="outline" className="text-lg px-4 py-1.5 bg-orange-500 text-white border-orange-500 shadow-sm">
                 {/* Total: {orderData.total.toLocaleString()} FCFA
                  */}
                  Total : {calculateTotal()} FCFA
@@ -67,31 +67,31 @@ export default function OneOrder({ order, clean }) {
     
     <CardContent className="pt-6 space-y-4">
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="flex items-center space-x-3 bg-blue-50 p-3 rounded-lg">
-              <Calendar className="text-blue-600" size={18} />
+            <div className="flex items-center space-x-3 bg-orange-50 p-3 rounded-lg">
+              <Calendar className="text-orange-500" size={18} />
               <div>
                 <p className="text-xs text-gray-500 font-medium">Date</p>
                 <p className="text-sm text-gray-800">{new Date(order.order_date).toLocaleDateString("fr-FR")}</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 bg-indigo-50 p-3 rounded-lg">
-              <Truck className="text-indigo-600" size={18} />
+            <div className="flex items-center space-x-3 bg-orange-50 p-3 rounded-lg">
+              <Truck className="text-orange-600" size={18} />
               <div>
                 <p className="text-xs text-gray-500 font-medium">Livreur</p>
-                <p className="text-sm text-gray-800">{order.driver.driver_name}</p>
+                <p className="text-sm text-gray-800">{order.driver?.driver_name}</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 bg-purple-50 p-3 rounded-lg">
-              <User className="text-purple-600" size={18} />
+            <div className="flex items-center space-x-3 bg-orange-50 p-3 rounded-lg">
+              <User className="text-orange-600" size={18} />
               <div>
                 <p className="text-xs text-gray-500 font-medium">Client</p>
-                <p className="text-sm text-gray-800">{order.contact.telephone}</p>
+                <p className="text-sm text-gray-800">{order.contact?.telephone}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3 bg-teal-50 p-3 rounded-lg">
-              <MapPin className="text-indigo-600" size={18} />
+              <MapPin className="text-orange-600" size={18} />
               <div>
                 <p className="text-xs text-gray-500 font-medium">Livraison</p>
                 <p className="text-sm text-gray-800">{order.contact.adresse}</p>
@@ -104,7 +104,7 @@ export default function OneOrder({ order, clean }) {
 
           <div className="space-y-3">
             <h3 className="font-medium flex items-center text-gray-700">
-              <ShoppingBag size={16} className="mr-2 text-blue-600" />
+              <ShoppingBag size={16} className="mr-2 text-orange-500" />
               Articles commandés
             </h3>
 
@@ -128,7 +128,7 @@ export default function OneOrder({ order, clean }) {
                       <p className="text-sm text-gray-500">Quantité: {item.quantity}</p>
                     </div>
                   </div>
-                  <p className="font-semibold text-blue-700">{item.product.price} FCFA</p>
+                  <p className="font-semibold text-orange-700">{item.product.price} FCFA</p>
                 </motion.div>
               ))}
             </div>

@@ -9,7 +9,8 @@ const ProductGallery = ({
   productId,
   onClose,
   fileUrl,
-  isLoading: parentLoading
+  isLoading: parentLoading,
+  ProduitsAll
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [newImages, setNewImages] = useState([]);
@@ -70,6 +71,7 @@ const ProductGallery = ({
       formData.append("product", productId);
       
       await addProduitImages(formData);
+      await ProduitsAll();
       await fetchProductImages(); // Rafraîchir les images
       setNewImages([]);
       setPreviewImages([]);
@@ -87,6 +89,7 @@ const ProductGallery = ({
     
     try {
       await deleteProduitImage(imageId);
+      await ProduitsAll();
       await fetchProductImages(); // Rafraîchir les images
       if (currentIndex >= images.length - 1) {
         setCurrentIndex(Math.max(0, images.length - 2));
@@ -182,7 +185,7 @@ const ProductGallery = ({
                   key={img.id || `preview-${index}`}
                   onClick={() => setCurrentIndex(index)}
                   className={`flex-shrink-0 w-16 h-16 border-2 rounded-md overflow-hidden ${
-                    currentIndex === index ? 'border-blue-500' : 'border-transparent'
+                    currentIndex === index ? 'border-orange-500' : 'border-transparent'
                   }`}
                   disabled={loading}
                 >
@@ -200,7 +203,7 @@ const ProductGallery = ({
         {/* Add images section */}
         <div className="p-4 border-t bg-gray-50">
           <div className="flex flex-wrap items-center gap-4">
-            <label className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer transition-colors disabled:opacity-50">
+            <label className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700 cursor-pointer transition-colors disabled:opacity-50">
               {loading ? (
                 <Loader2 size={18} className="animate-spin" />
               ) : (

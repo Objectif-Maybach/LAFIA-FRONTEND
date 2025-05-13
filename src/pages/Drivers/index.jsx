@@ -133,7 +133,7 @@ const Drivers = () => {
 
             <button
               onClick={() => (setDataEdit([]), setIsModalOpen(true))}
-              className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700"
             >
               <PlusIcon size={16} className="mr-2" />
               Ajouter un livreur
@@ -175,7 +175,7 @@ const Drivers = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredDrivers.map((driver) => (
                 <tr key={driver.id} className="hover:bg-gray-50"><td className="px-6 py-4 whitespace-nowrap">
-                  <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(driver.piece)}>
+                  <button className="text-orange-500 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(driver.piece)}>
                     <File size={25} />
                   </button>
                 </td>
@@ -190,7 +190,7 @@ const Drivers = () => {
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(driver)}>
+                    <button className="text-orange-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(driver)}>
                       <PencilIcon size={16} />
                     </button>
                     <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(driver.id)}>

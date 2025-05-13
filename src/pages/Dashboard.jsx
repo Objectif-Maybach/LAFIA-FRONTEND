@@ -36,7 +36,7 @@ const Dashboard = () => {
         <p className="text-gray-600">Aperçu des performances de livraison</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard title="Commandes totales" value={nbrOrders} icon={<ShoppingBagIcon className="text-white" size={24} />} color="bg-blue-600" />
+        <StatCard title="Commandes totales" value={nbrOrders} icon={<ShoppingBagIcon className="text-white" size={24} />} color="bg-orange-500" />
         <StatCard title="Utilisateurs" value={nbrUsers} icon={<UserIcon className="text-white" size={24} />} color="bg-green-600" />
         <StatCard title="Livraisons en cours" value="42" icon={<TruckIcon className="text-white" size={24} />} color="bg-orange-500" />
         <StatCard title="Revenus" value="9,254 €" icon={<CreditCardIcon className="text-white" size={24} />} color="bg-purple-600" />
@@ -47,7 +47,7 @@ const Dashboard = () => {
           <div className="space-y-4">
             {[1, 2, 3, 4, 5].map(item => <div key={item} className="flex items-center p-3 border-b last:border-0">
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                  <TruckIcon size={20} className="text-blue-600" />
+                  <TruckIcon size={20} className="text-orange-500" />
                 </div>
                 <div>
                   <p className="font-medium">Commande #{1000 + item}</p>
@@ -75,7 +75,7 @@ const Dashboard = () => {
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-blue-600 h-2 rounded-full" style={{
+                    <div className="bg-orange-500 h-2 rounded-full" style={{
                   width: `${85 - index * 7}%`
                 }}></div>
                   </div>

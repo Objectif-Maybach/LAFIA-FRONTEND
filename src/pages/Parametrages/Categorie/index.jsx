@@ -38,13 +38,13 @@ const Categorie = ({filteredCategories, updateState, setIsDelete, setId, activeT
                                     <div className="text-gray-500">{categorie.description}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    {/* <button onClick={notify} className="text-blue-600 hover:text-blue-900 mr-3">
+                                    {/* <button onClick={notify} className="text-orange-500 hover:text-blue-900 mr-3">
                   <ToastContainer />
                     <PencilIcon size={16} />
                   </button> */}
                                     <button
                                         onClick={() => updateState(activeTab, categorie)}
-                                        className="text-blue-600 hover:text-blue-900 mr-3"
+                                        className="text-orange-500 hover:text-blue-900 mr-3"
                                     >
                                         <PencilIcon size={16} />
                                     </button>
