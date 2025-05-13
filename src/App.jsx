@@ -14,6 +14,11 @@ import Commandes from './pages/Commandes/index.jsx'
 // Fonction RequireAuth pour protéger les routes
 const RequireAuth = ({ children }) => {
   const isLogged = localStorage.getItem('isLogged');
+  if (isLogged && children === '/') {
+    // Si l'utilisateur est déjà connecté et essaie d'accéder à la page de connexion, redirigez-le vers la page d'accueil 
+
+    <Navigate to="/accueil" replace />;
+  }
   return isLogged ? children : <Navigate to="/" replace />;
 };
 

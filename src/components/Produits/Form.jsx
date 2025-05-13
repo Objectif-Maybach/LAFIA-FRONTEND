@@ -48,7 +48,7 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
     formData.append("description", data.description);
     formData.append("price", data.price);
 
-    if (data.product_images.length > 0) {
+    if (data.product_images && data.product_images.length > 0) {
       for (let i = 0; i < data.product_images.length; i++) {
         formData.append("product_images[]", data.product_images[i]);
       }
@@ -119,20 +119,27 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
               {errors?.description && <span className='text-sm text-red-600'>{errors.description.message}</span>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
-              <input
-                type="file"
-                name="product_images"
-                id="product_images"
-                {...register('product_images')}
+              <label className="block text-sm font-medium text-gray-700 mb-1">Categorie</label>
+              <select
+                name="category"
+                defaultValue={dataEdit?.category?.id}
+                {...register('category', { required: 'La categorie est obligatoire' })
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="URL de l'image" multiple
-              />
+              >
+                <option value="">-- Choisir --</option>
+                {categories.map(cat => (
+                  <option selected={dataEdit?.category?.id === cat.id} key={cat.id} value={cat.id}>
+                    {cat.category_name}
+                  </option>
+                ))}
+              </select>
+              {errors?.category && <span className='text-sm text-red-600'>{errors.category.message}</span>}
             </div>
-            {errors?.product_images && <span className='text-sm text-red-600'>{errors.product_images.message}</span>}
+
           </div>
-          <div className="grid grid-cols-2 gap-6 mb-6">
-            {dataEdit.length === 0 &&
+          {dataEdit.length === 0 &&
+            <div className="grid grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Etablissement</label>
                 <select
@@ -152,27 +159,20 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
                 </select>
                 {errors?.establishment && <span className='text-sm text-red-600'>{errors.establishment.message}</span>}
               </div>
-            }
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Categorie</label>
-              <select
-                name="category"
-                defaultValue={dataEdit?.category?.id}
-                {...register('category', {required: 'La categorie est obligatoire' })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">-- Choisir --</option>
-                {categories.map(cat => (
-                  <option selected={dataEdit?.category?.id === cat.id} key={cat.id} value={cat.id}>
-                    {cat.category_name}
-                  </option>
-                ))}
-              </select>
-              {errors?.category && <span className='text-sm text-red-600'>{errors.category.message}</span>}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                <input
+                  type="file"
+                  name="product_images"
+                  id="product_images"
+                  {...register('product_images')}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="URL de l'image" multiple
+                />
+                {errors?.product_images && <span className='text-sm text-red-600'>{errors.product_images.message}</span>}
+              </div>
             </div>
-          </div>
+          }
         </div>
         <div className="flex justify-end gap-3 mt-6">
           <button
