@@ -3,13 +3,16 @@ import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
 import { toast } from "react-toastify";
 import CategorieForm from "../../components/parametrages/categoryForm";
-import TypeEtablissementForm from "../../components/parametrages/TypeEtablissementForm";
+import TypeEtablissementForm from "../../components/parametrages/typeEtablissementForm";
 import { motion } from "framer-motion";
 import { GetAllTypeEtablissements, updateTypeEtablissement, AddTypeEtablissement, DeleteTypeEtablissement } from "../../functions/TypeEtablissement/TypeEtablissements";
 import { GetAllCategories, AddCategorie, updateCategorie, DeleteCategorie } from "../../functions/Categorie/Categories";
 import Loader from "../../components/loading/loader";
 import TypeEtablissement from "./TypeEtablissement";
 import Categorie from "./Categorie";
+import { AddStatutOrder, DeleteStatutOrder, GetAllStatutOrders, updateStatutOrder } from "../../functions/StatutCommande/StatutCommandes";
+import StatutOrderForm from "../../components/parametrages/statutOrderForm";
+import StatutOrder from "./StatutCommandes";
 
 
 const Parametrage = () => {
@@ -30,6 +33,7 @@ const Parametrage = () => {
 
   const [typesEtablissements, setTypesEtablissements] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [statutOrders, setStatutOrders] = useState([]);
 
   const handleFormClose = () => {
     setIsModalOpen(false);
@@ -178,9 +182,72 @@ const Parametrage = () => {
       setIsLoading(false)
     }
   }
+  const dataStatut = async () => {
+    setIsLoading(true)
+    try {
+      const response = await GetAllStatutOrders();
+      setStatutOrders(response);
+      console.log(response)
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+    finally {
+      setIsLoading(false)
+    }
+  }
+  const addDataStatut = async (data) => {
+    setIsLoading(true)
+    try {
+      await AddStatutOrder(data);
+      toast.success('Ajout effectué avec succès')
+      dataStatut();
+      setIsModalOpen(false);
+      setModalType("");
+    } catch (error) {
+      toast.error('Erreur lors de l\'ajout')
+      console.error("Error sending data:", error);
+    }
+    finally {
+      setIsLoading(false)
+    }
+
+  }
+  const updateDataStatut = async (data) => {
+    try {
+      await updateStatutOrder(dataEdit.id, data);
+      setUpdate(false)
+      clean();
+      dataStatut();
+      setIsModalOpen(false);
+      setModalType("");
+      toast.success('Modification effectuée avec succès')
+
+    } catch (error) {
+      toast.error('Erreur lors de la modification')
+      console.error("Error sending data:", error);
+    }
+  }
+  const deleteDataStatut = async (id) => {
+    setIsLoading(true)
+    try {
+      await DeleteStatutOrder(id);
+      toast.success('Suppression effectuée avec succès')
+      dataStatut();
+      setIsDelete(false);
+      setModalType("");
+    }
+    catch (error) {
+      toast.error('Erreur lors de la suppression')
+      console.error("Error sending data:", error);
+    }
+    finally {
+      setIsLoading(false)
+    }
+  }
   useEffect(() => {
     dataCategorie();
     dataTypeEtablissement();
+    dataStatut();
 
   }, []);
 
@@ -194,6 +261,11 @@ const Parametrage = () => {
     (type) =>
       type.establishment_types_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       type.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const filteredStatutOrders = statutOrders.filter(
+    (stat) =>
+      stat.statut_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      stat.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -237,6 +309,21 @@ const Parametrage = () => {
                   />
                 )}
               </TabsTrigger>
+              <TabsTrigger
+                value="StatutCommandes"
+                className="relative px-6 py-3 text-sm font-medium tracking-wide transition-all data-[state=active]:text-black data-[state=active]:font-semibold data-[state=inactive]:text-gray-500 bg-transparent rounded-none border-0"
+              >
+                Statut de commande
+                {activeTab === "StatutCommandes" && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"
+                    layoutId="activeTabIndicator"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
+              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -246,7 +333,9 @@ const Parametrage = () => {
                 ? "Liste des catégories"
                 : activeTab === "typesEtablissements"
                   ? "Liste des types d'établissements"
-                  : "Liste des options de livraison"}
+                  : activeTab === "StatutCommandes"
+                    ? "Liste des statuts de commande"
+                    : "Liste des options de livraison"}
             </h2>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
@@ -261,7 +350,9 @@ const Parametrage = () => {
                     ? "une catégorie"
                     : activeTab === "typesEtablissements"
                       ? "un type d'établissement"
-                      : "une option de livraison"
+                      : activeTab === "StatutCommandes"
+                        ? "un statut de commande"
+                        : "une option de livraison"
                     }...`}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -278,7 +369,9 @@ const Parametrage = () => {
                   ? "une catégorie"
                   : activeTab === "typesEtablissements"
                     ? "un type d'établissement"
-                    : "une option de livraison"}
+                    : activeTab === "StatutCommandes"
+                      ? "un statut de commande"
+                      : "une option de livraison"}
               </button>
             </div>
           </div>
@@ -288,6 +381,9 @@ const Parametrage = () => {
           </TabsContent>
           <TabsContent value="typesEtablissements" className="p-0">
             <TypeEtablissement filteredTypesEtablissements={filteredTypesEtablissements} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab} />
+          </TabsContent>
+          <TabsContent value="StatutCommandes" className="p-0">
+            <StatutOrder filteredStatutOrders={filteredStatutOrders} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab} />
           </TabsContent>
         </Tabs>
       </div>
@@ -305,8 +401,8 @@ const Parametrage = () => {
                         : "Modifier une option de livraison"
                     : modalType === "categories"
                       ? "Ajouter une catégorie"
-                      : modalType === "typesEtablissements"
-                        ? "Ajouter un type d'établissement"
+                      : modalType === "StatutCommandes"
+                        ? "Ajouter un statut de commande"
                         : "Ajouter une option de livraison"}
                 </h3>
               </div>
@@ -316,13 +412,26 @@ const Parametrage = () => {
             </div>
             <div className="p-4">
               {modalType === "categories" && (
-                <CategorieForm onClose={handleFormClose} onSubmit={update ? updateDataCategorie : addDataCategorie} dataEdit={dataEdit} />
+                <CategorieForm
+                  onClose={handleFormClose}
+                  onSubmit={update ? updateDataCategorie :
+                    addDataCategorie}
+                  dataEdit={dataEdit}
+                />
               )}
               {modalType === "typesEtablissements" && (
                 <TypeEtablissementForm
                   onClose={handleFormClose}
                   onSubmit={update ? updateDataTypeEtablissement :
                     addDataTypeEtablissement}
+                  dataEdit={dataEdit}
+                />
+              )}
+              {modalType === "StatutCommandes" && (
+                <StatutOrderForm
+                  onClose={handleFormClose}
+                  onSubmit={update ? updateDataStatut :
+                    addDataStatut}
                   dataEdit={dataEdit}
                 />
               )}
@@ -361,7 +470,8 @@ const Parametrage = () => {
                   type="button"
                   onClick={() => {
                     activeTab === 'categories' ? deleteDataCategorie(id) :
-                      deleteDataTypeEtablissement(id);
+                      activeTab === 'typesEtablissements' ? deleteDataTypeEtablissement(id)
+                        : deleteDataStatut(id);
                     setIsDelete(false);
                     setId('');
                   }}

@@ -12,7 +12,7 @@ export const GetAllCommandes = async () => {
 // Recuperation d'un  categorie par son id
 export const GetCommandeById = async (CommandeId) => {
   try {
-    const response = await axiosClient.get(`establishments-/${CommandeId}`);
+    const response = await axiosClient.get(`orders/${CommandeId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching  categorie:', error);
