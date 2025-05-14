@@ -75,7 +75,7 @@ const Dashboard = () => {
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-orange-500 h-2 rounded-full" style={{
+                    <div className="bg-green-500 h-2 rounded-full" style={{
                   width: `${85 - index * 7}%`
                 }}></div>
                   </div>
