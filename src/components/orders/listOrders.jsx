@@ -180,13 +180,13 @@ export default function ListOrders({ search }) {
 
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 
-                        <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => {
+                        <button className="text-gray-500 hover:text-gray-900 mr-3" onClick={() => {
                           setOrder(etab);
                           setIsOneOrder(true);
                         }}>
                           <Eye size={16} />
                         </button>
-                        <button className="text-orange-500 hover:text-blue-900 mr-3"
+                        <button className="text-blue-500 hover:text-blue-900 mr-3"
                           onClick={() => handleEdit(etab)}>
                           <PencilIcon size={16} />
                         </button>

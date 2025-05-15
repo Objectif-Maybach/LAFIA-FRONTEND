@@ -225,7 +225,7 @@ const Users = () => {
                     <button className="text-yellow-600 hover:text-yellow-900 mr-3" onClick={() => handleReset(user)}>
                       <LockIcon size={16} />
                     </button>
-                    <button className="text-orange-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(user)}>
+                    <button className="text-blue-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(user)}>
                       <PencilIcon size={16} />
                     </button>
                     <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(user.id)}>
