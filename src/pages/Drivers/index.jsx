@@ -198,7 +198,7 @@ const Drivers = () => {
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-orange-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(driver)}>
+                    <button className="text-blue-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(driver)}>
                       <PencilIcon size={16} />
                     </button>
                     <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(driver.id)}>

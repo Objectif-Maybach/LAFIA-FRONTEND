@@ -40,7 +40,7 @@ const StatutOrder = ({filteredStatutOrders, handleDelete, updateState, setIsDele
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <button
                                         onClick={() => updateState(activeTab, StatutOrder)}
-                                        className="text-orange-500 hover:text-blue-900 mr-3"
+                                        className="text-blue-500 hover:text-blue-900 mr-3"
                                     >
                                         <PencilIcon size={16} />
                                     </button>
