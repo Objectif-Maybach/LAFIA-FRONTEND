@@ -5,7 +5,7 @@ import { GetAllEtablissements } from "../../functions/Etablissement/Etablissemen
 import { GetAllCategories } from "../../functions/Categorie/Categories";
 import Select from "react-select";
 
-const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
+const ProductForm = ({ onClose, onSubmit, dataEdit, loading }) => {
   const { register, control, handleSubmit, setValue, getValues, formState: { errors } } = useForm(
     { mode: "onTouched" }
   );
@@ -14,20 +14,26 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
   const [categories, setCategories] = useState([]);
   const AllCategories = async () => {
     try {
+      loading(true);
       const response = await GetAllCategories();
       setCategories(response);
     } catch (error) {
       console.error(error);
-
     }
+    finally {
+      loading(false);
+    } 
   };
   const AllEtablissements = async () => {
     try {
+      loading(true);
       const response = await GetAllEtablissements();
       setEtablissements(response);
     } catch (error) {
       console.error(error);
-
+    }
+    finally {
+      loading(false);
     }
   };
   useEffect(() => {
@@ -62,7 +68,7 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
   };
   const options = etablissements.map(etab => ({
     value: etab.id,
-    label: etab.establishment_name
+    label: etab.establishment_name 
   }));
 
   // console.log(getValues('product_name'), getValues('establishment'));
@@ -223,4 +229,4 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
   );
 };
 
-export default CategoryForm;
+export default ProductForm;

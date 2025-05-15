@@ -9,6 +9,7 @@ import no_image from '../../assets/images/no_image.png';
 import { toast } from 'react-toastify';
 import Loader from '../../components/loading/loader';
 import ProductGallery from '../../components/Produits/Galerie';
+import Pagination from '../../components/Pagination';
 
 const Produits = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -19,6 +20,8 @@ const Produits = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
   const fileUrl = import.meta.env.VITE_FILE_URL;
 
   const ProduitsAll = async () => {
@@ -99,6 +102,12 @@ const Produits = () => {
     store.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     store.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const totalPages = Math.ceil(filteredProduits.length / rowsPerPage);
+  const currentData = filteredProduits.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
 
   return (
     <div>
@@ -171,7 +180,7 @@ const Produits = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredProduits.map(produit => <tr key={produit.id} className="hover:bg-gray-50">
+                {currentData.map(produit => <tr key={produit.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <img
                       src={produit.images.length ? fileUrl + produit.images[0].file_name : no_image}
@@ -213,21 +222,16 @@ const Produits = () => {
               </tbody>
             </table>
           </div>
-          <div className="px-4 py-3 border-t flex items-center justify-between">
-            <div className="text-sm text-gray-700">
-              Affichage de <span className="font-medium">1</span> à{" "}
-              <span className="font-medium">{filteredProduits.length}</span> sur{" "}
-              <span className="font-medium">{filteredProduits.length}</span> résultats
-            </div>
-            <div className="flex space-x-2">
-              <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-                Précédent
-              </button>
-              <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-                Suivant
-              </button>
-            </div>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={(value) => {
+              setRowsPerPage(value);
+              setCurrentPage(1);
+            }}
+          />
         </div>
       </div>
       {isModalOpen && (
@@ -244,7 +248,7 @@ const Produits = () => {
             </div>
 
             <div className="p-4">
-              <StoreForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddProduits : UpdateProduits} dataEdit={dataEdit} />
+              <StoreForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddProduits : UpdateProduits} dataEdit={dataEdit} loading={setIsLoading} />
             </div>
           </div>
         </div>

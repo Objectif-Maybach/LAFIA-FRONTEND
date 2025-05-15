@@ -265,7 +265,7 @@ const Users = () => {
               </div>
             )}
             <div className="p-4">
-              <UserForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddUsers : UpdateUsers} dataEdit={dataEdit} />
+              <UserForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddUsers : UpdateUsers} dataEdit={dataEdit} loading={setIsLoading} />
             </div>
           </div>
         </div>
