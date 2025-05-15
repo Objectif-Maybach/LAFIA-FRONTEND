@@ -8,6 +8,7 @@ import { AddUser, DeleteUser, GetAllUsers, ResetPassword, UpdateUser } from "../
 import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
 import ConfirAlert from "../../components/alert/ConfirmAlert"
+import Pagination from "../../components/Pagination"
 const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalResetOpen, setIsModalResetOpen] = useState(false)
@@ -17,6 +18,8 @@ const Users = () => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isDelete, setIsDelete] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
   const [id, setId] = useState('');
 
   const UsersAll = async () => {
@@ -122,6 +125,11 @@ const Users = () => {
       user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
+  const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
+  const currentData = filteredUsers.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
 
   return (
     <div>
@@ -196,7 +204,7 @@ const Users = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredUsers.map((user) => (
+              {currentData.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">{user.full_name} </div>
@@ -238,21 +246,16 @@ const Users = () => {
           </table>
         </div>
 
-        <div className="px-4 py-3 border-t flex items-center justify-between">
-          <div className="text-sm text-gray-700">
-            Affichage de <span className="font-medium">1</span> à{" "}
-            <span className="font-medium">{filteredUsers.length}</span> sur{" "}
-            <span className="font-medium">{filteredUsers.length}</span> résultats
-          </div>
-          <div className="flex space-x-2">
-            <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-              Précédent
-            </button>
-            <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-              Suivant
-            </button>
-          </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(value) => {
+            setRowsPerPage(value);
+            setCurrentPage(1);
+          }}
+        />
       </div>
 
       {/* Modal personnalisé */}

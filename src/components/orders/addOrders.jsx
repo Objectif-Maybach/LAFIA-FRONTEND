@@ -62,7 +62,8 @@ export default function AddOrders() {
         "driver": selectedDriver,
         "products": cart.map((item) => ({
           "id": item.product_id,
-          "quantity": item.quantity
+          "quantity": item.quantity,
+          "price": item.price,
         })),
         "order_date": '2025-05-05 12:49:48',
         "order_statut": 1,
@@ -85,6 +86,8 @@ export default function AddOrders() {
   useEffect(() => {
     dataProduct()
     dataDriver()
+  }, [])
+  useEffect(() => {
     if (selectedProduct) {
       const product = products.find((p) => p.id === selectedProduct)
       if (product) {

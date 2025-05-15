@@ -129,6 +129,12 @@ export default function ListOrders({ search }) {
                     </th>
                     <th
                       scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Montant
+                    </th>
+                    <th
+                      scope="col"
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
@@ -159,6 +165,12 @@ export default function ListOrders({ search }) {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-gray-500">{etab.driver ? etab.driver.driver_name : 'Inconnu'}</div>
                       </td>
+                      
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-gray-900 font-medium">
+                          {etab.montant.toLocaleString()} FCFA
+                        </span>
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span >
                           {etab.order_statut.id === 1 ? (
@@ -176,7 +188,6 @@ export default function ListOrders({ search }) {
                           )}
                         </span>
                       </td>
-
 
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 
