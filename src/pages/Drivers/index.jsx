@@ -10,6 +10,7 @@ import { deleteDriver } from '../../functions/driver/deleteDriver';
 import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
 import ReadFile from "../../components/ReadFile";
+import ConfirAlert from "../../components/alert/ConfirmAlert";
 const Drivers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -18,6 +19,8 @@ const Drivers = () => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isReadFile, setIsReadFile] = useState(false)
+  const [isDelete, setIsDelete] = useState(false)
+  const [id, setId] = useState('')
   const [fileUrl, setFileUrl] = useState(null)
 
   const DriversAll = async () => {
@@ -69,20 +72,25 @@ const Drivers = () => {
     setIsModalOpen(true)
     setDataEdit(user)
   }
-
-  const handleDelete = async (userId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer ce livreur ?')) {
-      setIsLoading(true)
-      try {
-        const response = await deleteDriver(userId);
-        toast.success('Produit supprimé avec succès')
-        DriversAll()
-      } catch (error) {
-        toast.error('Erreur lors de la suppression du livreur')
-        console.error(error);
-      } finally {
-        setIsLoading(false)
-      }
+  const handleDelete = (userId) => {
+    setIsDelete(true)
+    setId(userId)
+  }
+  const handleDeleteCancel = () => {
+    setIsDelete(false)
+    setId('')
+  }
+  const DeleteDriver = async (userId) => {
+    setIsLoading(true)
+    try {
+      const response = await deleteDriver(userId);
+      toast.success('Produit supprimé avec succès')
+      DriversAll()
+    } catch (error) {
+      toast.error('Erreur lors de la suppression du livreur')
+      console.error(error);
+    } finally {
+      setIsLoading(false)
     }
   }
   const readingFileUrl = (file_url) => {
@@ -245,6 +253,7 @@ const Drivers = () => {
         </div>
       )}
 
+      {isDelete && (<ConfirAlert message="Supprimer un livreur" onConfirm={DeleteDriver} onCancel={handleDeleteCancel} id={id} />)}
     </div>
   );
 };

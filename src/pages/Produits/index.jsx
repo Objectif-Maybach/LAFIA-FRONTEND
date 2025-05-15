@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import Loader from '../../components/loading/loader';
 import ProductGallery from '../../components/Produits/Galerie';
 import Pagination from '../../components/Pagination';
+import ConfirAlert from '../../components/alert/ConfirmAlert';
 
 const Produits = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -18,10 +19,10 @@ const Produits = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [galleryOpen, setGalleryOpen] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [isDelete, setIsDelete] = useState(false)
+  const [id, setId] = useState('');
   const fileUrl = import.meta.env.VITE_FILE_URL;
 
   const ProduitsAll = async () => {
@@ -75,20 +76,26 @@ const Produits = () => {
     setIsModalOpen(true)
     setDataEdit(produit)
   }
-  const handleDelete = async (produitId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet produit ?')) {
-      setIsLoading(true)
-      try {
-        const response = await deleteProduit(produitId);
-        toast.success('produit supprimé avec succès')
-        ProduitsAll()
-      } catch (error) {
-        toast.error('Erreur lors de la suppression du produit')
-        console.error(error);
-      }
-      finally {
-        setIsLoading(false)
-      }
+  const handleDelete = async (id) => {
+    setIsDelete(true)
+    setId(id)
+  }
+  const handleDeleteCancel = async () => {
+    setIsDelete(false)
+    setId(0)
+  }
+  const DeleteProduct = async (produitId) => {
+    setIsLoading(true)
+    try {
+      const response = await deleteProduit(produitId);
+      toast.success('produit supprimé avec succès')
+      ProduitsAll()
+    } catch (error) {
+      toast.error('Erreur lors de la suppression du produit')
+      console.error(error);
+    }
+    finally {
+      setIsLoading(false)
     }
   }
   useEffect(() => {
@@ -253,16 +260,8 @@ const Produits = () => {
           </div>
         </div>
       )}
-      {galleryOpen && currentProduct && (
-        <ProductGallery
-          productName={currentProduct.product_name}
-          productId={currentProduct.id}
-          onClose={() => setGalleryOpen(false)}
-          fileUrl={fileUrl}
-          isLoading={isLoading}
-          ProduitsAll={ProduitsAll}
-        />
-      )}
+
+      {isDelete && (<ConfirAlert message="Supprimer un produit" onConfirm={DeleteProduct} onCancel={handleDeleteCancel} id={id}/>)}
     </div>
 
   );

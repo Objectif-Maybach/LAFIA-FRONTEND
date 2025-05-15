@@ -7,6 +7,7 @@ import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X, LockIcon } from "lucide
 import { AddUser, DeleteUser, GetAllUsers, ResetPassword, UpdateUser } from "../../functions/User/Users"
 import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
+import ConfirAlert from "../../components/alert/ConfirmAlert"
 const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalResetOpen, setIsModalResetOpen] = useState(false)
@@ -15,6 +16,8 @@ const Users = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isDelete, setIsDelete] = useState(false)
+  const [id, setId] = useState('');
 
   const UsersAll = async () => {
     setIsLoading(true)
@@ -83,19 +86,25 @@ const Users = () => {
     setIsModalResetOpen(true)
     setDataEdit(user)
   }
-  const handleDelete = async (userId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
-      setIsLoading(true)
-      try {
-        const response = await DeleteUser(userId);
-        toast.success('Utilisateur supprimé avec succès')
-        UsersAll()
-      } catch (error) {
-        toast.error('Erreur lors de la suppression de l\'utilisateur')
-        console.error(error);
-      } finally {
-        setIsLoading(false)
-      }
+  const handleDelete = async (id) => {
+    setIsDelete(true)
+    setId(id)
+  }
+  const handleDeleteCancel = async () => {
+    setIsDelete(false)
+    setId('')
+  }
+  const DeleteUsers = async (userId) => {
+    setIsLoading(true)
+    try {
+      const response = await DeleteUser(userId);
+      toast.success('Utilisateur supprimé avec succès')
+      UsersAll()
+    } catch (error) {
+      toast.error('Erreur lors de la suppression de l\'utilisateur')
+      console.error(error);
+    } finally {
+      setIsLoading(false)
     }
   }
   useEffect(() => {
@@ -276,7 +285,7 @@ const Users = () => {
             <div className="flex items-center justify-between p-4 border-b">
               <div>
                 <h3 className="text-lg font-medium">Reinitialisation  </h3>
-                <p className="text-sm text-gray-500">Reinitialiser le mot de passe de {dataEdit.full_name } </p>
+                <p className="text-sm text-gray-500">Reinitialiser le mot de passe de {dataEdit.full_name} </p>
               </div>
               <button onClick={handleFormCloseReset} className="text-gray-500 hover:text-gray-700">
                 <X size={20} />
@@ -288,11 +297,12 @@ const Users = () => {
               </div>
             )}
             <div className="p-4">
-              <ResetForm onClose={handleFormCloseReset} onSubmit={ResetUsers } dataEdit={dataEdit} />
+              <ResetForm onClose={handleFormCloseReset} onSubmit={ResetUsers} dataEdit={dataEdit} />
             </div>
           </div>
         </div>
       )}
+      {isDelete && (<ConfirAlert message="Supprimer un utilisateur" onConfirm={DeleteUsers} onCancel={handleDeleteCancel} id={id} />)}
     </div>
   );
 };

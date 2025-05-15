@@ -6,7 +6,7 @@ import { Eye, EyeIcon, PencilIcon, TrashIcon, X } from "lucide-react"
 import OneOrder from './oneOrder'
 import Pagination from '../Pagination'
 import OrderForm from './Form'
-
+import ConfirAlert from '../alert/ConfirmAlert'
 export default function ListOrders({ search }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [dataEdit, setDataEdit] = useState([])
@@ -18,9 +18,6 @@ export default function ListOrders({ search }) {
   const [order, setOrder] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-
-
-
   const CommandesAll = async () => {
     setIsLoading(true)
     try {
@@ -47,7 +44,15 @@ export default function ListOrders({ search }) {
       setIsLoading(false)
     }
   }
-  const handleDelete = async (userId) => {
+  const handleDelete = (userId) => {
+    setIsDelete(true)
+    setId(userId)
+  }
+  const handleDeleteCancel = () => {
+    setIsDelete(false)
+    setId('')
+  }
+  const DeleteOrder = async (userId) => {
 
     setIsLoading(true)
     try {
@@ -198,7 +203,6 @@ export default function ListOrders({ search }) {
                 </tbody>
               </table>
             </div>
-
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -212,47 +216,11 @@ export default function ListOrders({ search }) {
           </>
         )}
       </div>
-      {isDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b">
-              <div>
-                <h3 className="text-lg font-medium">
-                  Supprimer une commande
-                </h3>
-              </div>
-              <button onClick={() => { setIsDelete(false); setId('') }} className="text-gray-500 hover:text-gray-700">
-                <X size={20} />
-              </button>
-            </div>
-            <div className="p-4">
-              <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
-              <div className="flex justify-end gap-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => { setIsDelete(false); setId('') }}
-                  className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
-                >
-                  <X size={18} className="mr-2" />
-                  Annuler
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleDelete(id);
-                    setIsDelete(false);
-                    setId('');
-                  }}
-                  className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm"
-                >
-                  Confirmer
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      
+      {isDelete && (<ConfirAlert message="Supprimer une commande" onConfirm={DeleteOrder} onCancel={handleDeleteCancel} id={id} />)}
+      
       {isOneOrder && <OneOrder order={order} clean={clean} />}
+      
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
@@ -272,11 +240,6 @@ export default function ListOrders({ search }) {
           </div>
         </div>
       )}
-
-
-
     </div>
-
-
   )
 }

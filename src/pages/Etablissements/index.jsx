@@ -9,6 +9,7 @@ import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
 import ReadFile from "../../components/ReadFile"
 import Pagination from "../../components/Pagination"
+import ConfirAlert from "../../components/alert/ConfirmAlert"
 const Etablissements = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -18,6 +19,8 @@ const Etablissements = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [isDelete, setIsDelete] = useState(false)
+  const [id, setId] = useState('');
   const fileUrl = import.meta.env.VITE_FILE_URL;
 
   const EtablissementsAll = async () => {
@@ -71,20 +74,27 @@ const Etablissements = () => {
     setIsModalOpen(true)
     setDataEdit(user)
   }
-  const handleDelete = async (userId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet etablissement ?')) {
-      setIsLoading(true)
-      try {
-        const response = await DeleteEtablissement(userId);
-        toast.success('etablissement supprimé avec succès')
-        EtablissementsAll()
-      } catch (error) {
-        toast.error('Erreur lors de la suppression de l\'etablissement')
-        console.error(error);
-      }
-      finally {
-        setIsLoading(false)
-      }
+  const handleDelete = (userId) => {
+    setIsDelete(true)
+    setId(userId)
+  }
+  const handleDeleteCancel = () => {
+    setIsDelete(false)
+    setId('')
+  }
+
+  const DeleteEts = async (userId) => {
+    setIsLoading(true)
+    try {
+      const response = await DeleteEtablissement(userId);
+      toast.success('etablissement supprimé avec succès')
+      EtablissementsAll()
+    } catch (error) {
+      toast.error('Erreur lors de la suppression de l\'etablissement')
+      console.error(error);
+    }
+    finally {
+      setIsLoading(false)
     }
   }
   useEffect(() => {
@@ -255,13 +265,15 @@ const Etablissements = () => {
                 <X size={20} />
               </button>
             </div>
-           
+
             <div className="p-4">
               <EtablissementForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddEtablissements : UpdateEtablissements} dataEdit={dataEdit} loading={setIsLoading} />
             </div>
           </div>
         </div>
       )}
+
+      {isDelete && (<ConfirAlert message="Supprimer un établissement" onConfirm={DeleteEts} onCancel={handleDeleteCancel} id={id} />)}
     </div>
   )
 }

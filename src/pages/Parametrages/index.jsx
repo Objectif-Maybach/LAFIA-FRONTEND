@@ -13,6 +13,7 @@ import Categorie from "./Categorie";
 import { AddStatutOrder, DeleteStatutOrder, GetAllStatutOrders, updateStatutOrder } from "../../functions/StatutCommande/StatutCommandes";
 import StatutOrderForm from "../../components/parametrages/statutOrderForm";
 import StatutOrder from "./StatutCommandes";
+import ConfirAlert from "../../components/alert/ConfirmAlert";
 
 
 const Parametrage = () => {
@@ -227,6 +228,14 @@ const Parametrage = () => {
       console.error("Error sending data:", error);
     }
   }
+  const handleDelete = (userId) => {
+    setIsDelete(true)
+    setId(userId)
+  }
+  const handleDeleteCancel = () => {
+    setIsDelete(false)
+    setId('')
+  }
   const deleteDataStatut = async (id) => {
     setIsLoading(true)
     try {
@@ -377,13 +386,13 @@ const Parametrage = () => {
           </div>
 
           <TabsContent value="categories" className="p-0">
-            <Categorie filteredCategories={filteredCategories} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab} />
+            <Categorie filteredCategories={filteredCategories} updateState={updateState} handleDelete={handleDelete} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab} />
           </TabsContent>
           <TabsContent value="typesEtablissements" className="p-0">
-            <TypeEtablissement filteredTypesEtablissements={filteredTypesEtablissements} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab} />
+            <TypeEtablissement filteredTypesEtablissements={filteredTypesEtablissements} handleDelete={handleDelete} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab} />
           </TabsContent>
           <TabsContent value="StatutCommandes" className="p-0">
-            <StatutOrder filteredStatutOrders={filteredStatutOrders} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab} />
+            <StatutOrder filteredStatutOrders={filteredStatutOrders} handleDelete={handleDelete} updateState={updateState} setIsDelete={setIsDelete} setId={setId} activeTab={activeTab} />
           </TabsContent>
         </Tabs>
       </div>
@@ -440,50 +449,25 @@ const Parametrage = () => {
         </div>
       )}
       {isDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b">
-              <div>
-                <h3 className="text-lg font-medium">
-                  {modalType === "categories"
-                    ? "Supprimer une catégorie"
-                    : "Supprimer un type d'établissement"
-                  }
-                </h3>
-              </div>
-              <button onClick={() => { setIsDelete(false); setId('') }} className="text-gray-500 hover:text-gray-700">
-                <X size={20} />
-              </button>
-            </div>
-            <div className="p-4">
-              <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
-              <div className="flex justify-end gap-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => { setIsDelete(false); setId('') }}
-                  className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
-                >
-                  <X size={18} className="mr-2" />
-                  Annuler
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    activeTab === 'categories' ? deleteDataCategorie(id) :
-                      activeTab === 'typesEtablissements' ? deleteDataTypeEtablissement(id)
-                        : deleteDataStatut(id);
-                    setIsDelete(false);
-                    setId('');
-                  }}
-                  className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm"
-                >
-                  Confirmer
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+        <ConfirAlert
+          message=
+          {activeTab === "categories"
+            ? "Supprimer une catégorie"
+            : activeTab === "typesEtablissements"
+              ? "Supprimer un type d'établissement"
+              : activeTab === "StatutCommandes"
+                ? "Supprimer un statut de commande"
+                :
+                ""
+          }
+          onConfirm={
+            activeTab === 'categories' ? deleteDataCategorie :
+              activeTab === 'typesEtablissements' ? deleteDataTypeEtablissement
+                : deleteDataStatut
+          }
+          onCancel={handleDeleteCancel}
+          id={id}
+        />)}
     </div>
   )
 }
