@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2 } from "lucide-react";
+import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2, DollarSign } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { GetAllStatutOrders } from "../../functions/StatutCommande/StatutCommandes";
 import { getAllDriver } from "../../functions/driver/getAllDriver";
@@ -46,6 +46,7 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
         {
             order_date: user.order_date,
             driver: user.driver,
+            prix_livraison: user.prix_livraison,
             order_statut: user.order_statut,
             contact: {
                 telephone: user.telephone,
@@ -57,6 +58,7 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
     if (dataEdit.length != 0) {
         useEffect(() => {
             setValue('order_date', dataEdit?.order_date);
+            setValue('prix_livraison', dataEdit?.prix_livraison);
             setValue('driver', dataEdit?.driver?.id);
             setValue('telephone', dataEdit?.contact.telephone);
             setValue('adresse', dataEdit?.contact.adresse);
@@ -180,6 +182,24 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
                             />
                         </div>
                         {errors?.adresse && <span className='text-sm text-red-600'>{errors.adresse.message}</span>}
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Prix de la livraison</label>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <DollarSign size={16} className="text-gray-400" />
+                            </div>
+                            <input
+                                type="text"
+                                name="prix_livraison"
+
+                                {...register('prix_livraison')
+                                }
+                                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="123 Rue de la Paix, BKO"
+                            />
+                        </div>
+                        {errors?.prix_livraison && <span className='text-sm text-red-600'>{errors.prix_livraison.message}</span>}
                     </div>
 
                 </div>
