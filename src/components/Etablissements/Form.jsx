@@ -3,17 +3,21 @@ import { UserIcon, PhoneIcon, MapPinIcon, CheckCircle, X, FileText } from "lucid
 import { useForm } from "react-hook-form";
 import { GetAllTypeEtablissements } from "../../functions/TypeEtablissement/TypeEtablissements";
 
-const UserForm = ({ onClose, onSubmit, dataEdit }) => {
+const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm(
     { mode: "onTouched" }
   );
   const [types, setTypes] = useState([]);
   const AllTypes = async () => {
     try {
+      loading(true);
       const response = await GetAllTypeEtablissements();
       setTypes(response);
     } catch (error) {
       console.error(error);
+    }
+    finally {
+      loading(false);
     }
   };
   useEffect(() => {

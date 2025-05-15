@@ -3,17 +3,21 @@ import { UserIcon, MailIcon, PhoneIcon, MapPinIcon, CheckCircle, X, Lock, User2 
 import { useForm } from "react-hook-form";
 import { GetRoles } from "../../functions/User/Users";
 
-const UserForm = ({ onClose, onSubmit, dataEdit }) => {
+const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm(
     { mode: "onTouched" }
   );
   const [roles, setRoles] = useState([]);
   const AllRoles = async () => {
     try {
+      loading(true);
       const response = await GetRoles();
       setRoles(response);
     } catch (error) {
       console.error(error);
+    }
+    finally {
+      loading(false);
     }
   };
   useEffect(() => {

@@ -8,6 +8,7 @@ import restauImg from '../../assets/images/restau.jpg';
 import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
 import ReadFile from "../../components/ReadFile"
+import Pagination from "../../components/Pagination"
 const Etablissements = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -15,6 +16,8 @@ const Etablissements = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
   const fileUrl = import.meta.env.VITE_FILE_URL;
 
   const EtablissementsAll = async () => {
@@ -96,6 +99,11 @@ const Etablissements = () => {
       // user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       etab.establishment_name.toLowerCase().includes(searchQuery.toLowerCase())
   )
+  const totalPages = Math.ceil(filteredEtablissements.length / rowsPerPage);
+  const currentData = filteredEtablissements.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
 
   return (
     <div>
@@ -177,7 +185,7 @@ const Etablissements = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredEtablissements.map((etab) => (
+              {currentData.map((etab) => (
                 <tr key={etab.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     {etab.image ? (
@@ -221,21 +229,16 @@ const Etablissements = () => {
           </table>
         </div>
 
-        <div className="px-4 py-3 border-t flex items-center justify-between">
-          <div className="text-sm text-gray-700">
-            Affichage de <span className="font-medium">1</span> à{" "}
-            <span className="font-medium">{filteredEtablissements.length}</span> sur{" "}
-            <span className="font-medium">{filteredEtablissements.length}</span> résultats
-          </div>
-          <div className="flex space-x-2">
-            <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-              Précédent
-            </button>
-            <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-              Suivant
-            </button>
-          </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(value) => {
+            setRowsPerPage(value);
+            setCurrentPage(1);
+          }}
+        />
       </div>
 
       {/* {isReadFile && (<ReadFile url={fileUrl} onClose={() => setIsReadFile(false)} />)} */}
@@ -252,13 +255,9 @@ const Etablissements = () => {
                 <X size={20} />
               </button>
             </div>
-            {error && (
-              <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
-                {error}
-              </div>
-            )}
+           
             <div className="p-4">
-              <EtablissementForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddEtablissements : UpdateEtablissements} dataEdit={dataEdit} />
+              <EtablissementForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddEtablissements : UpdateEtablissements} dataEdit={dataEdit} loading={setIsLoading} />
             </div>
           </div>
         </div>

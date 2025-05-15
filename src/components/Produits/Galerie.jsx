@@ -203,7 +203,7 @@ const ProductGallery = ({
         {/* Add images section */}
         <div className="p-4 border-t bg-gray-50">
           <div className="flex flex-wrap items-center gap-4">
-            <label className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700 cursor-pointer transition-colors disabled:opacity-50">
+            <label className="flex items-center gap-2 px-4 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-700 cursor-pointer transition-colors disabled:opacity-50">
               {loading ? (
                 <Loader2 size={18} className="animate-spin" />
               ) : (
