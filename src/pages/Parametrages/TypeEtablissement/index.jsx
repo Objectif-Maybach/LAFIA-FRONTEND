@@ -1,7 +1,7 @@
 
 import React from "react";
 import { PencilIcon, TrashIcon } from "lucide-react";
-const TypeEtablissement = ({filteredTypesEtablissements, updateState, setIsDelete, setId, activeTab}) => {
+const TypeEtablissement = ({filteredTypesEtablissements, handleDelete, updateState, setIsDelete, setId, activeTab}) => {
 
     return (
 
@@ -56,7 +56,7 @@ const TypeEtablissement = ({filteredTypesEtablissements, updateState, setIsDelet
                                     >
                                         <PencilIcon size={16} />
                                     </button>
-                                    <button className="text-red-600 hover:text-red-900" onClick={() => { setIsDelete(true); setId(type.id) }}>
+                                    <button className="text-red-600 hover:text-red-900" onClick={() => { handleDelete(type.id) }}>
                                         <TrashIcon size={16} />
                                     </button>
                                 </td>

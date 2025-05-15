@@ -3,17 +3,9 @@ import StatCard from '../components/StatCard';
 import { ShoppingBagIcon, UserIcon, TruckIcon, CreditCardIcon } from 'lucide-react';
 import { GetDashboardData, GetFiveOrders, Percentage } from '../functions/dashboard/dashboard';
 import Loader from '../components/loading/loader';
-import Chart from 'react-apexcharts';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-} from 'recharts';
-const data = [
-  { name: 'Jan', ventes: 4000 },
-  { name: 'Fév', ventes: 3000 },
-  { name: 'Mar', ventes: 2000 },
-  { name: 'Avr', ventes: 2780 },
-  { name: 'Mai', ventes: 1890 },
-];
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import React from 'react';
 const Dashboard = () => {
   const [nbrUsers, setNbrUsers] = useState(0);
   const [nbrOrders, setNbrOrders] = useState(0);
@@ -45,6 +37,7 @@ const Dashboard = () => {
     try {
       setLoading(true);
       const response = await GetFiveOrders();
+      console.log('response', response);
       setRecentOrders(response);
     }
     catch (error) {
@@ -54,27 +47,7 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
-  const percentage = async () => {
-    try {
-      setLoading(true);
-      const response = await Percentage();
-      setChartData({
-        series: [
-          parseFloat(response.delivered),
-          parseFloat(response.pending),
-          parseFloat(response.cancelled)
-        ],
-        labels: ['Livrées', 'En attente', 'Annulées']
-      });
-      console.log('response', response);
-    }
-    catch (error) {
-      console.error(error);
-    }
-    finally {
-      setLoading(false);
-    }
-  };
+  
   const getDureOrder = (date) => {
     const now = new Date();
     const diff = now - new Date(date);
@@ -98,38 +71,68 @@ const Dashboard = () => {
     getFiveOrders();
     percentage();
   }, []);
-  const options = {
+  const percentage = async () => {
+    try {
+      setLoading(true);
+      const response = await Percentage();
+      setChartData({
+        series: [
+          parseFloat(response.delivered),
+          parseFloat(response.pending),
+          parseFloat(response.cancelled)
+        ],
+        labels: ['Livrées', 'En attente', 'Annulées']
+      });
+    }
+    catch (error) {
+      console.error(error);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+  const chartOptions = {
     chart: {
-      type: 'donut',
+      type: 'pie',
+      backgroundColor: 'white',
     },
-    labels: chartData.labels,
-    dataLabels: {
-      enabled: true,
+    title: {
+      text: 'Ratio de commande en fonction des statuts',
       style: {
-        fontSize: '14px',
-        fontWeight: 'bold'
-      }
+        fontSize: '18px',
+        fontWeight: '600',
+        color: 'black',
+      },
     },
-    colors: ['#22c55e', '#facc15', '#ef4444'], // vert, jaune, rouge
-    legend: {
-      position: 'bottom',
-      fontSize: '14px'
+    tooltip: {
+      pointFormat: '<b>{point.percentage:.1f}%</b>',
     },
     plotOptions: {
       pie: {
-        donut: {
-          labels: {
-            show: true,
-            total: {
-              show: true,
-              label: 'Total',
-              fontSize: '16px',
-              fontWeight: 600
-            }
-          }
-        }
-      }
-    }
+        innerSize: '65%',
+        dataLabels: {
+          enabled: true,
+          format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          style: {
+            fontSize: '13px',
+          },
+        },
+      },
+    },
+    colors: ['#10B981', '#F59E0B', '#EF4444'], // vert, orange, rouge
+    series: [
+      {
+        name: 'Commandes',
+        colorByPoint: true,
+        data: chartData.labels.map((label, index) => ({
+          name: label,
+          y: chartData.series[index],
+        })),
+      },
+    ],
+    credits: {
+      enabled: false,
+    },
   };
   return (
     <div>
@@ -194,10 +197,15 @@ const Dashboard = () => {
               </div>
             </div>)}
           </div>*/}
-          <div className="w-full h-80 bg-white p-4 rounded shadow">
-            <h2 className="text-lg font-semibold mb-4">Pourcentage</h2>
-            <Chart options={options} series={chartData.series} type="donut" width="100%" height={320} />
-          </div>
+            {chartData.series.length === 0 ? (
+              <div className="flex items-center justify-center h-48">
+                <p className="text-gray-500">Aucune donnée disponible</p>
+              </div>
+            ) : (
+              <div className="h-72">
+                <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+              </div>
+            )}
         </div>
       </div>
     </div>

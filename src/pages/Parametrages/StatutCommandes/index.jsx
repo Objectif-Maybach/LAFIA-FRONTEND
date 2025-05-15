@@ -1,6 +1,6 @@
 import React from "react";
 import { PencilIcon, TrashIcon } from "lucide-react";
-const StatutOrder = ({filteredStatutOrders, updateState, setIsDelete, setId, activeTab}) => {
+const StatutOrder = ({filteredStatutOrders, handleDelete, updateState, setIsDelete, setId, activeTab}) => {
     return (
        
         <div>
@@ -44,7 +44,7 @@ const StatutOrder = ({filteredStatutOrders, updateState, setIsDelete, setId, act
                                     >
                                         <PencilIcon size={16} />
                                     </button>
-                                    <button className="text-red-600 hover:text-red-900" onClick={() => { setIsDelete(true); setId(StatutOrder.id) }}>
+                                    <button className="text-red-600 hover:text-red-900" onClick={() => { handleDelete(StatutOrder.id) }}>
                                         <TrashIcon size={16} />
                                     </button>
                                 </td>
