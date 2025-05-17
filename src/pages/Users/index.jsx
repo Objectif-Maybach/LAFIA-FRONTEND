@@ -9,6 +9,7 @@ import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
 import ConfirAlert from "../../components/alert/ConfirmAlert"
 import Pagination from "../../components/Pagination"
+import Modal from "../../components/modal/modal"
 const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalResetOpen, setIsModalResetOpen] = useState(false)
@@ -260,6 +261,11 @@ const Users = () => {
 
       {/* Modal personnalisé */}
       {isModalOpen && (
+        <Modal title={dataEdit.length == 0 ? 'Ajouter un utilisateur' : 'Modifier l\'utilisateur'} discribe={dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel utilisateur' : 'Modifiez les informations pour mettre à jour l\'utilisateur'} onClose={handleFormClose}>
+          <UserForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddUsers : UpdateUsers} dataEdit={dataEdit} loading={setIsLoading} />
+        </Modal>
+      )}
+      {/* {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b">
@@ -281,29 +287,11 @@ const Users = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
       {isModalResetOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b">
-              <div>
-                <h3 className="text-lg font-medium">Reinitialisation  </h3>
-                <p className="text-sm text-gray-500">Reinitialiser le mot de passe de {dataEdit.full_name} </p>
-              </div>
-              <button onClick={handleFormCloseReset} className="text-gray-500 hover:text-gray-700">
-                <X size={20} />
-              </button>
-            </div>
-            {error && (
-              <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
-                {error}
-              </div>
-            )}
-            <div className="p-4">
-              <ResetForm onClose={handleFormCloseReset} onSubmit={ResetUsers} dataEdit={dataEdit} />
-            </div>
-          </div>
-        </div>
+        <Modal title="Reinitialiser le mot de passe" discribe="Reinitialiser le mot de passe" onClose={handleFormCloseReset}>
+          <ResetForm onClose={handleFormCloseReset} onSubmit={ResetUsers} dataEdit={dataEdit} />
+        </Modal>
       )}
       {isDelete && (<ConfirAlert message="Supprimer un utilisateur" onConfirm={DeleteUsers} onCancel={handleDeleteCancel} id={id} />)}
     </div>
