@@ -21,6 +21,8 @@ const Produits = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
   const [isDelete, setIsDelete] = useState(false)
   const [id, setId] = useState('');
   const fileUrl = import.meta.env.VITE_FILE_URL;
@@ -261,7 +263,17 @@ const Produits = () => {
         </div>
       )}
 
-      {isDelete && (<ConfirAlert message="Supprimer un produit" onConfirm={DeleteProduct} onCancel={handleDeleteCancel} id={id}/>)}
+      {isDelete && (<ConfirAlert message="Supprimer un produit" onConfirm={DeleteProduct} onCancel={handleDeleteCancel} id={id} />)}
+      {galleryOpen && currentProduct && (
+        <ProductGallery
+          productName={currentProduct.product_name}
+          productId={currentProduct.id}
+          onClose={() => setGalleryOpen(false)}
+          fileUrl={fileUrl}
+          isLoading={isLoading}
+          ProduitsAll={ProduitsAll}
+        />
+      )}
     </div>
 
   );
