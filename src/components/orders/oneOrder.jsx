@@ -53,8 +53,7 @@ export default function OneOrder({ order, clean }) {
 
         <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
               <Badge variant="outline" className="text-lg px-4 py-1.5 bg-blue-600 text-white border-blue-600 shadow-sm">
-                {/* Total: {orderData.total.toLocaleString()} FCFA
-                 */}
+               
                  Total : {calculateTotal()} FCFA
               </Badge>
             </motion.div>
