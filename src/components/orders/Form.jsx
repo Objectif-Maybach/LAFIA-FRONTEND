@@ -70,7 +70,7 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
             <form onSubmit={handleSubmit(UpdateOrder)}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Date de la commande</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Date de la commande <span className="text-red-600">*</span> </label>
 
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -88,7 +88,7 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Statut  <span className="text-red-600">*</span> </label>
                         <Controller
                             name="order_statut"
                             control={control}
@@ -118,7 +118,7 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
                         {errors?.order_statut && <span className='text-sm text-red-600'>{errors.order_statut.message}</span>}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Livreur</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Livreur  <span className="text-red-600">*</span> </label>
                         <Controller
                             name="driver"
                             control={control}
@@ -147,7 +147,7 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
                         {errors?.driver && <span className='text-sm text-red-600'>{errors.driver.message}</span>}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone  <span className="text-red-600">*</span> </label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <PhoneIcon size={16} className="text-gray-400" />

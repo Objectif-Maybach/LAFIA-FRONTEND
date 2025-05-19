@@ -55,7 +55,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
       <form onSubmit={handleSubmit(AddUser)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nom </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nom <span className="text-red-600">*</span>  </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <UserIcon size={16} className="text-gray-400" />
@@ -76,7 +76,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
 
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Telephone</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Telephone  <span className="text-red-600">*</span> </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <PhoneIcon size={16} className="text-gray-400" />
@@ -113,7 +113,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
             {errors?.adresse && <span className='text-sm text-red-600'>{errors.adresse.message}</span>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Type  </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Type  <span className="text-red-600">*</span>  </label>
             <select
               name="establishment_type"
               defaultValue={dataEdit?.establishment_type?.id}

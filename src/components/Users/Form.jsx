@@ -55,7 +55,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
       <form onSubmit={handleSubmit(AddUser)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nom et Prénom</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nom et Prénom  <span className="text-red-600">*</span> </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <UserIcon size={16} className="text-gray-400" />
@@ -74,7 +74,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nom d'utilisateur</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nom d'utilisateur  <span className="text-red-600">*</span> </label>
             <div className="relative" >
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <User2 size={16} className="text-gray-400" />
@@ -93,7 +93,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
           </div>
           { dataEdit.length === 0 &&  (
             <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe  <span className="text-red-600">*</span> </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock size={16} className="text-gray-400" />
@@ -113,7 +113,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
           </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email  <span className="text-red-600">*</span> </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <MailIcon size={16} className="text-gray-400" />
@@ -131,7 +131,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
             {errors?.email && <span className='text-sm text-red-600'>{errors.email.message}</span>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone  <span className="text-red-600">*</span> </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <PhoneIcon size={16} className="text-gray-400" />
@@ -168,7 +168,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
             {errors?.adresse && <span className='text-sm text-red-600'>{errors.adresse.message}</span>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Rôle  <span className="text-red-600">*</span> </label>
             <select
               name="role"
 

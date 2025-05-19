@@ -13,7 +13,7 @@ const ResetForm = ({ onClose, onSubmit }) => {
       <form onSubmit={handleSubmit(AddUser)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe  <span className="text-red-600">*</span> </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock size={16} className="text-gray-400" />

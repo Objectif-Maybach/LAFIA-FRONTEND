@@ -32,7 +32,7 @@ const DriversForm = ({ onClose, onSubmit, dataEdit }) => {
       <form onSubmit={handleSubmit(AddUser)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nom et Prénom</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nom et Prénom  <span className="text-red-600">*</span> </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <UserIcon size={16} className="text-gray-400" />
@@ -50,7 +50,7 @@ const DriversForm = ({ onClose, onSubmit, dataEdit }) => {
             {errors?.driver_name && <span className='text-sm text-red-600'>{errors.driver_name.message}</span>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone  <span className="text-red-600">*</span> </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <PhoneIcon size={16} className="text-gray-400" />
