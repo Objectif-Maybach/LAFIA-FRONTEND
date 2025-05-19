@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { UserIcon, LockIcon, TruckIcon } from 'lucide-react';
 import axios from 'axios';
+import speeda from '../assets/images/speeda.png';
 export const LoginPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoding] = useState(false);
@@ -34,18 +35,15 @@ export const LoginPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="bg-blue-600 py-3 px-5 text-center">
-          <div className="flex justify-center mb-2">
-            <div className="bg-white p-3 rounded-full">
-              <TruckIcon size={32} className="text-blue-600" />
-            </div>
+        <div className="py-3 text-center">
+          <div className="flex justify-center">
+            <img src={speeda} width={120} height={80} alt="" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Speeda </h1>
         </div>
-        <div className="p-8">
-          <h2 className="text-xl font-semibold text-gray-700 text-center mb-6">
+        <div className="py-2 px-8">
+          {/* <h2 className="text-xl font-semibold text-gray-700 text-center mb-6">
             Connexion
-          </h2>
+          </h2> */}
           <form onSubmit={handleSubmit(login)}>
             {error && (
               <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
@@ -97,12 +95,12 @@ export const LoginPage = () => {
               </div>
               {errors?.password && <span className='text-sm text-red-600'>{errors.password.message}</span>}
             </div>
-            <button type="submit" className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-200">
+            <button type="submit" className="w-full py-2 px-4 bg-orange-500 hover:bg-orange-700 text-white font-medium rounded-lg transition duration-200">
               {loading ? 'Connexion ... ' : 'Se connecter'}
             </button>
           </form>
           <div className="mt-6 text-center">
-            <a href="#" className="text-sm text-blue-600 hover:underline">
+            <a href="#" className="text-sm text-orange-500 hover:underline">
               Mot de passe oublié?
             </a>
           </div>

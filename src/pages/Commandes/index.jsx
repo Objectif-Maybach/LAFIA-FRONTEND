@@ -66,9 +66,6 @@ const CommandePage = () => {
               </TabsTrigger>
             </TabsList>
           </div>
-
-     
-
           <TabsContent value="addOrders" className="p-0">
             <AddOrders />
           </TabsContent>

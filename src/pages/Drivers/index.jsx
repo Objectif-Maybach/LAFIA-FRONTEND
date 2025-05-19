@@ -10,6 +10,7 @@ import { deleteDriver } from '../../functions/driver/deleteDriver';
 import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
 import ReadFile from "../../components/ReadFile";
+import ConfirAlert from "../../components/alert/ConfirmAlert";
 const Drivers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -18,6 +19,8 @@ const Drivers = () => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isReadFile, setIsReadFile] = useState(false)
+  const [isDelete, setIsDelete] = useState(false)
+  const [id, setId] = useState('')
   const [fileUrl, setFileUrl] = useState(null)
 
   const DriversAll = async () => {
@@ -69,24 +72,30 @@ const Drivers = () => {
     setIsModalOpen(true)
     setDataEdit(user)
   }
-
-  const handleDelete = async (userId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer ce livreur ?')) {
-      setIsLoading(true)
-      try {
-        const response = await deleteDriver(userId);
-        toast.success('Produit supprimé avec succès')
-        DriversAll()
-      } catch (error) {
-        toast.error('Erreur lors de la suppression du livreur')
-        console.error(error);
-      } finally {
-        setIsLoading(false)
-      }
+  const handleDelete = (userId) => {
+    setIsDelete(true)
+    setId(userId)
+  }
+  const handleDeleteCancel = () => {
+    setIsDelete(false)
+    setId('')
+  }
+  const DeleteDriver = async (userId) => {
+    setIsLoading(true)
+    try {
+      const response = await deleteDriver(userId);
+      toast.success('Produit supprimé avec succès')
+      DriversAll()
+    } catch (error) {
+      toast.error('Erreur lors de la suppression du livreur')
+      console.error(error);
+    } finally {
+      setIsLoading(false)
     }
   }
   const readingFileUrl = (file_url) => {
-    window.open(file_url, '_blank');
+    const url = import.meta.env.VITE_FILE_URL + file_url;
+    window.open(url, '_blank');
     // setFileUrl(file_url);
     // setIsReadFile(true);
   };
@@ -132,7 +141,7 @@ const Drivers = () => {
 
             <button
               onClick={() => (setDataEdit([]), setIsModalOpen(true))}
-              className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700"
             >
               <PlusIcon size={16} className="mr-2" />
               Ajouter un livreur
@@ -174,7 +183,7 @@ const Drivers = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredDrivers.map((driver) => (
                 <tr key={driver.id} className="hover:bg-gray-50"><td className="px-6 py-4 whitespace-nowrap">
-                  <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(driver.piece)}>
+                  <button className="text-orange-500 hover:text-blue-900 mr-3" onClick={() => readingFileUrl(driver.piece)}>
                     <File size={25} />
                   </button>
                 </td>
@@ -189,7 +198,7 @@ const Drivers = () => {
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(driver)}>
+                    <button className="text-blue-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(driver)}>
                       <PencilIcon size={16} />
                     </button>
                     <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(driver.id)}>
@@ -244,6 +253,7 @@ const Drivers = () => {
         </div>
       )}
 
+      {isDelete && (<ConfirAlert message="Supprimer un livreur" onConfirm={DeleteDriver} onCancel={handleDeleteCancel} id={id} />)}
     </div>
   );
 };

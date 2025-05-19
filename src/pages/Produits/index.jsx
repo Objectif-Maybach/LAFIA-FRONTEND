@@ -8,6 +8,9 @@ import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from 'lucide-react';
 import no_image from '../../assets/images/no_image.png';
 import { toast } from 'react-toastify';
 import Loader from '../../components/loading/loader';
+import ProductGallery from '../../components/Produits/Galerie';
+import Pagination from '../../components/Pagination';
+import ConfirAlert from '../../components/alert/ConfirmAlert';
 
 const Produits = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -16,6 +19,13 @@ const Produits = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
+  const [isDelete, setIsDelete] = useState(false)
+  const [id, setId] = useState('');
+  const fileUrl = import.meta.env.VITE_FILE_URL;
 
   const ProduitsAll = async () => {
     setIsLoading(true)
@@ -68,20 +78,26 @@ const Produits = () => {
     setIsModalOpen(true)
     setDataEdit(produit)
   }
-  const handleDelete = async (produitId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet produit ?')) {
-      setIsLoading(true)
-      try {
-        const response = await deleteProduit(produitId);
-        toast.success('produit supprimé avec succès')
-        ProduitsAll()
-      } catch (error) {
-        toast.error('Erreur lors de la suppression du produit')
-        console.error(error);
-      }
-      finally {
-        setIsLoading(false)
-      }
+  const handleDelete = async (id) => {
+    setIsDelete(true)
+    setId(id)
+  }
+  const handleDeleteCancel = async () => {
+    setIsDelete(false)
+    setId(0)
+  }
+  const DeleteProduct = async (produitId) => {
+    setIsLoading(true)
+    try {
+      const response = await deleteProduit(produitId);
+      toast.success('produit supprimé avec succès')
+      ProduitsAll()
+    } catch (error) {
+      toast.error('Erreur lors de la suppression du produit')
+      console.error(error);
+    }
+    finally {
+      setIsLoading(false)
     }
   }
   useEffect(() => {
@@ -95,6 +111,12 @@ const Produits = () => {
     store.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     store.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const totalPages = Math.ceil(filteredProduits.length / rowsPerPage);
+  const currentData = filteredProduits.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
 
   return (
     <div>
@@ -129,7 +151,7 @@ const Produits = () => {
 
                 <button
 
-                  className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700"
                   onClick={() => (setDataEdit([]), setIsModalOpen(true))}
                 >
                   <PlusIcon size={16} className="mr-2" />
@@ -167,12 +189,16 @@ const Produits = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredProduits.map(produit => <tr key={produit.id} className="hover:bg-gray-50">
+                {currentData.map(produit => <tr key={produit.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <img
-                      src={produit.images.length ? produit.images[0].file_name : no_image}
+                      src={produit.images.length ? fileUrl + produit.images[0].file_name : no_image}
                       alt={produit.product_name}
-                      className="w-16 h-16 object-cover rounded-md"
+                      className="w-16 h-16 object-cover rounded-md cursor-pointer"
+                      onClick={() => {
+                        setCurrentProduct(produit);
+                        setGalleryOpen(true);
+                      }}
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -194,7 +220,7 @@ const Produits = () => {
                     <div className="text-gray-500">{produit.category?.category_name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(produit)}>
+                    <button className="text-blue-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(produit)}>
                       <PencilIcon size={16} />
                     </button>
                     <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(produit.id)}>
@@ -205,21 +231,16 @@ const Produits = () => {
               </tbody>
             </table>
           </div>
-          <div className="px-4 py-3 border-t flex items-center justify-between">
-            <div className="text-sm text-gray-700">
-              Affichage de <span className="font-medium">1</span> à{" "}
-              <span className="font-medium">{filteredProduits.length}</span> sur{" "}
-              <span className="font-medium">{filteredProduits.length}</span> résultats
-            </div>
-            <div className="flex space-x-2">
-              <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-                Précédent
-              </button>
-              <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-                Suivant
-              </button>
-            </div>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={(value) => {
+              setRowsPerPage(value);
+              setCurrentPage(1);
+            }}
+          />
         </div>
       </div>
       {isModalOpen && (
@@ -236,12 +257,25 @@ const Produits = () => {
             </div>
 
             <div className="p-4">
-              <StoreForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddProduits : UpdateProduits} dataEdit={dataEdit} />
+              <StoreForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddProduits : UpdateProduits} dataEdit={dataEdit} loading={setIsLoading} />
             </div>
           </div>
         </div>
       )}
+
+      {isDelete && (<ConfirAlert message="Supprimer un produit" onConfirm={DeleteProduct} onCancel={handleDeleteCancel} id={id} />)}
+      {galleryOpen && currentProduct && (
+        <ProductGallery
+          productName={currentProduct.product_name}
+          productId={currentProduct.id}
+          onClose={() => setGalleryOpen(false)}
+          fileUrl={fileUrl}
+          isLoading={isLoading}
+          ProduitsAll={ProduitsAll}
+        />
+      )}
     </div>
+
   );
 
 };

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { UserIcon, FileText, CheckCircle, X } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { GetAllEtablissements } from "../../functions/Etablissement/Etablissements";
 import { GetAllCategories } from "../../functions/Categorie/Categories";
+import Select from "react-select";
 
-const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
-  const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm(
+const ProductForm = ({ onClose, onSubmit, dataEdit, loading }) => {
+  const { register, control, handleSubmit, setValue, getValues, formState: { errors } } = useForm(
     { mode: "onTouched" }
   );
 
@@ -13,20 +14,26 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
   const [categories, setCategories] = useState([]);
   const AllCategories = async () => {
     try {
+      loading(true);
       const response = await GetAllCategories();
       setCategories(response);
     } catch (error) {
       console.error(error);
-
     }
+    finally {
+      loading(false);
+    } 
   };
   const AllEtablissements = async () => {
     try {
+      loading(true);
       const response = await GetAllEtablissements();
       setEtablissements(response);
     } catch (error) {
       console.error(error);
-
+    }
+    finally {
+      loading(false);
     }
   };
   useEffect(() => {
@@ -48,7 +55,7 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
     formData.append("description", data.description);
     formData.append("price", data.price);
 
-    if (data.product_images.length > 0) {
+    if (data.product_images && data.product_images.length > 0) {
       for (let i = 0; i < data.product_images.length; i++) {
         formData.append("product_images[]", data.product_images[i]);
       }
@@ -59,6 +66,10 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
 
     onSubmit(formData);
   };
+  const options = etablissements.map(etab => ({
+    value: etab.id,
+    label: etab.establishment_name 
+  }));
 
   // console.log(getValues('product_name'), getValues('establishment'));
   return (
@@ -119,60 +130,82 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
               {errors?.description && <span className='text-sm text-red-600'>{errors.description.message}</span>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
-              <input
-                type="file"
-                name="product_images"
-                id="product_images"
-                {...register('product_images')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="URL de l'image" multiple
-              />
-            </div>
-            {errors?.product_images && <span className='text-sm text-red-600'>{errors.product_images.message}</span>}
-          </div>
-          <div className="grid grid-cols-2 gap-6 mb-6">
-            {dataEdit.length === 0 &&
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Etablissement</label>
-                <select
-                  name="establishment"
-                  defaultValue={dataEdit?.establishment?.id}
-                  {...register('establishment',
-                    { required: 'L\' etablissement est obligatoire' })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">-- Choisir --</option>
-                  {etablissements.map(etab => (
-                    <option selected={dataEdit?.establishment?.id === etab.id} key={etab.id} value={etab.id}>
-                      {etab.establishment_name}
-                    </option>
-                  ))}
-                </select>
-                {errors?.establishment && <span className='text-sm text-red-600'>{errors.establishment.message}</span>}
-              </div>
-            }
-
-            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Categorie</label>
-              <select
+              <Controller
                 name="category"
-                defaultValue={dataEdit?.category?.id}
-                {...register('category', {required: 'La categorie est obligatoire' })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">-- Choisir --</option>
-                {categories.map(cat => (
-                  <option selected={dataEdit?.category?.id === cat.id} key={cat.id} value={cat.id}>
-                    {cat.category_name}
-                  </option>
-                ))}
-              </select>
+                control={control}
+                rules={{ required: "La catégorie est obligatoire" }}
+                render={({ field }) => {
+                  const selectedValue = categories.find(
+                    (cat) => cat.id === field.value
+                  );
+
+                  return (
+                    <Select
+                      {...field}
+                      value={selectedValue || null} // ceci permet de pré-sélectionner
+                      options={categories}
+                      getOptionLabel={(option) => option.category_name}
+                      getOptionValue={(option) => option.id}
+                      onChange={(selectedOption) =>
+                        field.onChange(selectedOption ? selectedOption.id : null)
+                      }
+                      placeholder="-- Choisir --"
+                      isClearable
+                    />
+                  );
+                }}
+              />
               {errors?.category && <span className='text-sm text-red-600'>{errors.category.message}</span>}
             </div>
+
           </div>
+          {dataEdit.length === 0 &&
+            <div className="grid grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Etablissement</label>
+                <Controller
+                  name="establishment"
+                  control={control}
+                  rules={{ required: "L'établissement est obligatoire" }}
+                  render={({ field }) => {
+                    const selectedValue = etablissements.find(
+                      (cat) => cat.id === field.value
+                    );
+
+                    return (
+                      <Select
+                        {...field}
+                        value={selectedValue || null} // ceci permet de pré-sélectionner
+                        options={etablissements}
+                        getOptionLabel={(option) => option.establishment_name}
+                        getOptionValue={(option) => option.id}
+                        onChange={(selectedOption) =>
+                          field.onChange(selectedOption ? selectedOption.id : null)
+                        }
+                        placeholder="-- Choisir --"
+                        isClearable
+                      />
+                    );
+                  }}
+                />
+
+                {errors?.establishment && <span className='text-sm text-red-600'>{errors.establishment.message}</span>}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                <input
+                  type="file"
+                  name="product_images"
+                  id="product_images"
+                  {...register('product_images')}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="URL de l'image" multiple
+                />
+                {errors?.product_images && <span className='text-sm text-red-600'>{errors.product_images.message}</span>}
+              </div>
+            </div>
+          }
         </div>
         <div className="flex justify-end gap-3 mt-6">
           <button
@@ -185,7 +218,7 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
           </button>
           <button
             type="submit"
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm"
           >
             <CheckCircle size={18} className="mr-2" />
             Valider
@@ -196,4 +229,4 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit }) => {
   );
 };
 
-export default CategoryForm;
+export default ProductForm;

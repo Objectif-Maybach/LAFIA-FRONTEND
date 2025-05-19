@@ -3,17 +3,21 @@ import { UserIcon, PhoneIcon, MapPinIcon, CheckCircle, X, FileText } from "lucid
 import { useForm } from "react-hook-form";
 import { GetAllTypeEtablissements } from "../../functions/TypeEtablissement/TypeEtablissements";
 
-const UserForm = ({ onClose, onSubmit, dataEdit }) => {
+const UserForm = ({ onClose, onSubmit, dataEdit, loading }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm(
     { mode: "onTouched" }
   );
   const [types, setTypes] = useState([]);
   const AllTypes = async () => {
     try {
+      loading(true);
       const response = await GetAllTypeEtablissements();
       setTypes(response);
     } catch (error) {
       console.error(error);
+    }
+    finally {
+      loading(false);
     }
   };
   useEffect(() => {
@@ -193,7 +197,7 @@ const UserForm = ({ onClose, onSubmit, dataEdit }) => {
           </button>
           <button
             type="submit"
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm"
           >
             <CheckCircle size={18} className="mr-2" />
             Valider

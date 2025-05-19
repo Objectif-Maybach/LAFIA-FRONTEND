@@ -2,22 +2,22 @@ import { useEffect, useState } from "react";
 import { UserIcon, CheckCircle, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 
-const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
+const StatutOrderForm = ({ onClose, onSubmit, dataEdit}) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm(
     {mode: "onTouched"}
   );
 
-  const AddCategory = data => {
+  const AddStatut = data => {
     onSubmit(data);
   };
   if (dataEdit.length != 0) {
-  setValue('category_name', dataEdit?.category_name);
+  setValue('statut_name', dataEdit?.statut_name);
   setValue('description', dataEdit?.description);
   setValue('id', dataEdit?.id);
   }
   return (
     <div className="p-1">
-      <form onSubmit={handleSubmit(AddCategory)}>
+      <form onSubmit={handleSubmit(AddStatut)}>
         <div className="gap-6 mb-6">
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">Nom </label>
@@ -27,15 +27,15 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
               </div>
               <input
                 type="text"
-                name="category_name"
-                {...register('category_name',
+                name="statut_name"
+                {...register('statut_name',
                   { required: 'Le nom est obligatoire' })
                 }
                 className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nom de la catégorie"
               />
             </div>
-            {errors?.category_name && <span className='text-sm text-red-600'>{errors.category_name.message}</span>}
+            {errors?.statut_name && <span className='text-sm text-red-600'>{errors.statut_name.message}</span>}
           </div>
          
           <div className="mt-4">
@@ -76,4 +76,4 @@ const CategoryForm = ({ onClose, onSubmit, dataEdit}) => {
   );
 };
 
-export default CategoryForm;
+export default StatutOrderForm;

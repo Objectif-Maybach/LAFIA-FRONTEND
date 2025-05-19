@@ -7,6 +7,9 @@ import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X, LockIcon } from "lucide
 import { AddUser, DeleteUser, GetAllUsers, ResetPassword, UpdateUser } from "../../functions/User/Users"
 import { toast } from "react-toastify"
 import Loader from "../../components/loading/loader"
+import ConfirAlert from "../../components/alert/ConfirmAlert"
+import Pagination from "../../components/Pagination"
+import Modal from "../../components/modal/modal"
 const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalResetOpen, setIsModalResetOpen] = useState(false)
@@ -15,6 +18,10 @@ const Users = () => {
   const [dataEdit, setDataEdit] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isDelete, setIsDelete] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [id, setId] = useState('');
 
   const UsersAll = async () => {
     setIsLoading(true)
@@ -83,19 +90,25 @@ const Users = () => {
     setIsModalResetOpen(true)
     setDataEdit(user)
   }
-  const handleDelete = async (userId) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
-      setIsLoading(true)
-      try {
-        const response = await DeleteUser(userId);
-        toast.success('Utilisateur supprimé avec succès')
-        UsersAll()
-      } catch (error) {
-        toast.error('Erreur lors de la suppression de l\'utilisateur')
-        console.error(error);
-      } finally {
-        setIsLoading(false)
-      }
+  const handleDelete = async (id) => {
+    setIsDelete(true)
+    setId(id)
+  }
+  const handleDeleteCancel = async () => {
+    setIsDelete(false)
+    setId('')
+  }
+  const DeleteUsers = async (userId) => {
+    setIsLoading(true)
+    try {
+      const response = await DeleteUser(userId);
+      toast.success('Utilisateur supprimé avec succès')
+      UsersAll()
+    } catch (error) {
+      toast.error('Erreur lors de la suppression de l\'utilisateur')
+      console.error(error);
+    } finally {
+      setIsLoading(false)
     }
   }
   useEffect(() => {
@@ -110,9 +123,14 @@ const Users = () => {
 
   const filteredUsers = users.filter(
     (user) =>
-      // user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
+  const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
+  const currentData = filteredUsers.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
 
   return (
     <div>
@@ -142,7 +160,7 @@ const Users = () => {
 
             <button
               onClick={() => (setDataEdit([]), setIsModalOpen(true))}
-              className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-700"
             >
               <PlusIcon size={16} className="mr-2" />
               Ajouter un utilisateur
@@ -187,7 +205,7 @@ const Users = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredUsers.map((user) => (
+              {currentData.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">{user.full_name} </div>
@@ -216,7 +234,7 @@ const Users = () => {
                     <button className="text-yellow-600 hover:text-yellow-900 mr-3" onClick={() => handleReset(user)}>
                       <LockIcon size={16} />
                     </button>
-                    <button className="text-blue-600 hover:text-blue-900 mr-3" onClick={() => handleEdit(user)}>
+                    <button className="text-blue-500 hover:text-blue-900 mr-3" onClick={() => handleEdit(user)}>
                       <PencilIcon size={16} />
                     </button>
                     <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(user.id)}>
@@ -229,25 +247,25 @@ const Users = () => {
           </table>
         </div>
 
-        <div className="px-4 py-3 border-t flex items-center justify-between">
-          <div className="text-sm text-gray-700">
-            Affichage de <span className="font-medium">1</span> à{" "}
-            <span className="font-medium">{filteredUsers.length}</span> sur{" "}
-            <span className="font-medium">{filteredUsers.length}</span> résultats
-          </div>
-          <div className="flex space-x-2">
-            <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-              Précédent
-            </button>
-            <button className="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50" disabled>
-              Suivant
-            </button>
-          </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(value) => {
+            setRowsPerPage(value);
+            setCurrentPage(1);
+          }}
+        />
       </div>
 
       {/* Modal personnalisé */}
       {isModalOpen && (
+        <Modal title={dataEdit.length == 0 ? 'Ajouter un utilisateur' : 'Modifier l\'utilisateur'} discribe={dataEdit.length == 0 ? 'Remplissez le formulaire pour ajouter un nouvel utilisateur' : 'Modifiez les informations pour mettre à jour l\'utilisateur'} onClose={handleFormClose}>
+          <UserForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddUsers : UpdateUsers} dataEdit={dataEdit} loading={setIsLoading} />
+        </Modal>
+      )}
+      {/* {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b">
@@ -265,34 +283,17 @@ const Users = () => {
               </div>
             )}
             <div className="p-4">
-              <UserForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddUsers : UpdateUsers} dataEdit={dataEdit} />
+              <UserForm onClose={handleFormClose} onSubmit={dataEdit.length == 0 ? AddUsers : UpdateUsers} dataEdit={dataEdit} loading={setIsLoading} />
             </div>
           </div>
         </div>
-      )}
+      )} */}
       {isModalResetOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-xl mx-4 overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b">
-              <div>
-                <h3 className="text-lg font-medium">Reinitialisation  </h3>
-                <p className="text-sm text-gray-500">Reinitialiser le mot de passe de {dataEdit.full_name } </p>
-              </div>
-              <button onClick={handleFormCloseReset} className="text-gray-500 hover:text-gray-700">
-                <X size={20} />
-              </button>
-            </div>
-            {error && (
-              <div className="bg-red-50 border text-center border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
-                {error}
-              </div>
-            )}
-            <div className="p-4">
-              <ResetForm onClose={handleFormCloseReset} onSubmit={ResetUsers } dataEdit={dataEdit} />
-            </div>
-          </div>
-        </div>
+        <Modal title="Reinitialiser le mot de passe" discribe="Reinitialiser le mot de passe" onClose={handleFormCloseReset}>
+          <ResetForm onClose={handleFormCloseReset} onSubmit={ResetUsers} dataEdit={dataEdit} />
+        </Modal>
       )}
+      {isDelete && (<ConfirAlert message="Supprimer un utilisateur" onConfirm={DeleteUsers} onCancel={handleDeleteCancel} id={id} />)}
     </div>
   );
 };
