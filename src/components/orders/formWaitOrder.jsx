@@ -85,8 +85,8 @@ const OrderWaitForm = ({ onClose, onSubmit, dataEdit, loading }) => {
             setValue('order_date', dataEdit?.order_date);
             setValue('prix_livraison', '');
             setValue('driver', 0);
-            setValue('telephone', dataEdit?.client.contact);
-            setValue('adresse', dataEdit?.client.contact);
+            setValue('telephone', dataEdit?.client.contact.telephone);
+            setValue('adresse', dataEdit?.client.contact.adresse);
             setValue('order_statut', 0);
             orderById(id)
         }, [dataEdit, setValue])

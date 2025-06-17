@@ -175,7 +175,9 @@ const filteredCommandes = waitCommandes.filter(
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="font-medium text-gray-900">{etab.client.full_name} </div>
-                        <div className="font-medium text-red-900">{etab.client.contact} </div>
+                        <div className="font-medium text-teal-900">{etab.client.contact.adresse} </div>
+                        <div className="font-medium text-blue-900">{etab.client.contact.telephone} </div>
+
 
                       </td>
                       
