@@ -3,7 +3,7 @@ import { PencilIcon, TrashIcon, SearchIcon, PlusIcon, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
 import { toast } from "react-toastify";
 import CategorieForm from "../../components/parametrages/categoryForm";
-import TypeEtablissementForm from "../../components/parametrages/typeEtablissementForm";
+import TypeEtablissementForm from "../../components/parametrages/TypeEtablissementForm";
 import { motion } from "framer-motion";
 import { GetAllTypeEtablissements, updateTypeEtablissement, AddTypeEtablissement, DeleteTypeEtablissement } from "../../functions/TypeEtablissement/TypeEtablissements";
 import { GetAllCategories, AddCategorie, updateCategorie, DeleteCategorie } from "../../functions/Categorie/Categories";
