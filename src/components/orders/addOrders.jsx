@@ -11,6 +11,7 @@ import Panier from "../../components/orders/panier"
 import { AddCommande } from "../../functions/Commandes/Commandes"
 import { toast } from "react-toastify"
 import Loader from "../loading/loader"
+
 export default function AddOrders() {
 
   const [selectedProduct, setSelectedProduct] = useState("")
@@ -54,6 +55,11 @@ export default function AddOrders() {
 
     try {
       setIsLoading(true)
+    
+       if (!clientContact || !clientAddress) {
+    toast.error("Veuillez remplir tous les champs obligatoires.");
+    return;
+  }
       const commandeData = {
         "contact": {
           "telephone": clientContact,
@@ -72,6 +78,7 @@ export default function AddOrders() {
       setIsLoading(false)
       clean()
       toast.success("Commande ajoutée avec succès")
+       setError('');
 
     } catch (error) {
       console.error("Error adding commande:", error)
@@ -168,7 +175,7 @@ export default function AddOrders() {
             <CardContent className="pt-6 ">
               <div className="space-y-4 relative">
                 <div className="space-y-2">
-                  <label htmlFor="product">Produit</label>
+                  <label htmlFor="product">Produit  <span className="text-red-600">*</span> </label>
                   <Select value={selectedProduct} onValueChange={setSelectedProduct}>
                     <SelectTrigger>
                       <SelectValue placeholder="Sélectionnez un produit" />
@@ -200,7 +207,7 @@ export default function AddOrders() {
                 </div>
                 <div className="">
                   <div className="space-y-2">
-                    <Label htmlFor="quantity">Quantité</Label>
+                    <Label htmlFor="quantity">Quantité  <span className="text-red-600">*</span> </Label>
                     <div className="flex items-center">
                       <Button
                         variant="outline"
@@ -238,6 +245,7 @@ export default function AddOrders() {
                       readOnly
                       onChange={(e) => setPrice(Number.parseFloat(e.target.value) || 0)}
                       placeholder="Prix en FCFA"
+                      disabled
                     />
                   </div>
                 </div>
@@ -262,7 +270,7 @@ export default function AddOrders() {
               <CardContent className="pt-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="clientContact">Contact</Label>
+                    <Label htmlFor="clientContact">Contact  <span className="text-red-600">*</span> </Label>
                     <Input
                       id="clientContact"
                       value={clientContact}
@@ -272,7 +280,7 @@ export default function AddOrders() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="clientAddress">Adresse</Label>
+                    <Label htmlFor="clientAddress">Adresse  <span className="text-red-600">*</span> </Label>
                     <Input
                       id="clientAddress"
                       value={clientAddress}

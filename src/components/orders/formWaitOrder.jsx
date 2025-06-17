@@ -4,13 +4,15 @@ import { Controller, useForm } from "react-hook-form";
 import { GetAllStatutOrders } from "../../functions/StatutCommande/StatutCommandes";
 import { getAllDriver } from "../../functions/driver/getAllDriver";
 import Select from "react-select";
+import { orderWaitById } from "../../functions/Commandes/Commandes";
 
-const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
+const OrderWaitForm = ({ onClose, onSubmit, dataEdit, loading }) => {
     const { register, control, handleSubmit, setValue, formState: { errors } } = useForm(
         { mode: "onTouched" }
     );
     const [statut, setStatut] = useState([]);
     const [drivers, setDrivers] = useState([]);
+    const [products, setProducts] = useState([]);
     const AllStatut = async () => {
         try {
             loading(true);
@@ -23,6 +25,22 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
         finally {
             loading(false);
         }
+    };
+    const id = dataEdit?.id;
+
+    const orderById = async (id) => {
+        try{
+            const response = await orderWaitById(id);
+            // console.log('response', response);
+            setProducts(response.order_product_temps);
+            
+
+        } catch (error) {
+            console.error(error);
+        }
+        
+
+
     };
     const AllDriver = async () => {
         try {
@@ -50,18 +68,27 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
             contact: {
                 telephone: user.telephone,
                 adresse: user.adresse
-            }
+            },
+            products: products.map((item) => ({
+                'id' : item.product.id,
+                "quantity" : item.quantity,
+                'price' : item.product.price
+
+            }))
         }
+
+
         onSubmit(data);
     };
     if (dataEdit.length != 0) {
         useEffect(() => {
             setValue('order_date', dataEdit?.order_date);
-            setValue('prix_livraison', dataEdit?.prix_livraison);
-            setValue('driver', dataEdit?.driver?.id);
-            setValue('telephone', dataEdit?.contact.telephone);
-            setValue('adresse', dataEdit?.contact.adresse);
-            setValue('order_statut', dataEdit?.order_statut?.id);
+            setValue('prix_livraison', '');
+            setValue('driver', 0);
+            setValue('telephone', dataEdit?.client.contact.telephone);
+            setValue('adresse', dataEdit?.client.contact.adresse);
+            setValue('order_statut', 0);
+            orderById(id)
         }, [dataEdit, setValue])
     }
     return (
@@ -107,7 +134,7 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
                                         onChange={(selectedOption) =>
                                             field.onChange(selectedOption ? selectedOption.id : null)
                                         }
-                                        placeholder="-- Choisir --"
+                                        placeholder="-- En attente --"
                                         isClearable
                                     />
                                 );
@@ -224,4 +251,4 @@ const OrderForm = ({ onClose, onSubmit, dataEdit, loading }) => {
     );
 };
 
-export default OrderForm;
+export default OrderWaitForm;

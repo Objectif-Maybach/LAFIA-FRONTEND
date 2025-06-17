@@ -20,7 +20,7 @@ const StatutOrderForm = ({ onClose, onSubmit, dataEdit}) => {
       <form onSubmit={handleSubmit(AddStatut)}>
         <div className="gap-6 mb-6">
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nom </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nom  <span className="text-red-600">*</span>  </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <UserIcon size={16} className="text-gray-400" />

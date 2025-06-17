@@ -5,6 +5,7 @@ import { PlusIcon, SearchIcon } from "lucide-react"
 import { motion } from "framer-motion";
 import AddOrders from "../../components/orders/addOrders"
 import ListOrders from "../../components/orders/listOrders"
+import OrderWait from "../../components/orders/orderWait"   
 
 
 
@@ -64,6 +65,21 @@ const CommandePage = () => {
                   />
                 )}
               </TabsTrigger>
+               <TabsTrigger
+                value="orderWait"
+                className="relative px-6 py-3 text-sm font-medium tracking-wide transition-all data-[state=active]:text-black data-[state=active]:font-semibold data-[state=inactive]:text-gray-500 bg-transparent rounded-none border-0"
+              >
+                Commandes en attente
+                {activeTab === "orderWait" && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"
+                    layoutId="activeTabIndicator"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
+              </TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="addOrders" className="p-0">
@@ -71,6 +87,9 @@ const CommandePage = () => {
           </TabsContent>
           <TabsContent value="listOrders" className="p-0">
             <ListOrders search={searchQuery} />
+          </TabsContent>
+           <TabsContent value="orderWait" className="p-0">
+            <OrderWait search={searchQuery} />
           </TabsContent>
         </Tabs>
 

@@ -78,7 +78,7 @@ const ProductForm = ({ onClose, onSubmit, dataEdit, loading }) => {
         <div className="gap-6">
           <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nom </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nom  <span className="text-red-600">*</span> </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <UserIcon size={16} className="text-gray-400" />
@@ -96,7 +96,7 @@ const ProductForm = ({ onClose, onSubmit, dataEdit, loading }) => {
               {errors?.product_name && <span className='text-sm text-red-600'>{errors.product_name.message}</span>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Prix</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Prix  <span className="text-red-600">*</span> </label>
               <input
                 type="number"
                 name="price"
@@ -130,7 +130,7 @@ const ProductForm = ({ onClose, onSubmit, dataEdit, loading }) => {
               {errors?.description && <span className='text-sm text-red-600'>{errors.description.message}</span>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Categorie</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Categorie  <span className="text-red-600">*</span> </label>
               <Controller
                 name="category"
                 control={control}
@@ -163,7 +163,7 @@ const ProductForm = ({ onClose, onSubmit, dataEdit, loading }) => {
           {dataEdit.length === 0 &&
             <div className="grid grid-cols-2 gap-6 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Etablissement</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Etablissement  <span className="text-red-600">*</span> </label>
                 <Controller
                   name="establishment"
                   control={control}
