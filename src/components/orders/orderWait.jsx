@@ -1,17 +1,19 @@
 import Loader from '../../components/loading/loader'
-import { GetAllCommandes, DeleteCommande, updateCommande } from "../../functions/Commandes/Commandes"
+import { GetAllWaitCommandes, DeleteCommande, DeleteWaitCommande, AddCommande } from "../../functions/Commandes/Commandes"
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Eye, EyeIcon, PencilIcon, TrashIcon, X, SearchIcon } from "lucide-react"
 import OneOrder from './oneOrder'
 import Pagination from '../Pagination'
-import OrderForm from './Form'
+// import OrderForm from './Form'
+import OrderWaitForm from './formWaitOrder'
 import ConfirAlert from '../alert/ConfirmAlert'
-export default function ListOrders() {
+export default function OrderWait() {
+
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [dataEdit, setDataEdit] = useState([])
   const [isLoading, setIsLoading] = useState(false);
-  const [commandes, setCommandes] = useState([]);
+  const [waitCommandes, setWaitCommandes] = useState([]);
   const [isDelete, setIsDelete] = useState(false);
   const [id, setId] = useState('');
   const [isOneOrder, setIsOneOrder] = useState(false);
@@ -21,10 +23,10 @@ export default function ListOrders() {
   const [search, setSearch] = useState('');
 
   const CommandesAll = async () => {
-   
+
     try {
-      const response = await GetAllCommandes()
-      setCommandes(response)
+      const response = await GetAllWaitCommandes()
+      setWaitCommandes(response)
     } catch (err) {
       console.error(err)
     }
@@ -33,8 +35,12 @@ export default function ListOrders() {
   const handleSubmit = async (data) => {
     setIsLoading(true)
     try {
-      const response = await updateCommande(dataEdit.id, data);
+      console.log('data', data)
+      const response = await AddCommande(data);
+      await DeleteWaitCommande(dataEdit.id);
       CommandesAll()
+      setIsLoading(false)
+      setIsModalOpen(false)
       toast.success('Commande modifiée avec succès')
     } catch (error) {
       toast.error('Erreur lors de la modification de la commande')
@@ -81,16 +87,14 @@ export default function ListOrders() {
   const handleFormClose = () => {
     setIsModalOpen(false)
   }
-  const handleEdit = async (user) => {
+  const handleEdit = async (order) => {
     setIsModalOpen(true)
-    setDataEdit(user)
+    setDataEdit(order)
   }
-  const filteredCommandes = commandes.filter(
+const filteredCommandes = waitCommandes.filter(
   (etab) =>
-    new Date(etab.order_date)
-      .toLocaleDateString("fr-FR")
-      .toLowerCase()
-      .includes(search.toLowerCase())
+    etab.order_date.toLowerCase().includes(search.toLowerCase()) ||
+    etab.contact.adresse.toLowerCase().includes(search.toLowerCase())
 );
   const totalPages = Math.ceil(filteredCommandes.length / rowsPerPage);
   const currentData = filteredCommandes.slice(
@@ -106,8 +110,9 @@ export default function ListOrders() {
 
         {!isOneOrder && (
           <>
+          
             <div className="overflow-x-auto">
-                <div className="flex justify-end m-2">
+          <div className="flex justify-end m-2">
             <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <SearchIcon size={16} className="text-gray-400" />
@@ -141,14 +146,9 @@ export default function ListOrders() {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      Livreur
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
                       Montant
                     </th>
+                    
                     <th
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -174,45 +174,24 @@ export default function ListOrders() {
 
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="font-medium text-gray-900">{etab.contact.adresse} </div>
-                        <div className="font-medium text-red-900">{etab.contact.telephone} </div>
+                        <div className="font-medium text-gray-900">{etab.client.full_name} </div>
+                        <div className="font-medium text-red-900">{etab.client.contact} </div>
 
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-gray-500">{etab.driver ? etab.driver.driver_name : 'Inconnu'}</div>
                       </td>
                       
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-gray-900 font-medium">
-                          {etab.montant.toLocaleString()} FCFA
+                          { etab.montant? etab.montant.toLocaleString() : '' } FCFA
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span >
-                          {etab.order_statut.id === 1 ? (
-                            <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                              En cours
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                              En attente
                             </span>
-                          ) : etab.order_statut.id === 2? (
-                            <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                              Livré
-                            </span>
-                          ) : (
-                            <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                              Annulé
-                            </span>
-                          )}
-                        </span>
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 
-                        <button className="text-gray-500 hover:text-gray-900 mr-3" onClick={() => {
-                          setOrder(etab);
-                          setIsOneOrder(true);
-                        }}>
-                          <Eye size={16} />
-                        </button>
                         <button className="text-blue-500 hover:text-blue-900 mr-3"
                           onClick={() => handleEdit(etab)}>
                           <PencilIcon size={16} />
@@ -246,7 +225,7 @@ export default function ListOrders() {
       
       {isDelete && (<ConfirAlert message="Supprimer une commande" onConfirm={DeleteOrder} onCancel={handleDeleteCancel} id={id} />)}
       
-      {isOneOrder && <OneOrder order={order} clean={clean} />}
+    
       
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -262,7 +241,7 @@ export default function ListOrders() {
             </div>
 
             <div className="p-4">
-              <OrderForm onClose={handleFormClose} onSubmit={handleSubmit} dataEdit={dataEdit} loading={setIsLoading} />
+              <OrderWaitForm onClose={handleFormClose} onSubmit={handleSubmit} dataEdit={dataEdit} loading={setIsLoading} />
             </div>
           </div>
         </div>
